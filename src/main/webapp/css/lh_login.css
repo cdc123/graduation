@@ -1,0 +1,705 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    width: 100%;
+}
+
+#body {
+    width: 760px;
+    height: 350px;
+    background-color: salmon;
+    /*background-image: url("../image/lh_images/051000005B7BB7AFAD9AB70BA70ECF95.jpg");*/
+    background: #fff url("../image/lh_images/051000005B7BB7AFAD9AB70BA70ECF95.jpg") no-repeat right bottom !important;
+}
+
+#body1 {
+    width: 760px;
+    height: 420px;
+    background: #fff url("../image/lh_images/051000005B7BB7AFAD9AB70BA70ECF95.jpg") no-repeat right bottom !important;
+}
+
+#right {
+    width: 320px;
+    height: 290px;
+    float: right;
+    margin-top: 20px;
+    margin-right: 20px;
+    background-color: salmon;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+#log1 {
+    text-align: center;
+    float: left;
+    color: white;
+}
+
+#log2 {
+    text-align: center;
+    float: right;
+    color: white;
+}
+
+a:hover {
+    color: aqua;
+}
+
+#log3 {
+    width: 80px;
+    height: 50px;
+    margin-top: 35px;
+}
+
+#but {
+    width: 320px;
+    height: 40px;
+    margin-top: 79px;
+}
+
+#but1 {
+    width: 320px;
+    height: 40px;
+    margin-top: 44px;
+}
+
+#button {
+    width: 320px;
+    height: 40px;
+    border: 0;
+    outline: 0;
+    -webkit-appearance: none;
+    text-align: center;
+    line-height: 38px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #fff !important;
+    background-color: #2fb3ff;
+    font-family: "Microsoft YaHei", helvetica, sans-serif;
+    cursor: pointer;
+}
+
+#shoujihao {
+    width: 320px;
+    height: 40px;
+    border: 0;
+    outline: 0;
+    -webkit-appearance: none;
+    text-align: center;
+    line-height: 38px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #c0c0c0 !important;
+    background-color: #ffffff;
+    font-family: "Microsoft YaHei", helvetica, sans-serif;
+    cursor: pointer;
+    margin-top: 20px;
+    text-align: left;
+}
+
+#mima {
+    width: 320px;
+    height: 40px;
+    border: 0;
+    outline: 0;
+    -webkit-appearance: none;
+    line-height: 38px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #c0c0c0 !important;
+    background-color: #ffffff;
+    font-family: "Microsoft YaHei", helvetica, sans-serif;
+    cursor: pointer;
+    margin-top: 20px;
+    text-align: left;
+}
+
+#queren {
+    width: 320px;
+    height: 40px;
+    border: 0;
+    outline: 0;
+    -webkit-appearance: none;
+    text-align: center;
+    line-height: 38px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #c0c0c0 !important;
+    background-color: #ffffff;
+    font-family: "Microsoft YaHei", helvetica, sans-serif;
+    cursor: pointer;
+    margin-top: 20px;
+    text-align: left;
+}
+
+#register {
+    margin-top: 165px;
+    margin-left: 280px;
+    color: white;
+}
+
+#yz {
+    width: 140px;
+    height: 40px;
+    float: left;
+}
+
+#hqyz {
+    width: 100px;
+    height: 40px;
+    float: right;
+    background-color: silver;
+    font-size: 15px;
+    margin-top: -50px;
+    text-align: center;
+    line-height: 20px;
+    margin-right: 0px;
+}
+
+#YZ1 {
+    width: 320px;
+    height: 40px;
+    margin-top: 20px;
+    float: left;
+    background-color: white;
+}
+
+#register1 {
+    margin-top: 198px;
+    margin-left: 280px;
+    color: white;
+}
+
+#register22 {
+    margin-top: 170px;
+    margin-left: 290px;
+    color: white;
+    text-align: center;
+
+}
+
+#zhuce {
+    font-size: 14px;
+}
+
+a {
+    color: white;
+}
+
+#login {
+    margin-top: 251px;
+    margin-left: 292px;
+    color: white;
+}
+
+.YT-text {
+    display: inline-block;
+    line-height: 20px;
+    color: white;
+    font-size: 15px;
+}
+
+#bottom {
+    display: inline-block;
+    width: 320px;
+    margin: 0 10px 5px 0;
+    vertical-align: top;
+    position: relative;
+    margin-top: 4px;
+    margin-left: 10px;
+}
+
+#qq {
+    display: block;
+    width: 26px;
+    height: 35px;
+    text-align: center;
+    background: url("../image/lh_images/icons_6305647d.png") no-repeat;
+    background-position: 0px -170px;
+    margin-top: -10px;
+    float: left;
+}
+
+#qq:hover {
+    display: block;
+    width: 26px;
+    height: 35px;
+    text-align: center;
+    background: url("../image/lh_images/icons_6305647d.png") no-repeat;
+    background-position: 1px -170px;
+    margin-top: -10px;
+    float: left;
+}
+
+#weibo {
+    display: block;
+    width: 26px;
+    height: 35px;
+    text-align: center;
+    background: url("../image/lh_images/icons_6305647d.png") no-repeat;
+    background-position: -26px -170px;
+    margin-top: -10px;
+    float: left;
+    margin-left: 10px;
+}
+
+#weibo:hover {
+    display: block;
+    width: 26px;
+    height: 35px;
+    text-align: center;
+    background: url("../image/lh_images/icons_6305647d.png") no-repeat;
+    background-position: -27px -170px;
+    margin-top: -10px;
+    float: left;
+    margin-left: 10px;
+}
+
+#wechato:hover {
+    display: block;
+    width: 26px;
+    height: 35px;
+    text-align: center;
+    background: url("../image/lh_images/icons_6305647d.png") no-repeat;
+    background-position: 0px -170px;
+    margin-top: -10px;
+    float: left;
+    margin-left: 10px;
+}
+
+#wechat {
+    display: block;
+    width: 26px;
+    height: 35px;
+    text-align: center;
+    background: url("../image/lh_images/icons_6305647d.png") no-repeat;
+    background-position: -52px -170px;
+    margin-top: -10px;
+    float: left;
+    margin-left: 10px;
+}
+
+#zhifubao {
+    display: block;
+    width: 26px;
+    height: 35px;
+    text-align: center;
+    background: url("../image/lh_images/icons_6305647d.png") no-repeat;
+    background-position: -78px -170px;
+    margin-top: -10px;
+    float: left;
+    margin-left: 10px;
+}
+
+#YZ_one {
+    width: 320px;
+    height: 40px;
+    margin-top: 30px;
+    background-color: white;
+}
+
+#YZ_two {
+    width: 320px;
+    height: 40px;
+    margin-top: 29px;
+    background-color: white;
+}
+
+#YZ_three {
+    width: 320px;
+    height: 40px;
+    margin-top: 30px;
+    background-color: white;
+}
+
+#YZ_three1 {
+    width: 320px;
+    height: 40px;
+    margin-top: 33px;
+    background-color: white;
+}
+
+#YZ_five {
+    width: 320px;
+    height: 20px;
+    float: left;
+}
+
+#YZ_five1 {
+    width: 320px;
+    height: 40px;
+    margin-top: 16px;
+    float: left;
+}
+
+#YZ_x {
+    float: left;
+    width: 60px;
+    height: 40px;
+    text-align: center;
+    font-size: 17px;
+    color: black;
+    line-height: 40px;
+    text-align: center;
+    border: none;
+}
+
+#YZ_two_x {
+    width: 40px;
+    height: 40px;
+    float: left;
+    /*background: url("../lh_images/登录注册-密码大.png") no-repeat;*/
+    /*background-size: 100% 100%;*/
+    /*background-repeat: no-repeat;*/
+    /*background-image: url("../lh_images/登录注册-密码大.png");*/
+
+}
+
+#YZ_two_x img {
+    margin-left: 8px;
+    margin-top: 10px;
+    height: 20px;
+    width: 20px;
+
+}
+
+#YZ_three_x {
+    width: 40px;
+    height: 40px;
+    float: left;
+}
+
+#log3_x {
+    width: 40px;
+    height: 40px;
+    float: left;
+    background-color: white;
+    margin-left: 0px;
+    margin-top: 0px;
+}
+
+#log3_y {
+    width: 40px;
+    height: 40px;
+    float: left;
+    background-color: white;
+    margin-left: 0px;
+    margin-top: 0px;
+}
+
+#log3_x img {
+    margin-left: 8px;
+    margin-top: 10px;
+    height: 20px;
+    width: 20px;
+}
+
+#log3_y img {
+    margin-left: 8px;
+    margin-top: 10px;
+    height: 20px;
+    width: 20px;
+}
+
+#YZ_three_x img {
+    margin-left: 8px;
+    margin-top: 10px;
+    height: 20px;
+    width: 20px;
+}
+
+#YZ_four {
+    width: 320px;
+    height: 40px;
+    float: left;
+    margin-top: 26px;
+}
+
+#YZ_two_y {
+    float: left;
+    width: 220px;
+    height: 40px;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-left: -35px;
+}
+
+#YZ_three_y {
+    float: left;
+    width: 220px;
+    height: 40px;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-left: -35px;
+}
+
+#log3_x1 {
+    float: left;
+    width: 220px;
+    height: 40px;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-left: -35px;
+}
+
+#log3_x2 {
+    float: left;
+    width: 220px;
+    height: 40px;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-left: -35px;
+}
+
+#YZ_four_x {
+    float: left;
+    height: 40px;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-left: -30px;
+}
+
+#YZ_five_x {
+    float: left;
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    display: inline;
+    text-align: center;
+}
+
+#YZ_five_x1 {
+    float: left;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    font-size: 14px;
+}
+
+#YZ_five_y1 {
+    float: left;
+    width: 300px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    color: white;
+}
+
+#YZ_five_y {
+    float: left;
+    width: 300px;
+    height: 20px;
+    font-size: 14px;
+    line-height: 20px;
+    color: white;
+}
+
+#YZ_four_y {
+    width: 100px;
+    height: 40px;
+    float: left;
+    line-height: 39px;
+    font-size: 14px;
+    margin-top: 0px;
+    margin-left: 54px;
+    color: whitesmoke;
+    /*background-color: #ffffff;*/
+    background-color: #c81623;
+    text-align: center;
+}
+
+#YZ_z {
+    float: left;
+    width: 260px;
+    height: 40px;
+    background-color: #31b6ff;
+}
+
+#YZ_two_y {
+    float: left;
+    width: 220px;
+    height: 40px;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-left: -35px;
+
+}
+
+#YZ_two_z {
+    float: left;
+    width: 220px;
+    height: 40px;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-left: -35px;
+
+}
+
+#input_one {
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    width: 260px;
+    outline: none;
+    border: none;
+    color: silver;
+
+}
+
+#input_two {
+    height: 20px;
+    padding: 9px 10px 9px 0px;
+    border: 1px solid #c9c9c9;
+    line-height: 20px;
+    font-size: 14px;
+    box-shadow: 0 0 0 30px #fff inset;
+    margin-top: -5px;
+    margin-left: 31px;
+    width: 273px;
+    text-align: left;
+    -webkit-appearance: none;
+    outline: none;
+    border: none;
+    color: silver;
+
+}
+
+#input_three {
+    height: 20px;
+    padding: 9px 10px 9px 0px;
+    border: 1px solid #c9c9c9;
+    line-height: 20px;
+    font-size: 14px;
+    box-shadow: 0 0 0 30px #fff inset;
+    margin-top: -5px;
+    margin-left: 31px;
+    width: 273px;
+    text-align: left;
+    -webkit-appearance: none;
+    outline: none;
+    border: none;
+    color: silver;
+
+}
+
+#input_three1 {
+    height: 20px;
+    padding: 9px 10px 9px 0px;
+    border: 1px solid #c9c9c9;
+    line-height: 20px;
+    font-size: 14px;
+    color: #c0bcb8;
+    box-shadow: 0 0 0 30px #fff inset;
+    margin-top: -5px;
+    margin-left: 27px;
+    width: 273px;
+    text-align: left;
+    -webkit-appearance: none;
+    outline: none;
+    border: none;
+}
+
+#input_three2 {
+    height: 20px;
+    padding: 9px 10px 9px 0px;
+    border: 1px solid #c9c9c9;
+    line-height: 20px;
+    font-size: 14px;
+    color: #c0bcb8;
+    box-shadow: 0 0 0 30px #fff inset;
+    margin-top: -5px;
+    margin-left: 27px;
+    width: 273px;
+    text-align: left;
+    -webkit-appearance: none;
+    outline: none;
+    border: none;
+
+}
+
+#input_four_1 {
+    height: 20px;
+    padding: 9px 10px 9px 0px;
+    border: 1px solid #c9c9c9;
+    line-height: 20px;
+    font-size: 14px;
+    box-shadow: 0 0 0 30px #fff inset;
+    margin-top: -5px;
+    margin-left: 31px;
+    text-align: left;
+    -webkit-appearance: none;
+    color: silver;
+
+}
+
+#input_four_2 {
+    height: 40px;
+    padding: 9px 10px 9px 0px;
+    /*border: 1px solid #c9c9c9;*/
+    line-height: 20px;
+    font-size: 14px;
+    box-shadow: 0 0 0 30px #fff inset;
+    margin-top: 5px;
+    margin-left: 0px;
+    text-align: left;
+    width: 100px;
+    background-color: #c1c1c1 !important;
+    color: silver;
+    /*-webkit-appearance: none;*/
+
+    border: 0;
+    outline: 0;
+    -webkit-appearance: none;
+    font-weight: 400;
+    font-family: "Microsoft YaHei", helvetica, sans-serif;
+    cursor: pointer;
+
+}
+
+#YZ_y {
+    display: block;
+    width: 26px;
+    height: 35px;
+    background: url("../image/lh_images/icons_6305647d.png") no-repeat;
+    background-position: 0px -43px;
+    margin-top: -5px;
+    margin-left: 5px;
+    float: left;
+}
+
+#span_one {
+    background-color: #2fb3ff;
+    height: 90px;
+    height: 20px;
+
+}
+
+.code {
+
+    font-family: Arial;
+    font-style: italic;
+    color: #3edcff;
+    border: 0;
+    padding: 2px 3px;
+    letter-spacing: 3px;
+    font-weight: bolder;
+}
+
+.unchanged {
+    border: 0;
+}
+
+#xixi {
+    outline: none;
+    border: none;
+    font-weight: lighter;
+}
+
+#myform {
+    width: 200px;
+    height: 200px;
+}
+

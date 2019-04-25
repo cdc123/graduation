@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/lh_login.css">
+    <style type="text/css">
+        #myform label.error {
+            color: #c81623;
+        }
+    </style>
+    <script src="../js/jquery-3.3.1.js"></script>
+    <script>
+        $(function () {
+            /*登录*/
+            $("#button").click(function () {
+                if ($("#input_three1").next().attr("name") != "1") {
+                    $("#input_three1").next().remove();
+                }
+                if ($("#input_three2").next().attr("name") != "1") {
+                    $("#input_three2").next().remove();
+                }
+                if ($("#input_three1").val().length != 11) {
+                    var $error = $("<p style='color: red'>手机号长度必须为11位</p>");
+                    $("#input_three1").after($error);
+                } else if ($("#input_three2").val().length < 3) {
+                    var $error1 = $("<p style='color: red'>密码长度必须大于3位</p>");
+                    $("#input_three2").after($error1);
+                }
+                else {
+                    /*验证数据，这里需要从数据库调数据*/
+                    $.ajax({
+                        url: "/CheckUserServlet",
+                        data: {
+                            "user_phone": $("#input_three1").val(),
+                            "user_password": $("#input_three2").val()
+                        },
+                        type: "post",
+                        dataType: "json",
+                        success: function (result) {
+                            /*判断result是否为空*/
+                            if (result.length > 0) {
+                                /*使用$.each(data,function(i,val))循环JsonArray数组*/
+                                $.each(result, function (n, value) {
+                                    if (value.user_power == "3") {
+                                        parent.location.href = "zmm_backstage.html";
+                                    } else {
+                                        /*刷新父窗口(homePage.html)*/
+                                        parent.location.reload();
+                                    }
+                                })
+                            } else {
+                                var $error = $("<p style='color: red'>账户或密码错误</p>");
+                                $("#input_three1").before($error);
+                            }
+                        }
+                    });
+                }
+            });
+        })
+        /*layui使用参数*/
+        // var index = parent.layer.getFrameIndex(window.name);
+
+        /*点击注册按钮时，弹出注册页面*/
+        function show() {
+            parent.layer.open({
+                type: 2,
+                title: false,
+                area: ['760px', '420px'],
+                content: 'register.html',
+            });
+            //关闭登录弹出框
+            parent.layer.close(index);
+        }
+    </script>
+</head>
+<body>
+<div id="body">
+    <div id="right">
+        <div id="log1">账号登录</div>
+        <div id="log3">
+            <form action="/CheckUserServlet" id="myform">
+                <div id="YZ_three">
+                    <div id="log3_x">
+                        <img src="../image/lh_images/登录注册-用户小.png" height="200" width="200"/>
+                    </div>
+                    <div id="log3_x1">
+                        <input id="input_three1" type="text" placeholder="手机/邮箱/土豆账号" name="userphone"
+                               onfocus="this.placeholder=''"
+                               onblur="if(this.value.length < 1)this.placeholder='手机/邮箱/土豆账号';">
+                        <a name="1"></a>
+                    </div>
+                </div>
+                <div id="YZ_three1">
+                    <div id="log3_y">
+                        <img src="../image/lh_images/登录注册-密码大.png"/>
+                    </div>
+                    <div id="log3_x2"><input type="password" placeholder="登录密码" name="password" id="input_three2"
+                                             onfocus="this.placeholder='';"
+                                             onblur="if(this.value.length < 1)this.placeholder='登录密码'"><a name="1"></a>
+                    </div>
+                </div>
+                <div id="YZ_five1">
+                    <div id="YZ_five_x">
+                        <input type="checkbox" id="agree">
+                    </div>
+                    <div id="YZ_five_y">
+                        <p>记住我<span style="float: right"><a href="#">忘记密码|</a><a href="#">帮助</a></span></p>
+                    </div>
+                </div>
+                <div id="but1"><input type="button" value="登录" id="button"></div>
+            </form>
+        </div>
+        <div id="register22" onclick="show()"><a id="zhuce" href="#">注册</a></div>
+        <div class="YT-text">其他方式:</div>
+        <div id="bottom">
+            <div><a href="#" id="qq"></a></div>
+            <div><a href="#" id="weibo"></a></div>
+            <div><a href="#" id="wechat"></a></div>
+            <div><a href="#" id="zhifubao"></a></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

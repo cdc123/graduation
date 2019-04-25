@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        .wenzi {
+            color: #2E2D3C;
+            font-family: 微软雅黑;
+        }
+
+        .submit {
+            position: absolute;
+            left: 200px;
+            top: 530px;
+            width: 60px;
+            height: 30px
+        }
+
+        body {
+            background: #92B8B1;
+        }
+
+        .a1 {
+            position: absolute;
+            top: 271px;
+        }
+
+        .a2 {
+            position: absolute;
+            top: 370px;
+        }
+    </style>
+    <script src="../js/jquery-3.3.1.js"></script>
+    <script>
+        // var thisURL = document.URL;
+        // var  getval =thisURL.split('?')[1];
+        // var showval= getval.split("=")[1];
+        $(function () {
+            $("input[type='button']").click(function () {
+                $.ajax({
+                    url: "/zmm_insertUserServlet",   //要提交的URL路径
+                    type: "post",                          //发送请求的方式
+                    data: {
+                        "name": $("input[name='text_1']").val(),
+                        "sex": $("input[name='text_2']").val(),
+                        // "birthday1": $("input[name='text_3']").val(),
+                        "phone": $("input[name='text_4']").val(),
+                        "password": $("input[name='text_5']").val(),
+                        "power": $("input[name='text_6']").val(),
+                        "address": $("textarea[name='zero1']").val(),
+                        "introduce": $("textarea[name='zero2']").val()
+                    },
+                    dataType: "json",
+                    //指定传输的数据格式
+                    success: function (ret) {//请求成功后要执行的代码console.log(list);
+                        if (ret == 1) {
+                            parent.location.reload();
+                        }
+                    }
+                });
+            });
+        });
+
+    </script>
+</head>
+<body>
+<form id="form">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span class="wenzi">昵称：</span><input type="text" name="text_1"><br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span class="wenzi">性别：</span><input type="text" name="text_2"><br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span class="wenzi">生日：</span><input type="date" name="text_3"><br><br>&nbsp;&nbsp;&nbsp;
+    <span class="wenzi">手机号：</span><input type="text" name="text_4"><br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span class="wenzi">密码：</span><input type="password" name="text_5"><br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span class="wenzi">权限：</span><input type="password" name="text_6"><br><br>
+    <span class="wenzi a1">用户地址：</span><textarea style="width: 170px;height: 80px;position: absolute;left: 90px;" name="zero1"></textarea><br><br>
+    <span class="wenzi a2">个人简介：</span><textarea
+            style="width: 170px;height: 140px;position: absolute;left: 90px;top:372px;" name="zero2"></textarea><br><br>
+    <input type="button" value="添加" class="submit">
+</form>
+</body>
+</html>

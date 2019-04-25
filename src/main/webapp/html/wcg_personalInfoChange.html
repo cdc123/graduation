@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>个人信息修改</title>
+    <!--base css-->
+    <link type="text/css" rel="stylesheet" href="../css/base.css">
+    <!--self css-->
+    <link rel="stylesheet" href="../css/wcg_userInfo.css">
+    <style>
+        #center_background {
+            width: 1080px;
+            padding-bottom: 20px;
+            background-color: rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+
+        #center_background:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+    </style>
+    <!--jquery-3.3.1 js-->
+    <script type="text/javascript" src="../js/jquery-3.3.1.js"></script>
+    <!--fileupload js-->
+    <script src="../js/jquery.fileupload.js"></script>
+    <script src="../js/jquery.fileupload-process.js"></script>
+    <script src="../js/jquery.fileupload-validate.js"></script>
+    <script src="../js/jquery.iframe-transport.js"></script>
+    <script src="../js/jquery.ui.widget.js"></script>
+    <!--layui js-->
+    <script src="../layui/layui.all.js"></script>
+    <script src="../layui/layui.js"></script>
+    <script src="../layui/lay/modules/carousel.js"></script>
+    <script src="../layui/lay/modules/code.js"></script>
+    <script src="../layui/lay/modules/colorpicker.js"></script>
+    <script src="../layui/lay/modules/element.js"></script>
+    <script src="../layui/lay/modules/flow.js"></script>
+    <script src="../layui/lay/modules/form.js"></script>
+    <script src="../layui/lay/modules/jquery.js"></script>
+    <script src="../layui/lay/modules/laydate.js"></script>
+    <script src="../layui/lay/modules/layedit.js"></script>
+    <script src="../layui/lay/modules/layer.js"></script>
+    <script src="../layui/lay/modules/laypage.js"></script>
+    <script src="../layui/lay/modules/laytpl.js"></script>
+    <script src="../layui/lay/modules/mobile.js"></script>
+    <script src="../layui/lay/modules/rate.js"></script>
+    <script src="../layui/lay/modules/slider.js"></script>
+    <script src="../layui/lay/modules/table.js"></script>
+    <script src="../layui/lay/modules/tree.js"></script>
+    <script src="../layui/lay/modules/upload.js"></script>
+    <script src="../layui/lay/modules/util.js"></script>
+    <!--myself js-->
+    <script type="text/javascript">
+        $(function () {
+            /*页面加载时获取用户信息，给页面赋初值*/
+            $.ajax({
+                type: "post",
+                url: "/Wcg_PersonalInfoChange?flag=getUserById",
+                dataType: "json",
+                success: function (result) {
+                    $.each(result, function (n, value) {
+                        /*设置初始头像*/
+                        $("#photoImg").css("background-image", "url(" + value.user_image + ")");
+                        /*昵称初始值*/
+                        $("input[name='user_name']").attr("value", value.user_name);
+                        /*性别初始值*/
+                        var gender = value.user_sex;
+                        if (gender == "女") {
+                            $("input[value='女']").attr("checked", true);
+                        }
+                        /*地址初始值*/
+                        $("input[name='user_address']").attr("value", value.user_address);
+                        /*给日期赋初值*/
+                        var date = value.user_birthday;
+                        var birth = date.split(" ")[0] + "";
+                        $("input[name='birth']").attr("value", birth);
+                        /*简介初始值*/
+                        $("textarea").text(value.user_introduce);
+                    });
+                }
+            });
+            //以下是历史部分
+            /*为历史纪录导向设置事件委托*/
+            $("#forHistory").on("click", "a", function (event) {
+                var target = $(event.target);
+                var videoName = target.text();
+                $.ajax({
+                    type: "post",
+                    url: "/Wcg_SearchVideo?flag=getVideoByName",
+                    data: {"videoName": videoName},
+                    dataType: "json",
+                    success: function (res) {
+                        location.href = "play.html";
+                    }
+                });
+            })
+            /*查询显示个人观看历史*/
+            $.ajax({
+                type: "post",
+                url: "/Wcg_SearchHistory",
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    /*最终的$node*/
+                    var $history;
+                    /*设置判断条件*/
+                    var yearfirst = 0;
+                    var monthfirst = 0;
+                    var datefirst = 0;
+                    var hourfirst = 0;
+                    var minutefirst = 0;
+                    /*取出每一条历史记录*/
+                    $.each(result, function (n, value) {
+                        /*取出video_id*/
+                        var videoId = value.video_id;
+                        var videoName = "";
+                        /*根据videoId查出视频名称,存入videoName*/
+                        $.ajax({
+                            type: "post",
+                            url: "/Wcg_SearchVideo?flag=getVideoById",
+                            data: {"videoId": videoId},
+                            dataType: "json",
+                            async: false,
+                            success: function (res) {
+                                $.each(res, function (i, val) {
+                                    videoName = val.video_name;
+                                });
+                            }
+                        });
+                        /*取出历史时间*/
+                        var historyTime = new Date(value.history_time);
+                        /*取出年份*/
+                        var year = historyTime.getFullYear() + "年";
+                        /*取出月，日*/
+                        var month_date = historyTime.getMonth() + "月" + historyTime.getDate() + "日";
+                        /*取出时，分*/
+                        var hour_minute = historyTime.getHours() + "时" + historyTime.getMinutes() + "分";
+                        /*取出数据计算出百分比*/
+                        var historyHolder = Number(value.history_holder);
+                        var historyTotal = Number(value.history_total);
+                        var percent = Number((historyHolder / historyTotal) * 100).toFixed() + "%";
+                        /*组装$node*/
+                        var y = "<div class='year'>" + year + "</div>";
+                        var m = "<div class='month_day'>" + month_date + "</div>";
+                        var h = "<div class='sItem'><div class='hour_minute'>" + hour_minute + "</div><div class='context'><a id='play' href='#videoPlay(本视频播放页)'>" + videoName + "</a></div><div class='rate'>看到" + percent + "</div></div>";
+                        if (Number(historyTime.getFullYear()) > yearfirst) {
+                            $history = $(y + m + h);
+                            $("#forHistory").append($history);
+                            yearfirst = Number(historyTime.getFullYear());
+                            monthfirst = Number(historyTime.getMonth());
+                            datefirst = Number(historyTime.getDate());
+                            hourfirst = Number(historyTime.getHours());
+                            minutefirst = Number(historyTime.getMinutes());
+                        } else {
+                            if ((Number(historyTime.getMonth()) > monthfirst) || (Number(historyTime.getMonth()) == monthfirst && Number(historyTime.getDate()) > datefirst)) {
+                                $history = $(m + h);
+                                $("#forHistory").children().eq(0).after($history);
+                                monthfirst = Number(historyTime.getMonth());
+                                datefirst = Number(historyTime.getDate());
+                                hourfirst = Number(historyTime.getHours());
+                                minutefirst = Number(historyTime.getMinutes());
+                            } else {
+                                if ((historyTime.getHours() > hourfirst) || ((historyTime.getHours() == hourfirst) && historyTime.getMinutes() > minutefirst)) {
+                                    $history = $(h);
+                                    $("#forHistory").children().eq(1).after($history);
+                                    hourfirst = Number(historyTime.getHours());
+                                    minutefirst = Number(historyTime.getMinutes());
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+            /*隐藏历史纪录*/
+            $("#forHistory").hide();
+            /*历史弹出列表,隐藏*/
+            $("#historyImg").mouseenter(function () {
+                $("#forHistory").show(100);
+            });
+            $("#forHistory").mouseleave(function () {
+                $("#forHistory").hide(200);
+            });
+            //以上是历史部分
+            /*导视弹出菜单,隐藏*/
+            $("#nav").mouseenter(function () {
+                $("#forNav").show(100);
+            });
+            $("#forNav").mouseleave(function () {
+                $("#forNav").hide(200);
+            });
+            //以下是搜库部分
+            /*事件绑定，点击<li>时,将<li>中的内容写入<input>*/
+            $("#forSearch ul").on("click", "li", function (event) {
+                var target = $(event.target);
+                var value = target.text();
+                $("input[name='search']").val(value);
+                $("#forSearch").hide();
+            });
+            /*查询数据库，返回匹配的video名称列表*/
+            $("input[name='search']").keyup(function () {
+                $("#forSearch ul").html("");
+                $("#forSearch").show();
+                if ($(this).val() != null && $(this).val() != "") {
+                    $.ajax({
+                        type: "post",
+                        url: "/Wcg_SearchVideo?flag=getVideoFirstByName",
+                        data: {"videoName": $(this).val()},
+                        dataType: "json",
+                        success: function (result) {
+                            $.each(result, function (n, value) {
+                                var $node = $('<li>' + value.toString() + '</li>');
+                                $("#forSearch ul").append($node);
+                            });
+                        }
+                    });
+                }
+            });
+            /*点击搜库按钮事件*/
+            $("#search_button p").click(function () {
+                $.ajax({
+                    type: "post",
+                    url: "/Wcg_SearchVideo?flag=getVideoByName",
+                    data: {"videoName": $("input[name='search']").val()},
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.length > 0) {
+                            location.href = "play.html";
+                        } else {
+                            layer.msg('未找到该影片 ！！！');
+                        }
+                    }
+                });
+            });
+            //以上是搜库部分
+            /*头像弹出列表,隐藏*/
+            $("#photo").mouseenter(function () {
+                $("#forPhoto").show(100);
+            });
+            $("#forPhoto").mouseleave(function () {
+                $("#forPhoto").hide(200);
+            });
+            /*登出功能*/
+            $("#logout").click(function () {
+                $.ajax({
+                    url: "/SessionServlet?flag=logout",
+                    type: "post",
+                    dataType: "text",
+                    success: function (result) {
+                        location.href = "homepage.html";
+                    }
+                });
+            });
+            //以下是信息设置部分
+            /*设置用户名*/
+            $("input[name='user_name']").blur(function () {
+                var userName = $(this).val();
+                if (userName != null && userName != "") {
+                    $.ajax({
+                        type: "post",
+                        url: "/Wcg_PersonalInfoChange?flag=updateUserName",
+                        data: {"userName": userName},
+                        dataType: "text",
+                        success: function (result) {
+                            if (result == 1) {
+                                layer.msg('昵称设置成功');
+                            }
+                        }
+                    });
+                }
+            });
+            /*设置用户性别*/
+            $("input[name='gender']").click(function () {
+                var userSex = $(this).val();
+                if (userSex != null && userSex != "") {
+                    $.ajax({
+                        type: "post",
+                        url: "/Wcg_PersonalInfoChange?flag=updateUserSex",
+                        data: {"userSex": userSex},
+                        dataType: "text",
+                        success: function (result) {
+                            if (result == 1) {
+                                layer.msg('性别设置成功');
+                            }
+                        }
+                    });
+                }
+            });
+            /*设置用户所在地*/
+            $("input[name='user_address']").blur(function () {
+                var userAddress = $(this).val();
+                if (userAddress != null && userAddress != "") {
+                    $.ajax({
+                        type: "post",
+                        url: "/Wcg_PersonalInfoChange?flag=updateUserAddress",
+                        data: {"userAddress": userAddress},
+                        dataType: "text",
+                        success: function (result) {
+                            if (result == 1) {
+                                layer.msg('地址设置成功');
+                            }
+                        }
+                    });
+                }
+            });
+            /*设置用户简介*/
+            $("textarea").blur(function () {
+                var userIntroduce = $(this).val();
+                if (userIntroduce != null && userIntroduce != "") {
+                    $.ajax({
+                        type: "post",
+                        url: "/Wcg_PersonalInfoChange?flag=updateUserIntroduce",
+                        data: {"userIntroduce": userIntroduce},
+                        dataType: "text",
+                        success: function (result) {
+                            if (result == 1) {
+                                layer.msg('简介设置成功');
+                            }
+                        }
+                    });
+                }
+            });
+            //以上是信息设置部分
+        });
+    </script>
+</head>
+<body>
+<div id="top">
+    <div id="top_in">
+        <!--Logo-->
+        <div id="logo">
+            <a href="homepage.html">
+                <div></div>
+            </a>
+        </div>
+        <!--首页-->
+        <div id="home">
+            <a href="homepage.html">
+                <div></div>
+                <p>首页</p>
+            </a>
+        </div>
+        <!--导航-->
+        <div id="nav">
+            <a href="#">
+                <div id="navLogo"></div>
+                <p>导视</p>
+            </a>
+            <div id="forNav" hidden>
+                <ul>
+                    <li><a href="homepage.html#movie">电影</a></li>
+                    <li><a href="homepage.html#tv">电视</a></li>
+                    <li><a href="homepage.html#upV">上传</a></li>
+                </ul>
+            </div>
+        </div>
+        <!--搜索栏-->
+        <div id="search">
+            <div id="key_word">
+                <div></div>
+                <input type="text" name="search"/>
+            </div>
+            <div id="search_button">
+                <p>搜库</p>
+            </div>
+            <div id="forSearch">
+                <ul>
+                </ul>
+            </div>
+        </div>
+        <!--头像-->
+        <div id="photo">
+            <a href="wcg_userInfo.html">
+                <div id="photoImg"></div>
+            </a>
+            <div id="forPhoto" hidden>
+                <ul>
+                    <li><a href="wcg_personalInfoChange.html">修改信息</a></li>
+                    <li><a id="logout" href="#homePage(未登录状态)">退出登录</a></li>
+                </ul>
+            </div>
+        </div>
+        <!--上传-->
+        <div id="upload">
+            <a href="wcg_userInfo.html#up">
+                <div></div>
+            </a>
+        </div>
+        <!--历史-->
+        <div id="history">
+            <div id="historyImg"></div>
+            <div id="forHistory">
+            </div>
+        </div>
+        <!--收藏-->
+        <div id="collect">
+            <a href="wcg_userInfo.html#miao">
+                <div></div>
+            </a>
+        </div>
+    </div>
+</div>
+<div id="body">
+    <div id="kongbai"></div>
+    <div id="center_background">
+        <!--基本资料-->
+        <div style="width: 800px; height: 500px;margin:0 auto;">
+            <div style="width: 140px;height:100px;">
+                <p style="font-size: 35px;line-height: 100px;font-weight: bolder;color: white">
+                    基本资料</p>
+            </div>
+            <div style="width: 453px;height:50px;margin-left: 100px;">
+                <p style="font-size: 20px;line-height: 50px;float: left;color: white;text-align: right;width: 100px;">
+                    昵称 : </p>
+                <input name="user_name" type="text"
+                       style="font-size: 20px;float: left;line-height: 50px;border: none;margin-left: 50px;background-color: transparent;color: white"/>
+            </div>
+            <div style="width: 453px;height:50px;margin-left: 100px;">
+                <p style="font-size: 20px;line-height: 50px;float: left;color: white;text-align: right;width: 100px;">
+                    性别 : </p>
+                <input name="gender" type="radio" value="男" checked=true
+                       style="float: left;border: none;margin-left: 50px;background-color: transparent;margin-top: 18px;"/>
+                <p style="float: left;line-height: 50px;font-size: 15px;margin-left: 10px;color: white">男</p>
+                <input name="gender" type="radio" value="女"
+                       style="border: none;margin-left: 50px;background-color: transparent;float: left;margin-top: 18px;"/>
+                <p style="float: left;line-height: 50px;font-size: 15px;margin-left: 10px;color: white">女</p>
+            </div>
+            <div style="width: 653px;height:50px;margin-left: 100px;">
+                <p style="font-size: 20px;line-height: 50px;float: left;color: white;text-align: right;width: 100px;">
+                    所在地 : </p>
+                <input name="user_address" type="text"
+                       style="font-size: 20px;float: left;line-height: 50px;border: none;margin-left: 50px;background-color: transparent;color: white"/>
+            </div>
+            <div style="width: 453px;height:50px;margin-left: 100px;">
+                <p style="font-size: 20px;line-height: 50px;float: left;color: white;text-align: right;width: 100px;">
+                    创建时间 : </p>
+                <input type="date" name="birth" readonly
+                       style="width:200px;height: 30px;float: left;margin-left: 50px;margin-top: 10px;border: none;border-radius: 5px;background-color: transparent;color: white;font-size: 18px;line-height: 50px"/>
+            </div>
+            <div style="width: 653px;height:50px;margin-left: 100px;">
+                <p style="font-size: 20px;line-height: 50px;float: left;color: white;text-align: right;width: 100px;">
+                    个人简介
+                    : </p>
+                <textarea rows="8" cols="50"
+                          style="border: none;border-radius: 5px;float: left;margin-left: 50px;font-size: 15px;line-height: 20px;width: 400px;min-width: 400px;max-width: 400px;height: 200px;min-height: 200px;max-height: 200px;margin-top: 10px"></textarea>
+            </div>
+        </div>
+        <!--修改头像-->
+        <div style="width: 800px;margin:0 auto;">
+            <div style="width: 140px;height:100px;">
+                <p style="font-size: 35px;line-height: 100px;font-weight: bolder;color: white">
+                    修改头像</p>
+            </div>
+            <iframe src="../fileUpload.html" style="margin-left: 100px;width: 700px;height: 800px;border: none"
+                    frameborder="0"></iframe>
+        </div>
+    </div>
+</div>
+<div id="footer">
+    <p>Copyright©2018 泉青酷 weteam.online 版权所有</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/lh_login.css">
+    <script src="../js/jquery-3.3.1.js"></script>
+</head>
+<script>
+    $(function () {
+        //以下为注册功能
+        $("#button").click(function () {
+            /*清空错误信息*/
+            if ($("#input_one").next().attr("name") != "1") {
+                $("#input_one").next().remove();
+            }
+            if ($("#input_two").next().attr("name") != "1") {
+                $("#input_two").next().remove();
+            }
+            if ($("#input_three").next().attr("name") != "1") {
+                $("#input_three").next().remove();
+            }
+            /*验证阶段*/
+            var userName = String($("#input_one").val());
+            var password = String($("#input_two").val());
+            var repass = String($("#input_three").val());
+            if (userName != null && userName != "") {
+                if (userName.length == 11) {
+                    /*到此，手机号验证完毕，以下为验证密码*/
+                    if (password != null && password != "") {
+                        if (password >= 6) {
+                            if (repass != null && repass != "" && repass == password) {
+                                /*注册*/
+                                $.ajax({
+                                    url: "/CheckUserServlet?flag=register",
+                                    type: "post",
+                                    dataType: "text",
+                                    async: false,
+                                    data: {
+                                        "user_phone": userName,
+                                        "user_password": password
+                                    },
+                                    success: function (result) {
+                                        if (result == 1) {
+                                            $.ajax({
+                                                url: "/CheckUserServlet?flag=getUserByPhone",
+                                                type: "post",
+                                                dataType: "text",
+                                                async: false,
+                                                data: {
+                                                    "user_phone": userName,
+                                                    "user_password": password
+                                                },
+                                                success: function (result) {
+                                                    if (result == 1) {
+                                                        parent.location.reload();
+                                                    }
+                                                }
+                                            });
+                                        } else {
+                                            alert("改手机号已被注册!!!");
+                                        }
+                                    }
+                                });
+                            } else {
+                                var $error = $("<p style=color:red;'>两次输入的密码不同!!!</p>");
+                                $("#input_three").after($error);
+                            }
+                        } else {
+                            var $error = $("<p style=color:red;'>请输入长度超过6位的密码!!!</p>");
+                            $("#input_two").after($error);
+                        }
+                    } else {
+                        var $error = $("<p style=color:red;'>请输入密码!!!</p>");
+                        $("#input_two").after($error);
+                    }
+                }
+                else {
+                    var $error = $("<p style=color:red;'>请输入长度位11位的手机号!!!</p>");
+                    $("#input_one").after($error);
+                }
+            } else {
+                var $error = $("<p style=color:red;'>请输入手机号!!!</p>");
+                $("#input_one").after($error1);
+            }
+        });
+        //以上为注册功能
+    })
+
+    var index = parent.layer.getFrameIndex(window.name);
+
+    /*切换登录页面页面*/
+    function show2() {
+        parent.layer.open({
+            type: 2,
+            title: false,
+            area: ['760px', '350px'],
+            content: 'login.html',
+        });
+        /*关闭本页面*/
+        parent.layer.close(index);
+    }
+</script>
+<body>
+<div id="body1">
+    <div id="right">
+        <div id="log1">
+            <a href="#">手机注册</a>
+        </div>
+        <div id="log3">
+            <div id="YZ_one">
+                <div id="YZ_x" data-region="CN">+86</div>
+                <!--<div id="YZ_y"></div>-->
+                <div id="YZ_z" data-region="CN">
+                    <input name="userphone" type="text" placeholder="手机号码" id="input_one"
+                           onfocus="this.placeholder='';"
+                           onblur="if(this.value.length < 1)this.placeholder='手机号码';"/>
+                    <a name="1"></a>
+                </div>
+            </div>
+            <div id="YZ_two">
+                <div id="YZ_two_x">
+                    <img src="../image/lh_images/登录注册-密码大.png"/>
+                </div>
+                <div id="YZ_two_y">
+                    <input type="password" name="userpassword" placeholder="密码(6-16位字母、数字和符号)"
+                           id="input_two" onfocus="this.placeholder='';"
+                           onblur="if(this.placeholder.length < 1)this.placeholder='密码(6-16位字母、数字和符号)';">
+                    <a name="1"></a>
+                </div>
+            </div>
+            <div id="YZ_three">
+                <div id="YZ_three_x">
+                    <img src="../image/lh_images/登录注册-密码大.png"/>
+                </div>
+                <div id="YZ_three_y">
+                    <input type="password" placeholder="确认密码" id="input_three"
+                           onfocus="this.placeholder='';"
+                           onblur="if(this.value.length < 1)this.placeholder='确认密码';">
+                    <a name="1"></a>
+                </div>
+            </div>
+            <div id="but">
+                <input type="button" value="注册" id="button">
+            </div>
+        </div>
+        <div id="login" onclick="show2()">
+            <a href="#">登录</a>
+        </div>
+        <div id="YZ_five">
+            <div id="YZ_five_x1">
+                <input type="checkbox" style="margin-top: 3.5px">
+            </div>
+            <div id="YZ_five_y1">
+                <p>已阅读并同意<a href="#">《用户协议》</a><a href="#">《隐私政策》</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../js/jquery-3.3.1.js"></script>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" type="text/css" href="../css/wcg_userInfo.css">
+    <link rel="stylesheet" href="../css/lh_homepage.css">
+    <script src="../js/jquery-3.3.1.js"></script>
+    <script src="../layui/layui.all.js"></script>
+    <script>
+        $(function () {
+            /*页面加载时查询Session，若有值，显示个人头像*/
+            $.ajax({
+                type: "post",
+                url: "/Wcg_PersonalInfoChange?flag=getUserById",
+                dataType: "json",
+                success: function (result) {
+                    $.each(result, function (n, value) {
+                        if (value.user_image != null && value.user_image != "") {
+                            /*设置初始头像*/
+                            $("#photoImg").css("background-image", "url(" + value.user_image + ")");
+                        }
+                    });
+                    $("#tou").attr("onclick", "");
+                }
+            });
+            /*导视弹出菜单,隐藏*/
+            $("#nav").mouseenter(function () {
+                $("#forNav").show(100);
+            });
+            $("#forNav").mouseleave(function () {
+                $("#forNav").hide(200);
+            });
+            //以下是搜库部分
+            /*事件绑定，点击<li>时,将<li>中的内容写入<input>*/
+            $("#forSearch ul").on("click", "li", function (event) {
+                var target = $(event.target);
+                var value = target.text();
+                $("input[name='search']").val(value);
+                $("#forSearch").hide();
+            });
+            /*查询数据库，返回匹配的video名称列表*/
+            $("input[name='search']").keyup(function () {
+                $("#forSearch ul").html("");
+                $("#forSearch").show();
+                if ($(this).val() != null && $(this).val() != "") {
+                    $.ajax({
+                        type: "post",
+                        url: "/Wcg_SearchVideo?flag=getVideoFirstByName",
+                        data: {"videoName": $(this).val()},
+                        dataType: "json",
+                        success: function (result) {
+                            $.each(result, function (n, value) {
+                                var $node = $('<li>' + value.toString() + '</li>');
+                                $("#forSearch ul").append($node);
+                            });
+                        }
+                    });
+                }
+            });
+            /*点击搜库按钮事件*/
+            $("#search_button p").click(function () {
+                $.ajax({
+                    type: "post",
+                    url: "/Wcg_SearchVideo?flag=getVideoByName",
+                    data: {"videoName": $("input[name='search']").val()},
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.length > 0) {
+                            location.href = "play.html";
+                        } else {
+                            layer.msg('未找到该影片 ！！！');
+                        }
+                    }
+                });
+            });
+            //以上是搜库部分
+
+            //以下是历史部分
+            /*为历史纪录导向设置事件委托*/
+            $("#forHistory").on("click", "a", function (event) {
+                var target = $(event.target);
+                var videoName = target.text();
+                $.ajax({
+                    type: "post",
+                    url: "/Wcg_SearchVideo?flag=getVideoByName",
+                    data: {"videoName": videoName},
+                    dataType: "json",
+                    success: function (res) {
+                        location.href = "play.html";
+                    }
+                });
+            })
+            /*查询显示个人观看历史*/
+            $.ajax({
+                type: "post",
+                url: "/Wcg_SearchHistory",
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    /*最终的$node*/
+                    var $history;
+                    /*设置判断条件*/
+                    var yearfirst = 0;
+                    var monthfirst = 0;
+                    var datefirst = 0;
+                    var hourfirst = 0;
+                    var minutefirst = 0;
+                    /*取出每一条历史记录*/
+                    $.each(result, function (n, value) {
+                        /*取出video_id*/
+                        var videoId = value.video_id;
+                        var videoName = "";
+                        /*根据videoId查出视频名称,存入videoName*/
+                        $.ajax({
+                            type: "post",
+                            url: "/Wcg_SearchVideo?flag=getVideoById",
+                            data: {"videoId": videoId},
+                            dataType: "json",
+                            async: false,
+                            success: function (res) {
+                                $.each(res, function (i, val) {
+                                    videoName = val.video_name;
+                                });
+                            }
+                        });
+                        /*取出历史时间*/
+                        var historyTime = new Date(value.history_time);
+                        /*取出年份*/
+                        var year = historyTime.getFullYear() + "年";
+                        /*取出月，日*/
+                        var month_date = historyTime.getMonth() + "月" + historyTime.getDate() + "日";
+                        /*取出时，分*/
+                        var hour_minute = historyTime.getHours() + "时" + historyTime.getMinutes() + "分";
+                        /*取出数据计算出百分比*/
+                        var historyHolder = Number(value.history_holder);
+                        var historyTotal = Number(value.history_total);
+                        var percent = Number((historyHolder / historyTotal) * 100).toFixed() + "%";
+                        /*组装$node*/
+                        var y = "<div class='year'>" + year + "</div>";
+                        var m = "<div class='month_day'>" + month_date + "</div>";
+                        var h = "<div class='sItem'><div class='hour_minute'>" + hour_minute + "</div><div class='context'><a id='play' href='#videoPlay(本视频播放页)'>" + videoName + "</a></div><div class='rate'>看到" + percent + "</div></div>";
+                        if (Number(historyTime.getFullYear()) > yearfirst) {
+                            $history = $(y + m + h);
+                            $("#forHistory").append($history);
+                            yearfirst = Number(historyTime.getFullYear());
+                            monthfirst = Number(historyTime.getMonth());
+                            datefirst = Number(historyTime.getDate());
+                            hourfirst = Number(historyTime.getHours());
+                            minutefirst = Number(historyTime.getMinutes());
+                        } else {
+                            if ((Number(historyTime.getMonth()) > monthfirst) || (Number(historyTime.getMonth()) == monthfirst && Number(historyTime.getDate()) > datefirst)) {
+                                $history = $(m + h);
+                                $("#forHistory").children().eq(0).after($history);
+                                monthfirst = Number(historyTime.getMonth());
+                                datefirst = Number(historyTime.getDate());
+                                hourfirst = Number(historyTime.getHours());
+                                minutefirst = Number(historyTime.getMinutes());
+                            } else {
+                                if ((historyTime.getHours() > hourfirst) || ((historyTime.getHours() == hourfirst) && historyTime.getMinutes() > minutefirst)) {
+                                    $history = $(h);
+                                    $("#forHistory").children().eq(1).after($history);
+                                    hourfirst = Number(historyTime.getHours());
+                                    minutefirst = Number(historyTime.getMinutes());
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+            /*隐藏历史纪录*/
+            $("#forHistory").hide();
+            /*历史弹出列表,隐藏*/
+            $("#historyImg").mouseenter(function () {
+                $("#forHistory").show(100);
+            });
+            $("#forHistory").mouseleave(function () {
+                $("#forHistory").hide(200);
+            });
+            //以上是历史部分
+            /*头像弹出列表,隐藏*/
+            $("#photo").mouseenter(function () {
+                $("#forPhoto").show(100);
+            });
+            $("#forPhoto").mouseleave(function () {
+                $("#forPhoto").hide(200);
+            });
+            /*登出功能*/
+            $("#logout").click(function () {
+                $.ajax({
+                    url: "/SessionServlet?flag=logout",
+                    type: "post",
+                    dataType: "text",
+                    success: function (result) {
+                        location.href = "homepage.html";
+                        $("#tou").attr("onclick", "ShowLoginText()");
+                    }
+                });
+            });
+            //电影显示
+            $.ajax({
+                url: "/HomeShowServlet",
+                data: {"video_sort": "电影"},
+                type: "post",
+                dataType: "json",
+                success: function (result) {
+                    for (var j = 1; j < 6; j++) {
+                        $("#body_two_content" + j +"").children().eq(1).children().children().children().text(result[j].video_name);
+                        $("#body_two_content" + j +"").children().eq(0).attr("src",result[j].video_image);
+                        $("#body_two_content" + j +"").children().eq(0).attr("id",result[j].video_id);
+                    }
+                }, error: function () {
+                    // alert("展示数据错误！！");
+                }
+            });
+            //电影传session
+            for (var i = 1; i < 6; i++) {
+                //立即调用的函数表达式（IIFE）
+                (function (i) {
+                    $("#body_two_content" + i +"").children().eq(0).click(function () {
+                        var $vid_session = $("#body_two_content" + i +"").children().eq(0).attr("id");
+                        $.ajax({
+                            url: "/CdcMidSetsessionServlet",
+                            data: {"video_id": $vid_session},
+                            type: "post",
+                            dataType: "json",
+                            success: function (result) {
+                                // alert(2);
+                                location.href = "play.html";
+                            }, error: function () {
+                                // alert("展示数据错误！！");
+                            }
+                        });
+                    });
+                })(i);
+            };
+            //剧集显示
+            $.ajax({
+                url: "/HomeShowServlet",
+                data: {"video_sort": "剧集"},
+                type: "post",
+                dataType: "json",
+                success: function (result) {
+                    // alert($("#body_three_content1").children().eq(1).children().eq(0).children().text());
+                    for (var j = 1; j < 6; j++) {
+                        $("#body_three_content" + j + "").children().eq(1).children().eq(0).children().text(result[j].video_name);
+                        $("#body_three_content" + j +"").children().eq(0).attr("src",result[j].video_image).css("width","192px").css("height","288px");
+                        $("#body_three_content" + j +"").children().eq(0).attr("id",result[j].video_id);
+                    }
+                }, error: function () {
+                    // alert("展示数据错误！！");
+                }
+            });
+            //剧集传session
+            for (var i = 1; i < 6; i++) {
+                //立即调用的函数表达式（IIFE）
+                (function (i) {
+                    $("#body_three_content" + i +"").children().eq(0).click(function () {
+                        var $vid_session = $("#body_three_content" + i +"").children().eq(0).attr("id");
+                        $.ajax({
+                            url: "/CdcMidSetsessionServlet",
+                            data: {"video_id": $vid_session},
+                            type: "post",
+                            dataType: "json",
+                            success: function (result) {
+                                // alert(2);
+                                location.href = "play.html";
+                            }, error: function () {
+                                // alert("展示数据错误！！");
+                            }
+                        });
+                    });
+                })(i);
+            };
+        });
+        /*轮播数组*/
+        var $lunboarr = new Array("../image/lh_images/0.jpg", "../image/lh_images/1.jpg", "../image/lh_images/2.jpg", "../image/lh_images/3.jpg", "../image/lh_images/4.jpg", "../image/lh_images/5.jpg", "../image/lh_images/6.jpg");
+        var $i = 1;
+        /*单独加载轮播*/
+        $(function () {
+            setTimeout("changeImage()", 3000);
+        });
+
+        /*轮播函数(小花立功)*/
+        function changeImage() {
+            if ($i > 6) {
+                $i = 0;
+            }
+            $("#body").css("background-image", "url(" + $lunboarr[$i] + ")");
+            /*设置背景图片*/
+            $i++;
+            setTimeout("changeImage()", 3000);
+        }
+
+        /*弹出登录页面函数*/
+        function ShowLoginText() {
+            layer.open({
+                type: 2,
+                title: false,
+                area: ['760px', '350px'],
+                content: 'login.html',
+            });
+        }
+    </script>
+</head>
+<body>
+<div id="top">
+    <div id="top_in">
+        <!--Logo-->
+        <div id="logo">
+            <a href="homepage.html">
+                <div></div>
+            </a>
+        </div>
+        <!--首页-->
+        <div id="home">
+            <a href="homepage.html">
+                <div></div>
+                <p>首页</p>
+            </a>
+        </div>
+        <!--导航-->
+        <div id="nav">
+            <a href="#">
+                <div id="navLogo"></div>
+                <p>导视</p>
+            </a>
+            <div id="forNav" hidden>
+                <ul>
+                    <li><a href="homepage.html#movie">电影</a></li>
+                    <li><a href="homepage.html#tv">电视</a></li>
+                    <li><a href="homepage.html#upV">上传</a></li>
+                </ul>
+            </div>
+        </div>
+        <!--搜索栏-->
+        <div id="search">
+            <div id="key_word">
+                <div></div>
+                <input type="text" name="search"/>
+            </div>
+            <div id="search_button">
+                <p>搜库</p>
+            </div>
+            <div id="forSearch">
+                <ul>
+                </ul>
+            </div>
+        </div>
+        <!--头像-->
+        <div id="photo">
+            <a id="tou" onclick="ShowLoginText()">
+                <div id="photoImg"></div>
+            </a>
+            <div id="forPhoto" hidden>
+                <ul>
+                    <li><a href="wcg_personalInfoChange.html">修改信息</a></li>
+                    <li><a id="logout" href="#homePage(未登录状态)">退出登录</a></li>
+                </ul>
+            </div>
+        </div>
+        <!--上传-->
+        <div id="upload">
+            <a href="wcg_userInfo.html#up">
+                <div></div>
+            </a>
+        </div>
+        <!--历史-->
+        <div id="history">
+            <div id="historyImg"></div>
+            <div id="forHistory">
+            </div>
+        </div>
+        <!--收藏-->
+        <div id="collect">
+            <a href="wcg_userInfo.html#miao">
+                <div></div>
+            </a>
+        </div>
+        <!--片库-->
+        <div id="searchLib">
+            <a href="film_library.html">
+                <div></div>
+            </a>
+        </div>
+    </div>
+</div>
+<div id="body">
+    <!--<div id="right">-->
+    <!--<ul class="right">-->
+    <!--<li><a href="#">舞动乾坤：张天爱身份揭晓</a></li>-->
+    <!--<li><a href="#">灌篮顶配版：李易峰训斥球员</a></li>-->
+    <!--<li><a href="#">香蜜成成如雪：锦觅一心</a></li>-->
+    <!--<li><a href="#">周六夜现场XXXL版</a></li>-->
+    <!--<li><a href="#">煤这吴江</a></li>-->
+    <!--<li><a href="#">花花会员版</a></li>-->
+    <!--<li><a href="#">共筑中国梦</a></li>-->
+    <!--</ul>-->
+    <!--</div>-->
+</div>
+<a name="movie" style="float: left;margin-top: -90px"></a>
+<div id="body_two">
+    <div id="body_two_logo">
+        <p>电影</p>
+    </div>
+    <div id="body_two_content1">
+        <img src="../image/lh_images/dianying1.jpg" id="aa"/>
+        <div>
+            <ul>
+                <li id="li1"><a>侠盗联盟</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="body_two_content2">
+        <img src="../image/lh_images/dianying2.jpg" id="bb"/>
+        <div>
+            <ul>
+                <li id="li1a"><a>狄仁杰之夺命天眼</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="body_two_content3">
+        <img src="../image/lh_images/dianying3.jpg" id="cc"/>
+        <div>
+            <ul>
+                <li id="li1c"><a>武动乾坤之英雄出少年</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="body_two_content4">
+        <img src="../image/lh_images/dingying4.jpg" id="dd"/>
+        <div>
+            <ul>
+                <li id="li1e"><a>小岳岳被爆掌权</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="body_two_content5">
+        <img src="../image/lh_images/diangying5.jpg" id="ee"/>
+        <div>
+            <ul>
+                <li id="li1g"><a>万魂京</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<a name="tv" style="float: left;margin-top: -90px"></a>
+<div id="body_three">
+    <div id="body_three_logo">
+        <p>剧集</p>
+    </div>
+    <div id="body_three_content1">
+        <img src="../image/lh_images/juji1.jpg" id="ff"/>
+        <ul>
+            <li><a href="#">舞动乾坤之英雄出少年</a></li>
+        </ul>
+    </div>
+    <div id="body_three_content2">
+        <img src="../image/lh_images/juji2.jpg" height="252" width="448" id="gg"/>
+        <ul>
+            <li><a href="#">舞动乾坤之英雄出少年</a></li>
+        </ul>
+    </div>
+    <div id="body_three_content3">
+        <img src="../image/lh_images/juji3.jpg" height="252" width="448" id="hh"/>
+        <ul>
+            <li><a href="#">舞动乾坤之英雄出少年</a></li>
+        </ul>
+    </div>
+    <div id="body_three_content4">
+        <img src="../image/lh_images/juji4.jpg" height="252" width="448" id="ii"/>
+        <ul>
+            <li><a href="#">舞动乾坤之英雄出少年</a></li>
+        </ul>
+    </div>
+    <div id="body_three_content5">
+        <img src="../image/lh_images/juji5.jpg" height="252" width="448" id="jj"/>
+        <ul>
+            <li><a href="#">桃花</a></li>
+        </ul>
+    </div>
+</div>
+<div id="body_four">
+    <div id="body_four_logo">
+        <a name="upV" style="float: left;margin-top: -90px"></a>
+        <p>用户上传</p>
+    </div>
+</div>
+<div id="body_four_content1">
+
+    <img src="../image/video_image/zhongjiyiban1.jpg" height="300" width="200"/>
+    <div>
+        <ul>
+            <li id="liaa"><a href="#">终极一班1</a></li>
+        </ul>
+    </div>
+</div>
+<div id="body_four_content2">
+
+    <img src="../image/video_image/zhongjiyiban2.jpg" height="300" width="200"/>
+    <div>
+        <ul>
+            <li id="licc"><a href="#">终极一班2</a></li>
+        </ul>
+    </div>
+</div>
+<div id="body_four_content3">
+
+    <img src="../image/video_image/zhongjiyiban3.jpg" height="300" width="200"/>
+    <div>
+        <ul>
+            <li id="liee">
+                <a href="#">终极一班3</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div id="body_four_content4">
+    <img src="../image/lh_images/dianying1.jpg"/>
+    <div>
+        <ul>
+            <li id="ligg"><a href="#">侠盗联盟</a></li>
+        </ul>
+    </div>
+</div>
+<div id="body_four_content5">
+
+    <img src="../image/video_image/yangu.jpg" height="300" width="200"/>
+    <div>
+        <ul>
+            <li id="liii"><a href="#">艳骨</a></li>
+        </ul>
+    </div>
+</div>
+<div id="footer">
+</div>
+<div id="footer_last">
+    <p>Copyright©2018 泉青酷 weteam.online 版权所有</p>
+</div>
+</body>
+</html>

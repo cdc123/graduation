@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <script type="text/javascript" src="../js/jquery-3.3.1.js"></script>
+    <script>
+        $(function () {
+            $(".ak").click(function () {
+                $.ajax({
+                    url: "/TextServlet",
+                    type: "post",
+                    dataType: "json",
+                    success: function (result) {
+                        location.href = "play.html";
+                    }, error: function () {
+                        alert("展示数据错误！！");
+                    }
+                });
+            });
+            $(".bk").click(function () {
+                $.ajax({
+                    url: "/Test1Servlet",
+                    data:{"user_id": 21},
+                    type: "post",
+                    dataType: "json",
+                    success: function (result) {
+alert(1);
+                    }, error: function () {
+                        alert("展示数据错误！！");
+                    }
+                });
+            });
+        })
+    </script>
+</head>
+<body>
+<input type="button" value="视频id" class="ak">
+<input type="button" value="用户id" class="bk">
+
+</body>
+</html>
