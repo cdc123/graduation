@@ -12,6 +12,8 @@
     <script src="../layui/layui.all.js"></script>
     <script src="../js/wangEditor.min.js"></script>
     <link rel="stylesheet" href="../css/C_CSS.css" type="text/css">
+    <script src="https://www.moerats.com/usr/dplayer/DPlayer.min.js"></script>
+    <script src="https://cdnjs.loli.net/ajax/libs/blueimp-md5/2.10.0/js/md5.min.js"></script>
     <script>
         $(function () {
             var E = window.wangEditor;
@@ -63,34 +65,34 @@
             var $v_id = -1;
             var $u_id = -1;
             //获取session信息
-            $.ajax({
-                async: false,
-                url: "/CdcGetsessionServlet",
-                data: {"videoGetsession": "videosession"},
-                type: "post",
-                dataType: "json",
-                success: function (result) {
-                    //对象转数字
-                    $v_id = Number(result);
-                    //第二层ajax取user_id_session
-                    $.ajax({
-                        async: false,
-                        url: "/CdcGetsession1Servlet",
-                        // data: {"userGetsession": "sessionListForUser"},
-                        type: "post",
-                        dataType: "json",
-                        success: function (result) {
-                            $u_id = Number(result[0].user_id);
-                            //嵌套ajax，调整ajax执行顺序
-                            show();
-                        }, error: function () {
-                            alert("kkkk");
-                        }
-                    });
-                }, error: function () {
-                    alert("展示数据错误！！");
-                }
-            });
+            // $.ajax({
+            //     async: false,
+            //     url: "/CdcGetsessionServlet",
+            //     data: {"videoGetsession": "videosession"},
+            //     type: "post",
+            //     dataType: "json",
+            //     success: function (result) {
+            //         //对象转数字
+            //         $v_id = Number(result);
+            //         //第二层ajax取user_id_session
+            //         $.ajax({
+            //             async: false,
+            //             url: "/CdcGetsession1Servlet",
+            //             // data: {"userGetsession": "sessionListForUser"},
+            //             type: "post",
+            //             dataType: "json",
+            //             success: function (result) {
+            //                 $u_id = Number(result[0].user_id);
+            //                 //嵌套ajax，调整ajax执行顺序
+            //                 show();
+            //             }, error: function () {
+            //                 alert("kkkk");
+            //             }
+            //         });
+            //     }, error: function () {
+            //         alert("展示数据错误！！");
+            //     }
+            // });
 
             show();
             function show() {
@@ -98,96 +100,96 @@
                 //历史
                 //以下是历史部分
                 /*为历史纪录导向设置事件委托*/
-                $("#forHistory").on("click", "a", function (event) {
-                    var target = $(event.target);
-                    var videoName = target.text();
-                    $.ajax({
-                        type: "post",
-                        url: "/Wcg_SearchVideo?flag=getVideoByName",
-                        data: {"videoName": videoName},
-                        dataType: "json",
-                        success: function (res) {
-                            location.href = "play.html";
-                        }
-                    });
-                })
+                // $("#forHistory").on("click", "a", function (event) {
+                //     var target = $(event.target);
+                //     var videoName = target.text();
+                //     $.ajax({
+                //         type: "post",
+                //         url: "/Wcg_SearchVideo?flag=getVideoByName",
+                //         data: {"videoName": videoName},
+                //         dataType: "json",
+                //         success: function (res) {
+                //             location.href = "play.html";
+                //         }
+                //     });
+                // })
                 /*查询显示个人观看历史*/
-                $.ajax({
-                    type: "post",
-                    url: "/Wcg_SearchHistory",
-                    dataType: "json",
-                    async: false,
-                    success: function (result) {
-                        /*最终的$node*/
-                        var $history;
-                        /*设置判断条件*/
-                        var yearfirst = 0;
-                        var monthfirst = 0;
-                        var datefirst = 0;
-                        var hourfirst = 0;
-                        var minutefirst = 0;
-                        /*取出每一条历史记录*/
-                        $.each(result, function (n, value) {
-                            /*取出video_id*/
-                            var videoId = value.video_id;
-                            var videoName = "";
-                            /*根据videoId查出视频名称,存入videoName*/
-                            $.ajax({
-                                type: "post",
-                                url: "/Wcg_SearchVideo?flag=getVideoById",
-                                data: {"videoId": videoId},
-                                dataType: "json",
-                                async: false,
-                                success: function (res) {
-                                    $.each(res, function (i, val) {
-                                        videoName = val.video_name;
-                                    });
-                                }
-                            });
-                            /*取出历史时间*/
-                            var historyTime = new Date(value.history_time);
-                            /*取出年份*/
-                            var year = historyTime.getFullYear() + "年";
-                            /*取出月，日*/
-                            var month_date = historyTime.getMonth() + "月" + historyTime.getDate() + "日";
-                            /*取出时，分*/
-                            var hour_minute = historyTime.getHours() + "时" + historyTime.getMinutes() + "分";
-                            /*取出数据计算出百分比*/
-                            var historyHolder = Number(value.history_holder);
-                            var historyTotal = Number(value.history_total);
-                            var percent = Number((historyHolder / historyTotal) * 100).toFixed() + "%";
-                            /*组装$node*/
-                            var y = "<div class='year'>" + year + "</div>";
-                            var m = "<div class='month_day'>" + month_date + "</div>";
-                            var h = "<div class='sItem'><div class='hour_minute'>" + hour_minute + "</div><div class='context'><a id='play' href='#videoPlay(本视频播放页)'>" + videoName + "</a></div><div class='rate'>看到" + percent + "</div></div>";
-                            if (Number(historyTime.getFullYear()) > yearfirst) {
-                                $history = $(y + m + h);
-                                $("#forHistory").append($history);
-                                yearfirst = Number(historyTime.getFullYear());
-                                monthfirst = Number(historyTime.getMonth());
-                                datefirst = Number(historyTime.getDate());
-                                hourfirst = Number(historyTime.getHours());
-                                minutefirst = Number(historyTime.getMinutes());
-                            } else {
-                                if ((Number(historyTime.getMonth()) > monthfirst) || (Number(historyTime.getMonth()) == monthfirst && Number(historyTime.getDate()) > datefirst)) {
-                                    $history = $(m + h);
-                                    $("#forHistory").children().eq(0).after($history);
-                                    monthfirst = Number(historyTime.getMonth());
-                                    datefirst = Number(historyTime.getDate());
-                                    hourfirst = Number(historyTime.getHours());
-                                    minutefirst = Number(historyTime.getMinutes());
-                                } else {
-                                    if ((historyTime.getHours() > hourfirst) || ((historyTime.getHours() == hourfirst) && historyTime.getMinutes() > minutefirst)) {
-                                        $history = $(h);
-                                        $("#forHistory").children().eq(1).after($history);
-                                        hourfirst = Number(historyTime.getHours());
-                                        minutefirst = Number(historyTime.getMinutes());
-                                    }
-                                }
-                            }
-                        });
-                    }
-                });
+                // $.ajax({
+                //     type: "post",
+                //     url: "/Wcg_SearchHistory",
+                //     dataType: "json",
+                //     async: false,
+                //     success: function (result) {
+                //         /*最终的$node*/
+                //         var $history;
+                //         /*设置判断条件*/
+                //         var yearfirst = 0;
+                //         var monthfirst = 0;
+                //         var datefirst = 0;
+                //         var hourfirst = 0;
+                //         var minutefirst = 0;
+                //         /*取出每一条历史记录*/
+                //         $.each(result, function (n, value) {
+                //             /*取出video_id*/
+                //             var videoId = value.video_id;
+                //             var videoName = "";
+                //             /*根据videoId查出视频名称,存入videoName*/
+                //             $.ajax({
+                //                 type: "post",
+                //                 url: "/Wcg_SearchVideo?flag=getVideoById",
+                //                 data: {"videoId": videoId},
+                //                 dataType: "json",
+                //                 async: false,
+                //                 success: function (res) {
+                //                     $.each(res, function (i, val) {
+                //                         videoName = val.video_name;
+                //                     });
+                //                 }
+                //             });
+                //             /*取出历史时间*/
+                //             var historyTime = new Date(value.history_time);
+                //             /*取出年份*/
+                //             var year = historyTime.getFullYear() + "年";
+                //             /*取出月，日*/
+                //             var month_date = historyTime.getMonth() + "月" + historyTime.getDate() + "日";
+                //             /*取出时，分*/
+                //             var hour_minute = historyTime.getHours() + "时" + historyTime.getMinutes() + "分";
+                //             /*取出数据计算出百分比*/
+                //             var historyHolder = Number(value.history_holder);
+                //             var historyTotal = Number(value.history_total);
+                //             var percent = Number((historyHolder / historyTotal) * 100).toFixed() + "%";
+                //             /*组装$node*/
+                //             var y = "<div class='year'>" + year + "</div>";
+                //             var m = "<div class='month_day'>" + month_date + "</div>";
+                //             var h = "<div class='sItem'><div class='hour_minute'>" + hour_minute + "</div><div class='context'><a id='play' href='#videoPlay(本视频播放页)'>" + videoName + "</a></div><div class='rate'>看到" + percent + "</div></div>";
+                //             if (Number(historyTime.getFullYear()) > yearfirst) {
+                //                 $history = $(y + m + h);
+                //                 $("#forHistory").append($history);
+                //                 yearfirst = Number(historyTime.getFullYear());
+                //                 monthfirst = Number(historyTime.getMonth());
+                //                 datefirst = Number(historyTime.getDate());
+                //                 hourfirst = Number(historyTime.getHours());
+                //                 minutefirst = Number(historyTime.getMinutes());
+                //             } else {
+                //                 if ((Number(historyTime.getMonth()) > monthfirst) || (Number(historyTime.getMonth()) == monthfirst && Number(historyTime.getDate()) > datefirst)) {
+                //                     $history = $(m + h);
+                //                     $("#forHistory").children().eq(0).after($history);
+                //                     monthfirst = Number(historyTime.getMonth());
+                //                     datefirst = Number(historyTime.getDate());
+                //                     hourfirst = Number(historyTime.getHours());
+                //                     minutefirst = Number(historyTime.getMinutes());
+                //                 } else {
+                //                     if ((historyTime.getHours() > hourfirst) || ((historyTime.getHours() == hourfirst) && historyTime.getMinutes() > minutefirst)) {
+                //                         $history = $(h);
+                //                         $("#forHistory").children().eq(1).after($history);
+                //                         hourfirst = Number(historyTime.getHours());
+                //                         minutefirst = Number(historyTime.getMinutes());
+                //                     }
+                //                 }
+                //             }
+                //         });
+                //     }
+                // });
                 /*隐藏历史纪录*/
                 $("#forHistory").hide();
                 /*历史弹出列表,隐藏*/
@@ -199,313 +201,301 @@
                 });
                 //以上是历史部分
                 //获取头像
-                $.ajax({
-                    async: false,
-                    type: "post",
-                    url: "/Wcg_PersonalInfoChange?flag=getUserById",
-                    dataType: "json",
-                    success: function (result) {
-                        $.each(result, function (n, value) {
-                            if (value.user_image != null && value.user_image != "") {
-                                /*设置初始头像*/
-                                $(".login").children().children().attr("src", value.user_image);
-                            }
-                        });
-                        $("#tou").attr("onclick", "");
-                    }
-                });
+                // $.ajax({
+                //     async: false,
+                //     type: "post",
+                //     url: "/Wcg_PersonalInfoChange?flag=getUserById",
+                //     dataType: "json",
+                //     success: function (result) {
+                //         $.each(result, function (n, value) {
+                //             if (value.user_image != null && value.user_image != "") {
+                //                 /*设置初始头像*/
+                //                 $(".login").children().children().attr("src", value.user_image);
+                //             }
+                //         });
+                //         $("#tou").attr("onclick", "");
+                //     }
+                // });
                 //获取video信息
                 $.ajax({
                     async: false,
-                    url: "/CdcPlayServlet",
-                    data: {"video_id": $v_id},
+                    url: "/play/getVideo",
+                    data: {"video_id": 1},
+                    // data:{"video_id":""},
                     type: "post",
-                    dataType: "json",
+                    // contentType: "application/json;charset=UTF-8",
+                    // dataType: "json",
                     success: function (result) {
-                        $video = result[0].video_video;
+                        // alert("成功");
                         $(".play_3_1_1").text(result[0].video_name);
                         $(".tag_1_1").text(result[0].video_name);
                         $(".intro_2").children().text(result[0].video_introduce);
-                        var dp = new DPlayer({
-                            element: document.getElementById('player1'),
-                            autoplay: true,
-                            video: {
-                                // url: $video,
-                                url: 'https://cdc123.oss-cn-beijing.aliyuncs.com/xiaoli.mp4?Expires=1556085581&OSSAccessKeyId=TMP.AgHgz7CzIJlSegVxwJEb-eLEkcS3jakTDjkwKgm4EvfhqoDYpi7wgTrnvV0ZMC4CFQDBCWBTMcU5FP_ihWYD9bFwRJuhoAIVAMcst-d21V5x-m8ATTSzNFZyXlzz&Signature=radMGMjKC2nHMpRoj9kbKa6k8wA%3D'
-                                // pic: '../css/danmu.jpg'
-                            },
-                            danmaku: {
-                                id: 'demo',
-                                api: 'https://dplayer.moerats.com/',
-                                addition: ['https://api.prprpr.me/dplayer/v3/bilibili?aid=4157142']
-                            }
-                        });
                         //嵌套ajax
-                        $.ajax({
-                            async: false,
-                            url: "/CdcOutXuboServlet",
-                            data: {"video_id": $v_id, "user_id": $u_id},
-                            type: "post",
-                            dataType: "json",
-                            success: function (result) {
-                                //时间跳转
-                                dp.seek(result[0].history_holder);
-                            }, error: function () {
-                                // alert("展示数据错误！！");
-                            }
-                        });
-                        setInterval(miao, 1000);
-
-                        function miao() {
-                            //获取当前播放时间
-                            $cur = dp.video.currentTime;
-                            //获取视频总时间
-                            $dur = dp.video.duration;
-                        };
+                        // $.ajax({
+                        //     async: false,
+                        //     url: "/CdcOutXuboServlet",
+                        //     data: {"video_id": $v_id, "user_id": $u_id},
+                        //     type: "post",
+                        //     dataType: "json",
+                        //     success: function (result) {
+                        //         //时间跳转
+                        //         dp.seek(result[0].history_holder);
+                        //     }, error: function () {
+                        //         // alert("展示数据错误！！");
+                        //     }
+                        // });
+                        // setInterval(miao, 1000);
+                        //
+                        // function miao() {
+                        //     //获取当前播放时间
+                        //     $cur = dp.video.currentTime;
+                        //     //获取视频总时间
+                        //     $dur = dp.video.duration;
+                        // };
                     }, error: function () {
-                        // alert("展示数据错误！！");
+                        alert("失败！！");
                     }
                 });
                 //显示收藏
-                $.ajax({
-                    async: false,
-                    url: "/CdcShowFavouriteServlet",
-                    data: {"video_id": $v_id, "user_id": $u_id},
-                    type: "post",
-                    dataType: "json",
-                    success: function (result) {
-                        if (result == 0) {
-                            $(".top_4_2").children().attr("class", "handle1");
-                            $(".top_4_2").children().children().children().eq(1).text('"已收藏"');
-                        }
-                    }, error: function () {
-                        alert("展示数据错误！！");
-                    }
-                });
+                // $.ajax({
+                //     async: false,
+                //     url: "/CdcShowFavouriteServlet",
+                //     data: {"video_id": $v_id, "user_id": $u_id},
+                //     type: "post",
+                //     dataType: "json",
+                //     success: function (result) {
+                //         if (result == 0) {
+                //             $(".top_4_2").children().attr("class", "handle1");
+                //             $(".top_4_2").children().children().children().eq(1).text('"已收藏"');
+                //         }
+                //     }, error: function () {
+                //         alert("展示数据错误！！");
+                //     }
+                // });
                 //点击收藏
-                $(".top_4_2").children().click(function () {
-                    $.ajax({
-                        url: "/CdcInFavouriteServlet",
-                        data: {"video_id": $v_id, "user_id": $u_id},
-                        type: "post",
-                        dataType: "json",
-                        success: function (result) {
-                            if (result) {
-                                $(".top_4_2").children().attr("class", "handle1");
-                                $(".top_4_2").children().children().children().eq(1).text('"已收藏"');
-                            }
-                        }, error: function () {
-                            alert("展示数据错误！！");
-                        }
-                    });
-                });
+                // $(".top_4_2").children().click(function () {
+                //     $.ajax({
+                //         url: "/CdcInFavouriteServlet",
+                //         data: {"video_id": $v_id, "user_id": $u_id},
+                //         type: "post",
+                //         dataType: "json",
+                //         success: function (result) {
+                //             if (result) {
+                //                 $(".top_4_2").children().attr("class", "handle1");
+                //                 $(".top_4_2").children().children().children().eq(1).text('"已收藏"');
+                //             }
+                //         }, error: function () {
+                //             alert("展示数据错误！！");
+                //         }
+                //     });
+                // });
                 //动态更新历史观看时间
-                setInterval(InXubo, 1000);
+                // setInterval(InXubo, 1000);
 
-                function InXubo() {
-                    $.ajax({
-                        url: "/CdcInXuboServlet",
-                        data: {"history_holder": $cur, "history_total": $dur, "video_id": $v_id, "user_id": $u_id},
-                        type: "post",
-                        dataType: "json",
-                        success: function (result) {
-                        }, error: function () {
-                            // alert("展示数据错误！！");
-                        }
-                    });
-                }
+                // function InXubo() {
+                //     $.ajax({
+                //         url: "/CdcInXuboServlet",
+                //         data: {"history_holder": $cur, "history_total": $dur, "video_id": $v_id, "user_id": $u_id},
+                //         type: "post",
+                //         dataType: "json",
+                //         success: function (result) {
+                //         }, error: function () {
+                //             // alert("展示数据错误！！");
+                //         }
+                //     });
+                // }
 
                 // $(".top_3_1").children().eq(1).click(function () {
                 // });
                 //获取相关推荐信息
                 //中间推荐
-                $.ajax({
-                    url: "/CdcShowRecommendServlet",
-                    data: {"video_id": $v_id},
-                    type: "post",
-                    dataType: "json",
-                    success: function (result) {
-                        for (var i = 0; i < $(".recommend_2_1").length; i++) {
-                            $(".recommend_2_2").eq(i).attr("src", result[i].video_image);
-                            $(".recommend_2_3").eq(i).text(result[i].video_name);
-                            $(".recommend_2_1").eq(i).children().attr("id", result[i].video_id);
-                        }
-                    }, error: function () {
-                        // alert("展示数据错误！！");
-                    }
-                });
+                // $.ajax({
+                //     url: "/CdcShowRecommendServlet",
+                //     data: {"video_id": $v_id},
+                //     type: "post",
+                //     dataType: "json",
+                //     success: function (result) {
+                //         for (var i = 0; i < $(".recommend_2_1").length; i++) {
+                //             $(".recommend_2_2").eq(i).attr("src", result[i].video_image);
+                //             $(".recommend_2_3").eq(i).text(result[i].video_name);
+                //             $(".recommend_2_1").eq(i).children().attr("id", result[i].video_id);
+                //         }
+                //     }, error: function () {
+                //         // alert("展示数据错误！！");
+                //     }
+                // });
                 //中间推荐传session
-                for (var i = 0; i < $(".recommend_2_1").length; i++) {
-                    //立即调用的函数表达式（IIFE）
-                    (function (i) {
-                        $(".recommend_2_1").eq(i).children().click(function () {
-                            var $vid_session = $(".recommend_2_1").eq(i).children().attr("id");
-                            $.ajax({
-                                url: "/CdcMidSetsessionServlet",
-                                data: {"video_id": $vid_session},
-                                type: "post",
-                                dataType: "json",
-                                success: function (result) {
-                                    // alert(2);
-                                    location.href = "play.html";
-                                }, error: function () {
-                                    // alert("展示数据错误！！");
-                                }
-                            });
-                        });
-                    })(i);
-                };
+                // for (var i = 0; i < $(".recommend_2_1").length; i++) {
+                //     //立即调用的函数表达式（IIFE）
+                //     (function (i) {
+                //         $(".recommend_2_1").eq(i).children().click(function () {
+                //             var $vid_session = $(".recommend_2_1").eq(i).children().attr("id");
+                //             $.ajax({
+                //                 url: "/CdcMidSetsessionServlet",
+                //                 data: {"video_id": $vid_session},
+                //                 type: "post",
+                //                 dataType: "json",
+                //                 success: function (result) {
+                //                     // alert(2);
+                //                     location.href = "play.html";
+                //                 }, error: function () {
+                //                     // alert("展示数据错误！！");
+                //                 }
+                //             });
+                //         });
+                //     })(i);
+                // };
                 //右推荐
-                $.ajax({
-                    url: "/CdcShowRecommendServlet",
-                    data: {"video_id": $v_id},
-                    type: "post",
-                    dataType: "json",
-                    success: function (result) {
-                        for (var j = 0; j < 4; j++) {
-                            $(".play_3_2_1").eq(j).children().attr("src", result[j].video_image);
-                            $(".play_3_2_1").eq(j).attr("id", result[j].video_id);
-                            $(".play_3_2_2").eq(j).children().text(result[j].video_name);
-                            $(".play_3_2_3").eq(j).children().text(result[j].video_playtimes + "次播放");
-                        }
-                    }, error: function () {
-                        // alert("展示数据错误！！");
-                    }
-                });
+                // $.ajax({
+                //     url: "/CdcShowRecommendServlet",
+                //     data: {"video_id": $v_id},
+                //     type: "post",
+                //     dataType: "json",
+                //     success: function (result) {
+                //         for (var j = 0; j < 4; j++) {
+                //             $(".play_3_2_1").eq(j).children().attr("src", result[j].video_image);
+                //             $(".play_3_2_1").eq(j).attr("id", result[j].video_id);
+                //             $(".play_3_2_2").eq(j).children().text(result[j].video_name);
+                //             $(".play_3_2_3").eq(j).children().text(result[j].video_playtimes + "次播放");
+                //         }
+                //     }, error: function () {
+                //         // alert("展示数据错误！！");
+                //     }
+                // });
                 //右推荐传session
-                for (var i = 0; i < 4; i++) {
-                    //立即调用的函数表达式（IIFE）
-                    (function (i) {
-                        $(".play_3_2_1").eq(i).click(function () {
-                            var $vid_session = $(".play_3_2_1").eq(i).attr("id");
-                            $.ajax({
-                                url: "/CdcMidSetsessionServlet",
-                                data: {"video_id": $vid_session},
-                                type: "post",
-                                dataType: "json",
-                                success: function (result) {
-                                    // alert(2);
-                                    location.href = "play.html";
-                                }, error: function () {
-                                    // alert("展示数据错误！！");
-                                }
-                            });
-                        });
-                    })(i);
-                };
+                // for (var i = 0; i < 4; i++) {
+                //     //立即调用的函数表达式（IIFE）
+                //     (function (i) {
+                //         $(".play_3_2_1").eq(i).click(function () {
+                //             var $vid_session = $(".play_3_2_1").eq(i).attr("id");
+                //             $.ajax({
+                //                 url: "/CdcMidSetsessionServlet",
+                //                 data: {"video_id": $vid_session},
+                //                 type: "post",
+                //                 dataType: "json",
+                //                 success: function (result) {
+                //                     // alert(2);
+                //                     location.href = "play.html";
+                //                 }, error: function () {
+                //                     // alert("展示数据错误！！");
+                //                 }
+                //             });
+                //         });
+                //     })(i);
+                // };
                 // $(".play_3_2_2").eq(0).children().click(function () {
                 //     alert(1);
                 // })
                 //ts
-                function load() {
-                    $.ajax({
-                        async: false,
-                        url: "/ShowMessageServlet",
-                        type: "post",
-                        data: {"pagenumber": pagenumber},
-                        dataType: "json",
-                        success: function (jsonArray) {
-                            var $u1_id;
-                            for (var i = 0; i < (jsonArray.length - 1); i++) {
-                                $(".comments-text").eq(i).text(jsonArray[i].msg_text);
-                                $(".comment-time").eq(i).text(jsonArray[i].msg_date);
-                                // alert(jsonArray[i].user_id);
-                                $u1_id = jsonArray[i].user_id;
-                                //获取头像
-                                // 立即调用的函数表达式（IIFE）
-                                (function (i) {
-                                    $.ajax({
-                                        url: "/CdcGetphotoServlet",
-                                        data: {"user_id": $u1_id},
-                                        type: "post",
-                                        dataType: "json",
-                                        success: function (result) {
-                                            //判断用户是否命名
-                                            if(result[0].user_name !== null && result[0].user_name !== undefined && result[0].user_name !== ""){
-                                                $(".comments-user-info").children().eq(i).text("用户：" + result[0].user_name + "");
-                                            }else {
-                                                $(".comments-user-info").children().eq(i).text("用户：未命名用户");
-                                            }
-                                            $(".comments-user-avatar").children().children().eq(i).attr("src",result[0].user_image);
-                                        }, error: function () {
-                                            // alert("展示数据错误！！");
-                                        }
-                                    });
-                                })(i);
-                            }
-                            rsCount = jsonArray[jsonArray.length - 1];
-                        },
-                        error: function () {
-                            alert("第一页展示数据错误！！");
-                        },
-                    });
-                }
+                // function load() {
+                //     $.ajax({
+                //         async: false,
+                //         url: "/ShowMessageServlet",
+                //         type: "post",
+                //         data: {"pagenumber": pagenumber},
+                //         dataType: "json",
+                //         success: function (jsonArray) {
+                //             var $u1_id;
+                //             for (var i = 0; i < (jsonArray.length - 1); i++) {
+                //                 $(".comments-text").eq(i).text(jsonArray[i].msg_text);
+                //                 $(".comment-time").eq(i).text(jsonArray[i].msg_date);
+                //                 // alert(jsonArray[i].user_id);
+                //                 $u1_id = jsonArray[i].user_id;
+                //                 //获取头像
+                //                 // 立即调用的函数表达式（IIFE）
+                //                 (function (i) {
+                //                     $.ajax({
+                //                         url: "/CdcGetphotoServlet",
+                //                         data: {"user_id": $u1_id},
+                //                         type: "post",
+                //                         dataType: "json",
+                //                         success: function (result) {
+                //                             //判断用户是否命名
+                //                             if(result[0].user_name !== null && result[0].user_name !== undefined && result[0].user_name !== ""){
+                //                                 $(".comments-user-info").children().eq(i).text("用户：" + result[0].user_name + "");
+                //                             }else {
+                //                                 $(".comments-user-info").children().eq(i).text("用户：未命名用户");
+                //                             }
+                //                             $(".comments-user-avatar").children().children().eq(i).attr("src",result[0].user_image);
+                //                         }, error: function () {
+                //                             // alert("展示数据错误！！");
+                //                         }
+                //                     });
+                //                 })(i);
+                //             }
+                //             rsCount = jsonArray[jsonArray.length - 1];
+                //         },
+                //         error: function () {
+                //             alert("第一页展示数据错误！！");
+                //         },
+                //     });
+                // }
 
-                $.ajax({
-                    async: false,
-                    url: "/ShowVideoServlet",
-                    data: {"video_id": $v_id},
-                    type: "post",
-                    dataType: "json",
-                    success: function (list) {
-                        for (var i = 0; i < 8; i++) {
-                            var $node = $('<div class="item" style="width: 330px;height: 90px;float: left; margin-left: 10px;margin-right: 10px;overflow:hidden;"><a class="cover" href="####" target="_blank"><img src="' + list[i].video_image + '" style="width:180px;height:200px;overflow: hidden"></a> <div class="title"> <a href="####" target="_blank" title="' + list[i].video_introduce + '">' + list[i].video_name + '</a></div><div class="status" style="display:block;float:right;margin-right:10px;margin-top: 70px;"><span>' + list[i].video_playtimes + '次播放</span></div></div>');
-                            $(".c").append($node);
-                            // count=parseInt(list[list.length-1]);
-                            // console.log(count);
-                        }
-                    },
-                    error: function () {
-                        alert("第一页展示数据错误！！");
-                    }
-                });
-                load();
-                $("input[value='下一页']").click(function () {
-                    var count = Math.ceil(rsCount / 6);
-                    if (pagenumber < count) {
-                        pagenumber++;
-                    } else {
-                        pagenumber = count;
-                    }
-                    load();
-                })
-                $("input[value='上一页']").click(function () {
-                    // var maxPage =Math.ceil(rsCount/pageSize);
-                    // num=num<maxPage ? ++num:maxPage;
-                    if (pagenumber <= 1) {
-                        pagenumber = 1;
-                    } else {
-                        pagenumber--;
-                    }
-                    load();
-                })
+                // $.ajax({
+                //     async: false,
+                //     url: "/ShowVideoServlet",
+                //     data: {"video_id": $v_id},
+                //     type: "post",
+                //     dataType: "json",
+                //     success: function (list) {
+                //         for (var i = 0; i < 8; i++) {
+                //             var $node = $('<div class="item" style="width: 330px;height: 90px;float: left; margin-left: 10px;margin-right: 10px;overflow:hidden;"><a class="cover" href="####" target="_blank"><img src="' + list[i].video_image + '" style="width:180px;height:200px;overflow: hidden"></a> <div class="title"> <a href="####" target="_blank" title="' + list[i].video_introduce + '">' + list[i].video_name + '</a></div><div class="status" style="display:block;float:right;margin-right:10px;margin-top: 70px;"><span>' + list[i].video_playtimes + '次播放</span></div></div>');
+                //             $(".c").append($node);
+                //             // count=parseInt(list[list.length-1]);
+                //             // console.log(count);
+                //         }
+                //     },
+                //     error: function () {
+                //         alert("第一页展示数据错误！！");
+                //     }
+                // });
+                // load();
+                // $("input[value='下一页']").click(function () {
+                //     var count = Math.ceil(rsCount / 6);
+                //     if (pagenumber < count) {
+                //         pagenumber++;
+                //     } else {
+                //         pagenumber = count;
+                //     }
+                //     load();
+                // })
+                // $("input[value='上一页']").click(function () {
+                //     // var maxPage =Math.ceil(rsCount/pageSize);
+                //     // num=num<maxPage ? ++num:maxPage;
+                //     if (pagenumber <= 1) {
+                //         pagenumber = 1;
+                //     } else {
+                //         pagenumber--;
+                //     }
+                //     load();
+                // })
                 //分页数据
                 // changePage(pagenumber,pagesize);
                 //点发布，插入一条数据
-                $("#buttom_sub").click(function () {
-                    $.ajax({
-                        async: false,
-                        url: "/InsertMessageServlet",
-                        type: "post",
-                        data: {
-                            "msg_text": $("#editor").children().eq(1).children().text(),
-                            "video_id": $v_id,
-                            "user_id": $u_id
-                        },
-                        dataType: "json",
-                        success: function (result) {
-                            // alert("成功")
-                            layer.msg('评论成功！');
-                            load();
-                        },
-                        error: function () {
-                            alert("评论错误！！");
-                        },
-                        // complete: function () {
-                        //     $(".comments-text").load("http://localhost:8080/play.html .comments-text");
-                        // }
-                    });
-                });
+                // $("#buttom_sub").click(function () {
+                //     $.ajax({
+                //         async: false,
+                //         url: "/InsertMessageServlet",
+                //         type: "post",
+                //         data: {
+                //             "msg_text": $("#editor").children().eq(1).children().text(),
+                //             "video_id": $v_id,
+                //             "user_id": $u_id
+                //         },
+                //         dataType: "json",
+                //         success: function (result) {
+                //             // alert("成功")
+                //             layer.msg('评论成功！');
+                //             load();
+                //         },
+                //         error: function () {
+                //             alert("评论错误！！");
+                //         },
+                //         // complete: function () {
+                //         //     $(".comments-text").load("http://localhost:8080/play.html .comments-text");
+                //         // }
+                //     });
+                // });
             }
         });
     </script>
@@ -573,7 +563,9 @@
         <div class="play">
             <div class="Dplayer_box">
                 <div class="player_av">
-                    <div id="player1"></div>
+                    <div id="player1">
+                        <iframe src="video.html" width="875" height="548" style="border: none;margin-top: -30px;" ></iframe>
+                    </div>
                 </div>
             </div>
 
@@ -889,60 +881,60 @@
     </div>
 </div>
 //视频
-<script src="../js/DPlayer.min.js"></script>
-<script>
-    console.log(" %c 该项目基于Dplayer.js", 'color:red')
+<!--<script src="../js/DPlayer.min.js"></script>-->
+<!--<script>-->
+    <!--console.log(" %c 该项目基于Dplayer.js", 'color:red')-->
 
-    // 弹出框
-    function alert_back(text) {
-        $(".alert_back").html(text).show();
-        setTimeout(function () {
-            $(".alert_back").fadeOut();
-        }, 1200)
-    }
+    <!--// 弹出框-->
+    <!--function alert_back(text) {-->
+        <!--$(".alert_back").html(text).show();-->
+        <!--setTimeout(function () {-->
+            <!--$(".alert_back").fadeOut();-->
+        <!--}, 1200)-->
+    <!--}-->
 
-    //秒转分秒
-    function formatTime(seconds) {
-        return [
-//            parseInt(seconds / 60 / 60),
-            parseInt(seconds / 60 % 60),
-            parseInt(seconds % 60)
-        ]
-            .join(":")
-            .replace(/\b(\d)\b/g, "0$1");
-    }
+    <!--//秒转分秒-->
+    <!--function formatTime(seconds) {-->
+        <!--return [-->
+<!--//            parseInt(seconds / 60 / 60),-->
+            <!--parseInt(seconds / 60 % 60),-->
+            <!--parseInt(seconds % 60)-->
+        <!--]-->
+            <!--.join(":")-->
+            <!--.replace(/\b(\d)\b/g, "0$1");-->
+    <!--}-->
 
-    $.ajax({
-        url: "https://api.prprpr.me/dplayer/v3/bilibili?aid=4157142",
-        success: function (data) {
-            if (data.code == "1") {
-                var danmaku = data.danmaku;
-                var autor = "农民";
-                $(".danmuku_num").text(danmaku.length)
-                $(danmaku).each(function (index, item) {
-                    if (item.type == "right") {
-                    } else {
-                        autor = "地主"
-                    }
-                    var oLi = `   <ol class="danmuku_list" time="${item.time}">
-            <li>${formatTime(item.time)}</li>
-            <li title="${item.text}">${item.text}</li>
-            <li>${autor}</li>
-</ol>
-`
-                    $(".list_ovefiow").append(oLi);
-                    autor = "农民";
-                })
-            } else {
-                alert_back("弹幕加载失败 -v-!");
-            }
-            $(".danmuku_list").on("click", function () {
+    <!--$.ajax({-->
+        <!--url: "https://api.prprpr.me/dplayer/v3/bilibili?aid=4157142",-->
+        <!--success: function (data) {-->
+            <!--if (data.code == "1") {-->
+                <!--var danmaku = data.danmaku;-->
+                <!--var autor = "农民";-->
+                <!--$(".danmuku_num").text(danmaku.length)-->
+                <!--$(danmaku).each(function (index, item) {-->
+                    <!--if (item.type == "right") {-->
+                    <!--} else {-->
+                        <!--autor = "地主"-->
+                    <!--}-->
+                    <!--var oLi = `   <ol class="danmuku_list" time="${item.time}">-->
+            <!--<li>${formatTime(item.time)}</li>-->
+            <!--<li title="${item.text}">${item.text}</li>-->
+            <!--<li>${autor}</li>-->
+<!--</ol>-->
+<!--`-->
+                    <!--$(".list_ovefiow").append(oLi);-->
+                    <!--autor = "农民";-->
+                <!--})-->
+            <!--} else {-->
+                <!--alert_back("弹幕加载失败 -v-!");-->
+            <!--}-->
+            <!--$(".danmuku_list").on("click", function () {-->
 
-                dp.seek($(this).attr("time"))
-            })
-        }
-    })
+                <!--dp.seek($(this).attr("time"))-->
+            <!--})-->
+        <!--}-->
+    <!--})-->
 
-</script>
+<!--</script>-->
 </body>
 </html>
