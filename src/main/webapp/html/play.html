@@ -71,7 +71,10 @@
                 type: "post",
                 success: function (result) {
                     //对象转数字
-                    $v_id = Number(result);
+                    $v_id = Number(result.video_id);
+                    if(result.user_id != null){
+                        $u_id = Number(result.user_id)
+                    }
                     //第二层ajax取user_id_session
                     // $.ajax({
                     //     async: false,
@@ -252,39 +255,40 @@
                         alert("失败！！");
                     }
                 });
-                //显示收藏
-                // $.ajax({
-                //     async: false,
-                //     url: "/CdcShowFavouriteServlet",
-                //     data: {"video_id": $v_id, "user_id": $u_id},
-                //     type: "post",
-                //     dataType: "json",
-                //     success: function (result) {
-                //         if (result == 0) {
-                //             $(".top_4_2").children().attr("class", "handle1");
-                //             $(".top_4_2").children().children().children().eq(1).text('"已收藏"');
-                //         }
-                //     }, error: function () {
-                //         alert("展示数据错误！！");
-                //     }
-                // });
-                //点击收藏
-                // $(".top_4_2").children().click(function () {
-                //     $.ajax({
-                //         url: "/CdcInFavouriteServlet",
-                //         data: {"video_id": $v_id, "user_id": $u_id},
-                //         type: "post",
-                //         dataType: "json",
-                //         success: function (result) {
-                //             if (result) {
-                //                 $(".top_4_2").children().attr("class", "handle1");
-                //                 $(".top_4_2").children().children().children().eq(1).text('"已收藏"');
-                //             }
-                //         }, error: function () {
-                //             alert("展示数据错误！！");
-                //         }
-                //     });
-                // });
+                if($u_id != -1){
+                    //显示收藏
+                    $.ajax({
+                        async: false,
+                        url: "/play/showFavourite",
+                        data: {"video_id": $v_id},
+                        type: "post",
+                        success: function (result) {
+                            if (result > 0) {
+                                $(".top_4_2").children().attr("class", "handle1");
+                                $(".top_4_2").children().children().children().eq(1).text('"已收藏"');
+                            }
+                        }, error: function () {
+                            alert("展示数据错误！！");
+                        }
+                    });
+                    //点击收藏
+                    $(".top_4_2").children().click(function () {
+                        $.ajax({
+                            async: false,
+                            url: "/play/favourite",
+                            data: {"video_id": $v_id},
+                            type: "post",
+                            success: function (result) {
+                                if (result==0) {
+                                    $(".top_4_2").children().attr("class", "handle1");
+                                    $(".top_4_2").children().children().children().eq(1).text('"已收藏"');
+                                }
+                            }, error: function () {
+                                alert("展示数据错误！！");
+                            }
+                        });
+                    });
+                }
                 //动态更新历史观看时间
                 // setInterval(InXubo, 1000);
 

@@ -6,5 +6,9 @@
 	<select id="test11"  resultType="java.util.HashMap" parameterType="java.lang.String">
 		SELECT * FROM test WHERE reserve1 = #{str}
 	</select>
+	<!-- 测试获取用户id -->
+	<select id="test22"  resultType="java.util.HashMap" parameterType="java.lang.String">
+		SELECT user_id,user_name FROM user WHERE user_id = #{str}
+	</select>
 
 </mapper> 

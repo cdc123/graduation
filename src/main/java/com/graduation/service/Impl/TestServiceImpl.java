@@ -16,7 +16,6 @@ public class TestServiceImpl implements TestService {
 
     /**
      * 测试
-     *
      * @param str
      * @return String
      */
@@ -36,5 +35,14 @@ public class TestServiceImpl implements TestService {
             str1 = "error";
         }
         return str1;
+    }
+
+    /**
+     * 测试获取用户session
+     * @param str
+     * @return List<Map<String,Object>>
+     */
+    public List<Map<String,Object>> usertest(String str){
+        return dao.test22(str);
     }
 }

@@ -12,7 +12,7 @@
         FROM
 	video
         WHERE
-	video_id = #{video_id};
+	video_id = #{video_id}
 	</select>
 
     <!-- 获取推荐信息 -->
@@ -29,5 +29,15 @@
 	a.video_id = #{video_id}
     AND a.video_type = b.video_type
 	</select>
+
+	<!-- 获取视频是否收藏 -->
+	<select id="f_findById" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    SELECT count(*) FROM favourite WHERE user_id = #{user_id} AND video_id = #{video_id}
+	</select>
+
+	<!-- 获取视频是否收藏 -->
+	<insert id="f_docreat" parameterType="java.lang.Integer">
+    INSERT INTO favourite (user_id,video_id)VALUES(#{user_id},#{video_id});
+	</insert>
 
 </mapper> 

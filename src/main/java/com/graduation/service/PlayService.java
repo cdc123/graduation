@@ -6,4 +6,8 @@ public interface PlayService {
     List getVideo(String video_id);
 
     List recommend(String video_id);
+
+    int favourite(int user_id,String video_id);
+
+    int showFavourite(int user_id,String video_id);
 }
