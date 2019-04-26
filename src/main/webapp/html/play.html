@@ -62,7 +62,7 @@
             var $video = null;
             var $cur = 0;
             var $dur = 1;
-            var $v_id = -1;
+            var $v_id = 1;
             var $u_id = -1;
             //获取session信息
             // $.ajax({
@@ -220,7 +220,7 @@
                 $.ajax({
                     async: false,
                     url: "/play/getVideo",
-                    data: {"video_id": 1},
+                    data: {"video_id": $v_id},
                     // data:{"video_id":""},
                     type: "post",
                     // contentType: "application/json;charset=UTF-8",
@@ -309,21 +309,21 @@
                 // });
                 //获取相关推荐信息
                 //中间推荐
-                // $.ajax({
-                //     url: "/CdcShowRecommendServlet",
-                //     data: {"video_id": $v_id},
-                //     type: "post",
-                //     dataType: "json",
-                //     success: function (result) {
-                //         for (var i = 0; i < $(".recommend_2_1").length; i++) {
-                //             $(".recommend_2_2").eq(i).attr("src", result[i].video_image);
-                //             $(".recommend_2_3").eq(i).text(result[i].video_name);
-                //             $(".recommend_2_1").eq(i).children().attr("id", result[i].video_id);
-                //         }
-                //     }, error: function () {
-                //         // alert("展示数据错误！！");
-                //     }
-                // });
+                $.ajax({
+                    url: "/play/recommend",
+                    data: {"video_id": $v_id},
+                    type: "post",
+                    // dataType: "json",
+                    success: function (result) {
+                        for (var i = 0; i < $(".recommend_2_1").length; i++) {
+                            $(".recommend_2_2").eq(i).attr("src", result[i].video_image);
+                            $(".recommend_2_3").eq(i).text(result[i].video_name);
+                            $(".recommend_2_1").eq(i).children().attr("id", result[i].video_id);
+                        }
+                    }, error: function () {
+                        // alert("展示数据错误！！");
+                    }
+                });
                 //中间推荐传session
                 // for (var i = 0; i < $(".recommend_2_1").length; i++) {
                 //     //立即调用的函数表达式（IIFE）
@@ -346,22 +346,22 @@
                 //     })(i);
                 // };
                 //右推荐
-                // $.ajax({
-                //     url: "/CdcShowRecommendServlet",
-                //     data: {"video_id": $v_id},
-                //     type: "post",
-                //     dataType: "json",
-                //     success: function (result) {
-                //         for (var j = 0; j < 4; j++) {
-                //             $(".play_3_2_1").eq(j).children().attr("src", result[j].video_image);
-                //             $(".play_3_2_1").eq(j).attr("id", result[j].video_id);
-                //             $(".play_3_2_2").eq(j).children().text(result[j].video_name);
-                //             $(".play_3_2_3").eq(j).children().text(result[j].video_playtimes + "次播放");
-                //         }
-                //     }, error: function () {
-                //         // alert("展示数据错误！！");
-                //     }
-                // });
+                $.ajax({
+                    url: "/play/recommend",
+                    data: {"video_id": $v_id},
+                    type: "post",
+                    // dataType: "json",
+                    success: function (result) {
+                        for (var j = 0; j < 4; j++) {
+                            $(".play_3_2_1").eq(j).children().attr("src", result[j].video_image);
+                            $(".play_3_2_1").eq(j).attr("id", result[j].video_id);
+                            $(".play_3_2_2").eq(j).children().text(result[j].video_name);
+                            $(".play_3_2_3").eq(j).children().text(result[j].video_playtimes + "次播放");
+                        }
+                    }, error: function () {
+                        // alert("展示数据错误！！");
+                    }
+                });
                 //右推荐传session
                 // for (var i = 0; i < 4; i++) {
                 //     //立即调用的函数表达式（IIFE）

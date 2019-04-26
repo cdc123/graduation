@@ -15,4 +15,19 @@
 	video_id = #{video_id};
 	</select>
 
+    <!-- 获取推荐信息 -->
+    <select id="recommend" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+	SELECT
+	b.video_id,
+	b.video_image,
+	b.video_name,
+	b.video_playtimes
+    FROM
+	video a,
+	video b
+    WHERE
+	a.video_id = 1
+    AND a.video_type = b.video_type
+	</select>
+
 </mapper> 

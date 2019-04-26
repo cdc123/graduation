@@ -14,7 +14,12 @@ public class PlayController {
     private PlayService service;
 
     @PostMapping(value = {"/getVideo"})
-    public List getVideo(String video_id){
+    public List getVideo(String video_id) {
         return service.getVideo(video_id);
+    }
+
+    @PostMapping(value = {"/recommend"})
+    public List recommend(String video_id) {
+        return service.recommend(video_id);
     }
 }
