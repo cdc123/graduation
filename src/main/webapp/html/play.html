@@ -62,39 +62,38 @@
             var $video = null;
             var $cur = 0;
             var $dur = 1;
-            var $v_id = 1;
+            var $v_id = -1;
             var $u_id = -1;
             //获取session信息
-            // $.ajax({
-            //     async: false,
-            //     url: "/CdcGetsessionServlet",
-            //     data: {"videoGetsession": "videosession"},
-            //     type: "post",
-            //     dataType: "json",
-            //     success: function (result) {
-            //         //对象转数字
-            //         $v_id = Number(result);
-            //         //第二层ajax取user_id_session
-            //         $.ajax({
-            //             async: false,
-            //             url: "/CdcGetsession1Servlet",
-            //             // data: {"userGetsession": "sessionListForUser"},
-            //             type: "post",
-            //             dataType: "json",
-            //             success: function (result) {
-            //                 $u_id = Number(result[0].user_id);
-            //                 //嵌套ajax，调整ajax执行顺序
-            //                 show();
-            //             }, error: function () {
-            //                 alert("kkkk");
-            //             }
-            //         });
-            //     }, error: function () {
-            //         alert("展示数据错误！！");
-            //     }
-            // });
+            $.ajax({
+                async: false,
+                url: "/play/getSession_v",
+                type: "post",
+                success: function (result) {
+                    //对象转数字
+                    $v_id = Number(result);
+                    //第二层ajax取user_id_session
+                    // $.ajax({
+                    //     async: false,
+                    //     url: "/CdcGetsession1Servlet",
+                    //     // data: {"userGetsession": "sessionListForUser"},
+                    //     type: "post",
+                    //     dataType: "json",
+                    //     success: function (result) {
+                    //         $u_id = Number(result[0].user_id);
+                    //         //嵌套ajax，调整ajax执行顺序
+                    //         show();
+                    //     }, error: function () {
+                    //         alert("kkkk");
+                    //     }
+                    // });
+                    show();
+                }, error: function () {
+                    alert("展示数据错误！！");
+                }
+            });
 
-            show();
+            // show();
             function show() {
 //dc
                 //历史
@@ -221,10 +220,7 @@
                     async: false,
                     url: "/play/getVideo",
                     data: {"video_id": $v_id},
-                    // data:{"video_id":""},
                     type: "post",
-                    // contentType: "application/json;charset=UTF-8",
-                    // dataType: "json",
                     success: function (result) {
                         // alert("成功");
                         $(".play_3_1_1").text(result[0].video_name);
@@ -313,7 +309,6 @@
                     url: "/play/recommend",
                     data: {"video_id": $v_id},
                     type: "post",
-                    // dataType: "json",
                     success: function (result) {
                         for (var i = 0; i < $(".recommend_2_1").length; i++) {
                             $(".recommend_2_2").eq(i).attr("src", result[i].video_image);
@@ -325,32 +320,29 @@
                     }
                 });
                 //中间推荐传session
-                // for (var i = 0; i < $(".recommend_2_1").length; i++) {
-                //     //立即调用的函数表达式（IIFE）
-                //     (function (i) {
-                //         $(".recommend_2_1").eq(i).children().click(function () {
-                //             var $vid_session = $(".recommend_2_1").eq(i).children().attr("id");
-                //             $.ajax({
-                //                 url: "/CdcMidSetsessionServlet",
-                //                 data: {"video_id": $vid_session},
-                //                 type: "post",
-                //                 dataType: "json",
-                //                 success: function (result) {
-                //                     // alert(2);
-                //                     location.href = "play.html";
-                //                 }, error: function () {
-                //                     // alert("展示数据错误！！");
-                //                 }
-                //             });
-                //         });
-                //     })(i);
-                // };
+                for (var i = 0; i < $(".recommend_2_1").length; i++) {
+                    //立即调用的函数表达式（IIFE）
+                    (function (i) {
+                        $(".recommend_2_1").eq(i).children().click(function () {
+                            var $vid_session = $(".recommend_2_1").eq(i).children().attr("id");
+                            $.ajax({
+                                url: "/play/setSession_v",
+                                data: {"video_id": $vid_session},
+                                type: "post",
+                                success: function (result) {
+                                    location.href = "play.html";
+                                }, error: function () {
+                                    // alert("展示数据错误！！");
+                                }
+                            });
+                        });
+                    })(i);
+                };
                 //右推荐
                 $.ajax({
                     url: "/play/recommend",
                     data: {"video_id": $v_id},
                     type: "post",
-                    // dataType: "json",
                     success: function (result) {
                         for (var j = 0; j < 4; j++) {
                             $(".play_3_2_1").eq(j).children().attr("src", result[j].video_image);
@@ -363,29 +355,24 @@
                     }
                 });
                 //右推荐传session
-                // for (var i = 0; i < 4; i++) {
-                //     //立即调用的函数表达式（IIFE）
-                //     (function (i) {
-                //         $(".play_3_2_1").eq(i).click(function () {
-                //             var $vid_session = $(".play_3_2_1").eq(i).attr("id");
-                //             $.ajax({
-                //                 url: "/CdcMidSetsessionServlet",
-                //                 data: {"video_id": $vid_session},
-                //                 type: "post",
-                //                 dataType: "json",
-                //                 success: function (result) {
-                //                     // alert(2);
-                //                     location.href = "play.html";
-                //                 }, error: function () {
-                //                     // alert("展示数据错误！！");
-                //                 }
-                //             });
-                //         });
-                //     })(i);
-                // };
-                // $(".play_3_2_2").eq(0).children().click(function () {
-                //     alert(1);
-                // })
+                for (var i = 0; i < 4; i++) {
+                    //立即调用的函数表达式（IIFE）
+                    (function (i) {
+                        $(".play_3_2_1").eq(i).click(function () {
+                            var $vid_session = $(".play_3_2_1").eq(i).attr("id");
+                            $.ajax({
+                                url: "/play/setSession_v",
+                                data: {"video_id": $vid_session},
+                                type: "post",
+                                success: function (result) {
+                                    location.href = "play.html";
+                                }, error: function () {
+                                    // alert("展示数据错误！！");
+                                }
+                            });
+                        });
+                    })(i);
+                };
                 //ts
                 // function load() {
                 //     $.ajax({

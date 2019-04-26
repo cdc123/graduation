@@ -26,7 +26,7 @@
 	video a,
 	video b
     WHERE
-	a.video_id = 1
+	a.video_id = #{video_id}
     AND a.video_type = b.video_type
 	</select>
 

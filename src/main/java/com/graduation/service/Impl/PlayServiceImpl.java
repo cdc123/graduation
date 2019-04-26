@@ -14,7 +14,12 @@ public class PlayServiceImpl implements PlayService {
 
     @Override
     public List getVideo(String video_id) {
-        return dao.getVideo(Integer.parseInt(video_id));
+       try {
+           return dao.getVideo(Integer.parseInt(video_id));
+       }catch (Exception e){
+           System.out.println(e.getMessage());
+           return null;
+       }
     }
 
     public List recommend(String video_id){

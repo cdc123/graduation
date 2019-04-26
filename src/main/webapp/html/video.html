@@ -5,17 +5,45 @@
 <script src="https://cdnjs.loli.net/ajax/libs/blueimp-md5/2.10.0/js/md5.min.js"></script>
 <script>
     $(function () {
+        var $v_id = -1;
+        //获取session信息
+        $.ajax({
+            async: false,
+            url: "/play/getSession_v",
+            type: "post",
+            success: function (result) {
+                //对象转数字
+                $v_id = Number(result);
+                //第二层ajax取user_id_session
+                // $.ajax({
+                //     async: false,
+                //     url: "/CdcGetsession1Servlet",
+                //     // data: {"userGetsession": "sessionListForUser"},
+                //     type: "post",
+                //     dataType: "json",
+                //     success: function (result) {
+                //         $u_id = Number(result[0].user_id);
+                //         //嵌套ajax，调整ajax执行顺序
+                //         show();
+                //     }, error: function () {
+                //         alert("kkkk");
+                //     }
+                // });
+                video();
+            }, error: function () {
+                alert("展示数据错误！！");
+            }
+        });
         function video() {
             $.ajax({
                 async: false,
                 url: "/play/getVideo",
-                data: {"video_id": 1},
-                // data:{"video_id":""},
+                data: {"video_id": $v_id},
                 type: "post",
                 success: function (result) {
                     var url = result[0].video_video;
                     var danmu = result[0].video_danmu;
-                    //这里填写视频地址(阿里云oss存储)
+                    //这里填写视频地址
                     var id = md5(url);
                     const dp = new DPlayer({
                         container: document.getElementById('dplayer'),
@@ -36,6 +64,5 @@
                 }
             });
         }
-        video();
     });
 </script>

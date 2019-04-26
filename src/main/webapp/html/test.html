@@ -8,11 +8,12 @@
         $(function () {
             $(".ak").click(function () {
                 $.ajax({
-                    url: "/TextServlet",
+                    url: "/test/videoSession",
                     type: "post",
-                    dataType: "json",
+                    // dataType: "json",
                     success: function (result) {
                         location.href = "play.html";
+                        // alert(result);
                     }, error: function () {
                         alert("展示数据错误！！");
                     }

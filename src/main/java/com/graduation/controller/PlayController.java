@@ -4,6 +4,7 @@ import com.graduation.service.PlayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -21,5 +22,15 @@ public class PlayController {
     @PostMapping(value = {"/recommend"})
     public List recommend(String video_id) {
         return service.recommend(video_id);
+    }
+
+    @PostMapping(value = {"/getSession_v"})
+    public String getSession_v(HttpServletRequest request){
+        return String.valueOf(request.getSession().getAttribute("videosession"));
+    }
+
+    @PostMapping(value = {"/setSession_v"})
+    public void setSession_v(HttpServletRequest request,String video_id){
+        request.getSession().setAttribute("videosession",video_id);
     }
 }
