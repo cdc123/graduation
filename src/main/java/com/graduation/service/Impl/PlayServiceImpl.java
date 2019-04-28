@@ -15,7 +15,7 @@ public class PlayServiceImpl implements PlayService {
     /**
      * 获取视频
      * @param video_id
-     * @return String
+     * @return List
      */
     @Override
     public List getVideo(String video_id) {
@@ -29,7 +29,7 @@ public class PlayServiceImpl implements PlayService {
     /**
      * 推荐视频
      * @param video_id
-     * @return String
+     * @return List
      */
     @Override
     public List recommend(String video_id){
@@ -44,7 +44,7 @@ public class PlayServiceImpl implements PlayService {
     /**
      * 收藏
      * @param video_id,user_id
-     * @return String
+     * @return int
      */
     @Override
     public int favourite(int user_id, String video_id) {
@@ -58,11 +58,26 @@ public class PlayServiceImpl implements PlayService {
     /**
      * 显示收藏
      * @param video_id,user_id
-     * @return String
+     * @return int
      */
     @Override
     public int showFavourite(int user_id, String video_id) {
         int count = dao.f_findById(user_id,Integer.parseInt(video_id));
         return count;
+    }
+
+    /**
+     * 获取头像
+     * @param user_id
+     * @return List
+     */
+    @Override
+    public List avatar(int user_id) {
+        try {
+            return dao.gerAvatar(user_id);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 }

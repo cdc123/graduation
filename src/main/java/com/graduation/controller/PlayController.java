@@ -51,10 +51,18 @@ public class PlayController {
         int user_id = Integer.valueOf(((Map)json.get(0)).get("user_id").toString());
         return service.favourite(user_id,video_id);
     }
+
     @PostMapping(value = {"/showFavourite"})
     public int showFavourite(HttpServletRequest request,String video_id){
         JSONArray json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
         int user_id = Integer.valueOf(((Map)json.get(0)).get("user_id").toString());
         return service.showFavourite(user_id,video_id);
+    }
+
+    @PostMapping(value = {"/avatar"})
+    public List avatar(HttpServletRequest request){
+        JSONArray json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
+        int user_id = Integer.valueOf(((Map)json.get(0)).get("user_id").toString());
+        return service.avatar(user_id);
     }
 }

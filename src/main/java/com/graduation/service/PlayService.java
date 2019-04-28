@@ -10,4 +10,6 @@ public interface PlayService {
     int favourite(int user_id,String video_id);
 
     int showFavourite(int user_id,String video_id);
+
+    List avatar(int user_id);
 }

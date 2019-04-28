@@ -36,4 +36,11 @@ public interface PlayDao {
      * @return int
      */
     void f_docreat(@Param("user_id")int user_id,@Param("video_id")int video_id);
+
+    /**
+     * 获取头像
+     * @param user_id
+     * @return List<Map<String, Object>>
+     */
+    List<Map<String,Object>> gerAvatar(@Param("user_id")int user_id);
 }

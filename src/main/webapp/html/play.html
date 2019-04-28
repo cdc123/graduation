@@ -203,21 +203,20 @@
                 });
                 //以上是历史部分
                 //获取头像
-                // $.ajax({
-                //     async: false,
-                //     type: "post",
-                //     url: "/Wcg_PersonalInfoChange?flag=getUserById",
-                //     dataType: "json",
-                //     success: function (result) {
-                //         $.each(result, function (n, value) {
-                //             if (value.user_image != null && value.user_image != "") {
-                //                 /*设置初始头像*/
-                //                 $(".login").children().children().attr("src", value.user_image);
-                //             }
-                //         });
-                //         $("#tou").attr("onclick", "");
-                //     }
-                // });
+                $.ajax({
+                    async: false,
+                    type: "post",
+                    url: "/play/avatar",
+                    success: function (result) {
+                        $.each(result, function (n, value) {
+                            if (value.user_image != null && value.user_image != "") {
+                                /*设置初始头像*/
+                                $(".login").children().children().attr("src", value.user_image);
+                            }
+                        });
+                        $("#tou").attr("onclick", "");
+                    }
+                });
                 //获取video信息
                 $.ajax({
                     async: false,

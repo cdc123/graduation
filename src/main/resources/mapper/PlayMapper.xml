@@ -40,4 +40,9 @@
     INSERT INTO favourite (user_id,video_id)VALUES(#{user_id},#{video_id});
 	</insert>
 
+	<!-- 获取头像 -->
+	<select id="gerAvatar" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+    SELECT user_image FROM user where user_id = #{user_id}
+	</select>
+
 </mapper> 
