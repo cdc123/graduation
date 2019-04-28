@@ -75,21 +75,6 @@
                     if(result.user_id != null){
                         $u_id = Number(result.user_id)
                     }
-                    //第二层ajax取user_id_session
-                    // $.ajax({
-                    //     async: false,
-                    //     url: "/CdcGetsession1Servlet",
-                    //     // data: {"userGetsession": "sessionListForUser"},
-                    //     type: "post",
-                    //     dataType: "json",
-                    //     success: function (result) {
-                    //         $u_id = Number(result[0].user_id);
-                    //         //嵌套ajax，调整ajax执行顺序
-                    //         show();
-                    //     }, error: function () {
-                    //         alert("kkkk");
-                    //     }
-                    // });
                     show();
                 }, error: function () {
                     alert("展示数据错误！！");
@@ -98,7 +83,6 @@
 
             // show();
             function show() {
-//dc
                 //历史
                 //以下是历史部分
                 /*为历史纪录导向设置事件委托*/
@@ -202,21 +186,6 @@
                     $("#forHistory").hide(200);
                 });
                 //以上是历史部分
-                //获取头像
-                $.ajax({
-                    async: false,
-                    type: "post",
-                    url: "/play/avatar",
-                    success: function (result) {
-                        $.each(result, function (n, value) {
-                            if (value.user_image != null && value.user_image != "") {
-                                /*设置初始头像*/
-                                $(".login").children().children().attr("src", value.user_image);
-                            }
-                        });
-                        $("#tou").attr("onclick", "");
-                    }
-                });
                 //获取video信息
                 $.ajax({
                     async: false,
@@ -254,6 +223,7 @@
                         alert("失败！！");
                     }
                 });
+                //登陆后
                 if($u_id != -1){
                     //显示收藏
                     $.ajax({
@@ -287,25 +257,22 @@
                             }
                         });
                     });
+                    //获取头像
+                    $.ajax({
+                        async: false,
+                        type: "post",
+                        url: "/play/avatar",
+                        success: function (result) {
+                            $.each(result, function (n, value) {
+                                if (value.user_image != null && value.user_image != "") {
+                                    /*设置初始头像*/
+                                    $(".login").children().children().attr("src", value.user_image);
+                                }
+                            });
+                            $("#tou").attr("onclick", "");
+                        }
+                    });
                 }
-                //动态更新历史观看时间
-                // setInterval(InXubo, 1000);
-
-                // function InXubo() {
-                //     $.ajax({
-                //         url: "/CdcInXuboServlet",
-                //         data: {"history_holder": $cur, "history_total": $dur, "video_id": $v_id, "user_id": $u_id},
-                //         type: "post",
-                //         dataType: "json",
-                //         success: function (result) {
-                //         }, error: function () {
-                //             // alert("展示数据错误！！");
-                //         }
-                //     });
-                // }
-
-                // $(".top_3_1").children().eq(1).click(function () {
-                // });
                 //获取相关推荐信息
                 //中间推荐
                 $.ajax({

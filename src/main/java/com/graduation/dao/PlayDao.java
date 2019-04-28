@@ -43,4 +43,25 @@ public interface PlayDao {
      * @return List<Map<String, Object>>
      */
     List<Map<String,Object>> gerAvatar(@Param("user_id")int user_id);
+
+    /**
+     * 获取是否有历史记录
+     * @param user_id,video_id
+     * @return int
+     */
+    int h_findById(@Param("user_id")int user_id,@Param("video_id")int video_id);
+
+    /**
+     * 存储观看时间
+     * @param user_id,video_id,cur,dur
+     * @return
+     */
+    void setPlayTime(@Param("user_id")int user_id,@Param("video_id")int video_id,@Param("cur")double cur,@Param("dur")double dur);
+
+    /**
+     * 更新观看时间
+     * @param user_id,video_id,cur,dur
+     * @return
+     */
+    void updatePlayTime(@Param("user_id")int user_id,@Param("video_id")int video_id,@Param("cur")double cur,@Param("dur")double dur);
 }

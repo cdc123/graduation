@@ -6,34 +6,25 @@
 <script>
     $(function () {
         var $v_id = -1;
+        var $u_id = -1;
+        var $cur = 0;
+        var $dur = 1;
         //获取session信息
         $.ajax({
             async: false,
             url: "/play/getSession_v",
             type: "post",
             success: function (result) {
-                //对象转数字
                 $v_id = Number(result.video_id);
-                //第二层ajax取user_id_session
-                // $.ajax({
-                //     async: false,
-                //     url: "/CdcGetsession1Servlet",
-                //     // data: {"userGetsession": "sessionListForUser"},
-                //     type: "post",
-                //     dataType: "json",
-                //     success: function (result) {
-                //         $u_id = Number(result[0].user_id);
-                //         //嵌套ajax，调整ajax执行顺序
-                //         show();
-                //     }, error: function () {
-                //         alert("kkkk");
-                //     }
-                // });
+                if(result.user_id != null){
+                    $u_id = Number(result.user_id)
+                }
                 video();
             }, error: function () {
                 alert("展示数据错误！！");
             }
         });
+
         function video() {
             $.ajax({
                 async: false,
@@ -57,12 +48,38 @@
                             addition: [danmu]   //这里填写弹幕地址
                         }
                     })
+                    if ($u_id != -1) {
+                        setInterval(miao, 1000);
+                    }
+                    function miao() {
+                        //获取当前播放时间
+                        $cur = dp.video.currentTime;
+                        //获取视频总时间
+                        $dur = dp.video.duration;
+                    };
 
                 },
                 error: function () {
                     alert("失败！！");
                 }
             });
+
+            if ($u_id != -1) {
+                // 动态更新历史观看时间
+                setInterval(InXubo, 1000);
+            }
+
+            function InXubo() {
+                $.ajax({
+                    url: "/play/playTime",
+                    data: {"history_holder": $cur, "history_total": $dur, "video_id": $v_id},
+                    type: "post",
+                    success: function (result) {
+                    }, error: function () {
+                        // alert("展示数据错误！！");
+                    }
+                });
+            }
         }
     });
 </script>

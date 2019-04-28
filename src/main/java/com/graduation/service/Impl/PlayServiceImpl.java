@@ -80,4 +80,22 @@ public class PlayServiceImpl implements PlayService {
             return null;
         }
     }
+
+    /**
+     * 存储观看时间
+     * @param user_id,video_id,cur,dur
+     * @return
+     */
+    public void playTime(int user_id,int video_id,double cur,double dur){
+        try {
+            int count = dao.h_findById(user_id,video_id);
+            if(count == 0){
+                dao.setPlayTime(user_id,video_id,cur,dur);
+            }else {
+                dao.updatePlayTime(user_id,video_id,cur,dur);
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
 }

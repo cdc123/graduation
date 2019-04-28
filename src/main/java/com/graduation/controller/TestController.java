@@ -2,6 +2,7 @@ package com.graduation.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.graduation.service.TestService;
+import com.graduation.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,14 +27,14 @@ public class TestController {
 
     @PostMapping(value = {"/videoSession"})
     public String videoSession(HttpServletRequest request){
-        request.getSession().setAttribute("videosession",1);   //存
-        return String.valueOf(request.getSession().getAttribute("videosession"));  //取
+        SessionUtils.set_session_int(request,"videosession",1); //存
+        return SessionUtils.get_session_String(request,"videosession");  //取
     }
 
     @PostMapping(value = {"/userSession"})
     public String userSession(HttpServletRequest request,String user_id){
         List<Map<String,Object>> list = service.usertest(user_id);
-        request.getSession().setAttribute("sessionListForUser",list);   //存
+        SessionUtils.set_session_List(request,"sessionListForUser",list);//存
         System.out.println(JSON.toJSONString(list));
         return null;
     }

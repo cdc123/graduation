@@ -2,10 +2,9 @@ package com.graduation.controller;
 
 
 import com.graduation.service.PlayService;
-import net.sf.json.JSONArray;
+import com.graduation.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
@@ -29,40 +28,44 @@ public class PlayController {
     }
 
     @PostMapping(value = {"/getSession_v"})
-    public Map<String, String> getSession_v(HttpServletRequest request){
-        Map<String,String> map = new HashMap<String, String>();
-        map.put("video_id",String.valueOf(request.getSession().getAttribute("videosession")));
-        if(request.getSession().getAttribute("sessionListForUser") != null){
-            JSONArray json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
-            String user_id = ((Map)json.get(0)).get("user_id").toString();
-            map.put("user_id",user_id);
+    public Map<String, String> getSession_v(HttpServletRequest request) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("video_id", SessionUtils.get_session_video(request));
+        if (request.getSession().getAttribute("sessionListForUser") != null) {
+            String user_id = SessionUtils.get_session_user(request);
+            map.put("user_id", user_id);
         }
         return map;
     }
 
     @PostMapping(value = {"/setSession_v"})
-    public void setSession_v(HttpServletRequest request,String video_id){
-        request.getSession().setAttribute("videosession",video_id);
+    public void setSession_v(HttpServletRequest request, String video_id) {
+        SessionUtils.set_session_video(request,video_id);
     }
 
     @PostMapping(value = {"/favourite"})
-    public int favourite(HttpServletRequest request,String video_id){
-        JSONArray json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
-        int user_id = Integer.valueOf(((Map)json.get(0)).get("user_id").toString());
-        return service.favourite(user_id,video_id);
+    public int favourite(HttpServletRequest request, String video_id) {
+        int user_id = Integer.valueOf(SessionUtils.get_session_user(request));
+        return service.favourite(user_id, video_id);
     }
 
     @PostMapping(value = {"/showFavourite"})
-    public int showFavourite(HttpServletRequest request,String video_id){
-        JSONArray json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
-        int user_id = Integer.valueOf(((Map)json.get(0)).get("user_id").toString());
-        return service.showFavourite(user_id,video_id);
+    public int showFavourite(HttpServletRequest request, String video_id) {
+        int user_id = Integer.valueOf(SessionUtils.get_session_user(request));
+        return service.showFavourite(user_id, video_id);
     }
 
     @PostMapping(value = {"/avatar"})
-    public List avatar(HttpServletRequest request){
-        JSONArray json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
-        int user_id = Integer.valueOf(((Map)json.get(0)).get("user_id").toString());
+    public List avatar(HttpServletRequest request) {
+        int user_id = Integer.valueOf(SessionUtils.get_session_user(request));
         return service.avatar(user_id);
+    }
+
+    @PostMapping(value = {"/playTime"})
+    public void aplayTime(HttpServletRequest request,double history_holder,double history_total,int video_id) {
+        int user_id = Integer.valueOf(SessionUtils.get_session_user(request));
+        double cur = history_holder;
+        double dur = history_total;
+        service.playTime(user_id,video_id,cur,dur);
     }
 }

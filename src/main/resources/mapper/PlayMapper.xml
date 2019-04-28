@@ -35,7 +35,7 @@
     SELECT count(*) FROM favourite WHERE user_id = #{user_id} AND video_id = #{video_id}
 	</select>
 
-	<!-- 获取视频是否收藏 -->
+	<!-- 收藏视频 -->
 	<insert id="f_docreat" parameterType="java.lang.Integer">
     INSERT INTO favourite (user_id,video_id)VALUES(#{user_id},#{video_id});
 	</insert>
@@ -44,5 +44,20 @@
 	<select id="gerAvatar" resultType="java.util.HashMap" parameterType="java.lang.Integer">
     SELECT user_image FROM user where user_id = #{user_id}
 	</select>
+
+	<!-- 获取是否有历史记录 -->
+	<select id="h_findById" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    SELECT count(*) FROM history WHERE user_id = #{user_id} AND video_id = #{video_id}
+	</select>
+
+	<!-- 存储观看时间 -->
+	<insert id="setPlayTime">
+    INSERT INTO history (user_id,video_id,history_holder,history_total,history_time)VALUES(#{user_id},#{video_id},#{cur},#{dur},NOW());
+	</insert>
+
+    <!-- 更新观看时间 -->
+    <update id="updatePlayTime">
+    UPDATE history SET history_holder = #{cur},history_total = #{dur},history_time = NOW() WHERE user_id = #{user_id} AND video_id = #{video_id}
+    </update>
 
 </mapper> 
