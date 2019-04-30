@@ -5,7 +5,10 @@ import com.graduation.service.PlayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @Service
 public class PlayServiceImpl implements PlayService {
 
@@ -96,6 +99,26 @@ public class PlayServiceImpl implements PlayService {
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * 续播
+     * @param user_id,video_id
+     * @return List
+     */
+    public List continue_v(int user_id,int video_id){
+        try {
+            List<Map<String,Object>> list = dao.continue_v(user_id,video_id);
+            if(null == list||list.size()==0) {
+                Map<String,Object> map = new HashMap<String, Object>();
+                map.put("history_holder",0);
+                list.add(map);
+            }
+            return list;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
         }
     }
 }

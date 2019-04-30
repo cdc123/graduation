@@ -68,4 +68,10 @@ public class PlayController {
         double dur = history_total;
         service.playTime(user_id,video_id,cur,dur);
     }
+
+    @PostMapping(value = {"/continue"})
+    public List continue_v(HttpServletRequest request,int video_id){
+        int user_id = Integer.valueOf(SessionUtils.get_session_user(request));
+        return service.continue_v(user_id,video_id);
+    }
 }

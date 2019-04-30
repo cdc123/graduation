@@ -197,28 +197,6 @@
                         $(".play_3_1_1").text(result[0].video_name);
                         $(".tag_1_1").text(result[0].video_name);
                         $(".intro_2").children().text(result[0].video_introduce);
-                        //嵌套ajax
-                        // $.ajax({
-                        //     async: false,
-                        //     url: "/CdcOutXuboServlet",
-                        //     data: {"video_id": $v_id, "user_id": $u_id},
-                        //     type: "post",
-                        //     dataType: "json",
-                        //     success: function (result) {
-                        //         //时间跳转
-                        //         dp.seek(result[0].history_holder);
-                        //     }, error: function () {
-                        //         // alert("展示数据错误！！");
-                        //     }
-                        // });
-                        // setInterval(miao, 1000);
-                        //
-                        // function miao() {
-                        //     //获取当前播放时间
-                        //     $cur = dp.video.currentTime;
-                        //     //获取视频总时间
-                        //     $dur = dp.video.duration;
-                        // };
                     }, error: function () {
                         alert("失败！！");
                     }

@@ -60,4 +60,9 @@
     UPDATE history SET history_holder = #{cur},history_total = #{dur},history_time = NOW() WHERE user_id = #{user_id} AND video_id = #{video_id}
     </update>
 
+	<!-- 获取观看记录 -->
+	<select id="continue_v" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+    SELECT history_holder FROM history WHERE user_id = #{user_id} AND video_id = #{video_id}
+	</select>
+
 </mapper> 

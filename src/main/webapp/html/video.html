@@ -49,6 +49,18 @@
                         }
                     })
                     if ($u_id != -1) {
+                        $.ajax({
+                            async: false,
+                            url: "/play/continue",
+                            data: {"video_id": $v_id},
+                            type: "post",
+                            success: function (result) {
+                                //时间跳转
+                                dp.seek(result[0].history_holder);
+                            }, error: function () {
+                                // alert("展示数据错误！！");
+                            }
+                        });
                         setInterval(miao, 1000);
                     }
                     function miao() {

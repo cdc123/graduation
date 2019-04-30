@@ -64,4 +64,11 @@ public interface PlayDao {
      * @return
      */
     void updatePlayTime(@Param("user_id")int user_id,@Param("video_id")int video_id,@Param("cur")double cur,@Param("dur")double dur);
+
+    /**
+     * 获取观看记录
+     * @param user_id,video_id
+     * @return List<Map<String,Object>>
+     */
+    List<Map<String,Object>> continue_v(@Param("user_id")int user_id,@Param("video_id")int video_id);
 }
