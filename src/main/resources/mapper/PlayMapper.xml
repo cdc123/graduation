@@ -65,4 +65,27 @@
     SELECT history_holder FROM history WHERE user_id = #{user_id} AND video_id = #{video_id}
 	</select>
 
+	<!-- 获取历史记录 -->
+	<select id="getHistory" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+    SELECT
+	h.user_id,
+	h.video_id,
+	h.history_time,
+	h.history_holder,
+	h.history_total,
+	v.video_name
+    FROM
+	history h
+    LEFT JOIN video v ON h.video_id = v.video_id
+    WHERE
+	h.user_id = #{user_id}
+    ORDER BY
+	h.history_time ASC
+	</select>
+
+	<!-- 获取视频id -->
+	<select id="getVidByName" resultType="java.lang.String" parameterType="java.lang.String">
+    SELECT video_id FROM video WHERE video_name = #{video_name}
+	</select>
+
 </mapper> 

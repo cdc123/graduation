@@ -17,28 +17,31 @@ public class PlayServiceImpl implements PlayService {
 
     /**
      * 获取视频
+     *
      * @param video_id
      * @return List
      */
     @Override
     public List getVideo(String video_id) {
-       try {
-           return dao.getVideo(Integer.parseInt(video_id));
-       }catch (Exception e){
-           System.out.println(e.getMessage());
-           return null;
-       }
+        try {
+            return dao.getVideo(Integer.parseInt(video_id));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
+
     /**
      * 推荐视频
+     *
      * @param video_id
      * @return List
      */
     @Override
-    public List recommend(String video_id){
+    public List recommend(String video_id) {
         try {
-        return dao.recommend(Integer.parseInt(video_id));
-        }catch (Exception e){
+            return dao.recommend(Integer.parseInt(video_id));
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
         }
@@ -46,31 +49,34 @@ public class PlayServiceImpl implements PlayService {
 
     /**
      * 收藏
+     *
      * @param video_id,user_id
      * @return int
      */
     @Override
     public int favourite(int user_id, String video_id) {
-        int count = dao.f_findById(user_id,Integer.parseInt(video_id));
-        if(count == 0){
-            dao.f_docreat(user_id,Integer.parseInt(video_id));
+        int count = dao.f_findById(user_id, Integer.parseInt(video_id));
+        if (count == 0) {
+            dao.f_docreat(user_id, Integer.parseInt(video_id));
         }
         return count;
     }
 
     /**
      * 显示收藏
+     *
      * @param video_id,user_id
      * @return int
      */
     @Override
     public int showFavourite(int user_id, String video_id) {
-        int count = dao.f_findById(user_id,Integer.parseInt(video_id));
+        int count = dao.f_findById(user_id, Integer.parseInt(video_id));
         return count;
     }
 
     /**
      * 获取头像
+     *
      * @param user_id
      * @return List
      */
@@ -78,7 +84,7 @@ public class PlayServiceImpl implements PlayService {
     public List avatar(int user_id) {
         try {
             return dao.gerAvatar(user_id);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
         }
@@ -86,39 +92,67 @@ public class PlayServiceImpl implements PlayService {
 
     /**
      * 存储观看时间
+     *
      * @param user_id,video_id,cur,dur
      * @return
      */
-    public void playTime(int user_id,int video_id,double cur,double dur){
+    public void playTime(int user_id, int video_id, double cur, double dur) {
         try {
-            int count = dao.h_findById(user_id,video_id);
-            if(count == 0){
-                dao.setPlayTime(user_id,video_id,cur,dur);
-            }else {
-                dao.updatePlayTime(user_id,video_id,cur,dur);
+            int count = dao.h_findById(user_id, video_id);
+            if (count == 0) {
+                dao.setPlayTime(user_id, video_id, cur, dur);
+            } else {
+                dao.updatePlayTime(user_id, video_id, cur, dur);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
     /**
      * 续播
+     *
      * @param user_id,video_id
      * @return List
      */
-    public List continue_v(int user_id,int video_id){
+    public List continue_v(int user_id, int video_id) {
         try {
-            List<Map<String,Object>> list = dao.continue_v(user_id,video_id);
-            if(null == list||list.size()==0) {
-                Map<String,Object> map = new HashMap<String, Object>();
-                map.put("history_holder",0);
+            List<Map<String, Object>> list = dao.continue_v(user_id, video_id);
+            if (null == list || list.size() == 0) {
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("history_holder", 0);
                 list.add(map);
             }
             return list;
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
         }
+    }
+
+    /**
+     * 历史记录
+     *
+     * @param user_id
+     * @return List
+     */
+    public List history(int user_id) {
+        try {
+            List<Map<String, Object>> list = dao.getHistory(user_id);
+            return list;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * 历史跳转
+     *
+     * @param video_name
+     * @return String
+     */
+    public String getVid(String video_name) {
+        return dao.getVidByName(video_name);
     }
 }

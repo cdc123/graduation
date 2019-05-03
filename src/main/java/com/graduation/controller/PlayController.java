@@ -5,6 +5,7 @@ import com.graduation.service.PlayService;
 import com.graduation.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +41,7 @@ public class PlayController {
 
     @PostMapping(value = {"/setSession_v"})
     public void setSession_v(HttpServletRequest request, String video_id) {
-        SessionUtils.set_session_video(request,video_id);
+        SessionUtils.set_session_video(request, video_id);
     }
 
     @PostMapping(value = {"/favourite"})
@@ -62,16 +63,28 @@ public class PlayController {
     }
 
     @PostMapping(value = {"/playTime"})
-    public void aplayTime(HttpServletRequest request,double history_holder,double history_total,int video_id) {
+    public void aplayTime(HttpServletRequest request, double history_holder, double history_total, int video_id) {
         int user_id = Integer.valueOf(SessionUtils.get_session_user(request));
         double cur = history_holder;
         double dur = history_total;
-        service.playTime(user_id,video_id,cur,dur);
+        service.playTime(user_id, video_id, cur, dur);
     }
 
     @PostMapping(value = {"/continue"})
-    public List continue_v(HttpServletRequest request,int video_id){
+    public List continue_v(HttpServletRequest request, int video_id) {
         int user_id = Integer.valueOf(SessionUtils.get_session_user(request));
-        return service.continue_v(user_id,video_id);
+        return service.continue_v(user_id, video_id);
+    }
+
+    @PostMapping(value = {"/history"})
+    public List history(HttpServletRequest request) {
+        int user_id = Integer.valueOf(SessionUtils.get_session_user(request));
+        return service.history(user_id);
+    }
+
+    @PostMapping(value = {"/setSession_h"})
+    public void setSession_h(HttpServletRequest request, String videoName) {
+        String video_id = service.getVid(videoName);
+        SessionUtils.set_session_video(request, video_id);
     }
 }

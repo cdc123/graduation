@@ -16,4 +16,8 @@ public interface PlayService {
     void playTime(int user_id,int video_id,double cur,double dur);
 
     List continue_v(int user_id,int video_id);
+
+    List history(int user_id);
+
+    String getVid(String video_name);
 }

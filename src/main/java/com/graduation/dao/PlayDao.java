@@ -71,4 +71,18 @@ public interface PlayDao {
      * @return List<Map<String,Object>>
      */
     List<Map<String,Object>> continue_v(@Param("user_id")int user_id,@Param("video_id")int video_id);
+
+    /**
+     * 获取历史记录
+     * @param user_id
+     * @return List<Map<String,Object>>
+     */
+    List<Map<String,Object>> getHistory(@Param("user_id")int user_id);
+
+    /**
+     * 获取视频id
+     * @param video_name
+     * @return String
+     */
+    String getVidByName(@Param("video_name")String video_name);
 }
