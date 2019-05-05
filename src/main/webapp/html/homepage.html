@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Home</title>
-<script src="../js/jquery-3.3.1.js"></script>
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" type="text/css" href="../css/wcg_userInfo.css">
 <link rel="stylesheet" href="../css/lh_homepage.css">
+<link rel="stylesheet" href="../css/Rotation.css">
 <script src="../js/jquery-3.3.1.js"></script>
 <script src="../layui/layui.all.js"></script>
 <script type="text/javascript" src="../js/wcg_homePage.js"></script>
@@ -103,18 +103,27 @@
 			</div>
 		</div>
 	</div>
-	<div id="body">
-		<!--<div id="right">-->
-		<!--<ul class="right">-->
-		<!--<li><a href="#">舞动乾坤：张天爱身份揭晓</a></li>-->
-		<!--<li><a href="#">灌篮顶配版：李易峰训斥球员</a></li>-->
-		<!--<li><a href="#">香蜜成成如雪：锦觅一心</a></li>-->
-		<!--<li><a href="#">周六夜现场XXXL版</a></li>-->
-		<!--<li><a href="#">煤这吴江</a></li>-->
-		<!--<li><a href="#">花花会员版</a></li>-->
-		<!--<li><a href="#">共筑中国梦</a></li>-->
-		<!--</ul>-->
-		<!--</div>-->
+	<div class="pb-carouselWarp demo1">
+		<ul class="pb-carousel">
+			<li class="pb-this"><img src="../image/lh_images/0.jpg" alt="" /></li>
+			<li><img src="../image/lh_images/1.jpg" alt="" /></li>
+			<li><img src="../image/lh_images/2.jpg" alt="" /></li>
+			<li><img src="../image/lh_images/3.jpg" alt="" /></li>
+			<li><img src="../image/lh_images/4.jpg" alt="" /></li>
+			<li><img src="../image/lh_images/5.jpg" alt="" /></li>
+			<li><img src="../image/lh_images/6.jpg" alt="" /></li>
+		</ul>
+		<ul class="pb-carousel-ind">
+			<li class="pb-this"></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+		<button class="pb-arrow pb-arrow-prev"></button>
+		<button class="pb-arrow pb-arrow-next" id="aa"></button>
 	</div>
 	<a name="movie" style="float: left; margin-top: -90px"></a>
 	<div id="body_two">
@@ -260,4 +269,17 @@
 		<p>Copyright©2018 泉青酷 weteam.online 版权所有</p>
 	</div>
 </body>
+<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+<script src="../js/carousel.min.js" type="text/javascript"
+	charset="utf-8"></script>
+<script type="text/javascript">
+	carousel($('.demo1'), //必选， 要轮播模块(id/class/tagname均可)，必须为jQuery元素
+	{
+		type : 'fade', //可选，默认左右(leftright) - 'leftright' / 'updown' / 'fade' (左右/上下/渐隐渐现)
+		arrowtype : 'move', //可选，默认一直显示 - 'move' / 'none'	(鼠标移上显示 / 不显示 )
+		autoplay : true, //可选，默认true - true / false (开启轮播/关闭轮播)
+		time : 6000
+	//可选，默认3000
+	});
+</script>
 </html>
