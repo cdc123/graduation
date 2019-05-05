@@ -67,36 +67,40 @@
 				</div>
 			</div>
 			<!--头像-->
-			<div id="photo" onmouseenter="showForPhoto()">
+			<div id="photo" onmouseenter="showForPhoto()"
+				style="cursor: pointer;">
 				<a id="tou">
 					<div id="photoImg" onclick="ShowLoginText()"></div>
 				</a>
 				<div id="forPhoto" hidden onmouseleave="hideForPhoto()">
 					<ul>
-						<li><a href="wcg_personalInfoChange.html">修改信息</a></li>
-						<li><a id="logout" onclick="logOut()">退出登录</a></li>
+						<li><a href="wcg_personalInfoChange.html"
+							style="cursor: pointer;">修改信息</a></li>
+						<li><a id="logout" onclick="logOut()"
+							style="cursor: pointer;">退出登录</a></li>
 					</ul>
 				</div>
 			</div>
 			<!--上传-->
 			<div id="upload">
-				<a onclick="upload()">
+				<a onclick="upload()" style="cursor: pointer;">
 					<div></div>
 				</a>
 			</div>
 			<!--历史-->
 			<div id="history">
-				<div id="historyImg" onclick="showHistory()"></div>
+				<div id="historyImg" onclick="showHistory()"
+					style="cursor: pointer;"></div>
 				<div id="forHistory" onmouseleave="hideHistory()" hidden></div>
 			</div>
 			<!--收藏-->
 			<div id="collect">
-				<a onclick="collection()">
+				<a onclick="collection()" style="cursor: pointer;">
 					<div></div>
 				</a>
 			</div>
 			<!--片库-->
-			<div id="searchLib">
+			<div id="searchLib" style="cursor: pointer;">
 				<a href="film_library.html">
 					<div></div>
 				</a>

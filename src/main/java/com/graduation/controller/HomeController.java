@@ -29,82 +29,16 @@ public class HomeController {
 	HomeService service;
 
 	/* 查询session判断登录返回用户信息 */
+	@SuppressWarnings("unchecked")
 	@PostMapping(value = "/getUserBySession")
 	public List<Map<String, Object>> getUserBySession(HttpServletRequest request) {
 		JSONArray json = null;
 		List<Map<String, Object>> list = null;
-		Map<String, Object> map = null;
-		Map<String, Object> map2 = null;
 		try {
 			list = new ArrayList<Map<String, Object>>();
-			map = new HashMap<String, Object>();
-			map2 = new HashMap<String, Object>();
+			list = (List<Map<String, Object>>) request.getSession().getAttribute("sessionListForUser");
 			/* 提示信息 */
 			System.out.println("loginUser : " + request.getSession().getAttribute("sessionListForUser"));
-			if (request.getSession().getAttribute("sessionListForUser") != null
-					&& !"".equals(request.getSession().getAttribute("sessionListForUser"))) {
-				json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
-				if (((Map) (json.get(0))).get("user_id") != null && !"".equals(((Map) (json.get(0))).get("user_id"))) {
-					map2.put("userId", Integer.valueOf(((Map) (json.get(0))).get("user_id").toString()));
-				} else {
-					map2.put("userId", "");
-				}
-				if (((Map) (json.get(0))).get("user_password") != null
-						&& !"".equals(((Map) (json.get(0))).get("user_password"))) {
-					map2.put("userPassword", String.valueOf(((Map) (json.get(0))).get("user_password").toString()));
-				} else {
-					map2.put("userPassword", "");
-				}
-				if (((Map) (json.get(0))).get("user_phone") != null
-						&& !"".equals(((Map) (json.get(0))).get("user_phone"))) {
-					map2.put("userPhone", String.valueOf(((Map) (json.get(0))).get("user_phone").toString()));
-				} else {
-					map2.put("userPhone", "");
-				}
-				if (((Map) (json.get(0))).get("user_power") != null
-						&& !"".equals(((Map) (json.get(0))).get("user_power"))) {
-					map2.put("userPower", String.valueOf(((Map) (json.get(0))).get("user_power").toString()));
-				} else {
-					map2.put("userPower", "");
-				}
-				if (((Map) (json.get(0))).get("user_name") != null
-						&& !"".equals(((Map) (json.get(0))).get("user_name"))) {
-					map2.put("userName", String.valueOf(((Map) (json.get(0))).get("user_name").toString()));
-				} else {
-					map2.put("userName", "");
-				}
-				if (((Map) (json.get(0))).get("user_sex") != null
-						&& !"".equals(((Map) (json.get(0))).get("user_sex"))) {
-					map2.put("userSex", String.valueOf(((Map) (json.get(0))).get("user_sex").toString()));
-				} else {
-					map2.put("userSex", "");
-				}
-				if (((Map) (json.get(0))).get("user_address") != null
-						&& !"".equals(((Map) (json.get(0))).get("user_address"))) {
-					map2.put("userAddress", String.valueOf(((Map) (json.get(0))).get("user_address").toString()));
-				} else {
-					map2.put("userAddress", "");
-				}
-				if (((Map) (json.get(0))).get("user_birthday") != null
-						&& !"".equals(((Map) (json.get(0))).get("user_birthday"))) {
-					map2.put("userBirthday", Date.valueOf(((Map) (json.get(0))).get("user_birthday").toString()));
-				} else {
-					map2.put("userBirthday", "");
-				}
-				if (((Map) (json.get(0))).get("user_introduce") != null
-						&& !"".equals(((Map) (json.get(0))).get("user_introduce"))) {
-					map2.put("userIntroduce", String.valueOf(((Map) (json.get(0))).get("user_introduce").toString()));
-				} else {
-					map2.put("userIntroduce", "");
-				}
-				if (((Map) (json.get(0))).get("user_image") != null
-						&& !"".equals(((Map) (json.get(0))).get("user_image"))) {
-					map2.put("userImage", String.valueOf(((Map) (json.get(0))).get("user_image").toString()));
-				} else {
-					map2.put("userImage", "");
-				}
-				list.add(map2);
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

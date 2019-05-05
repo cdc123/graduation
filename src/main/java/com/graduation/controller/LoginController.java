@@ -1,6 +1,7 @@
 package com.graduation.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.graduation.service.RegisterLoginService;
+import com.graduation.utils.JsonDateValueProcessor;
 import com.graduation.utils.SessionUtils;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JsonConfig;
 
 @RestController
 @RequestMapping("/login")
@@ -47,7 +50,9 @@ public class LoginController {
 		try {
 			list = new ArrayList<Map<String, Object>>();
 			list = service.login(userPhone, password);
-			json = JSONArray.fromObject(list);
+			JsonConfig jsonConfig = new JsonConfig();
+			jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
+			json = JSONArray.fromObject(list, jsonConfig);
 			String relPassword = String.valueOf(((Map) json.get(0)).get("user_password").toString());
 			if (relPassword.equals(password)) {
 				request.getSession().setAttribute("sessionListForUser", list);

@@ -3,22 +3,8 @@ $(function() {
 	getMovie();
 	getTeleplay();
 	getUpload();
-	$("#body_two_content1").on("click", "a", function(event) {
-		var target = $(event.target);
-		var videoName = target.text();
-		$.ajax({
-			type : "post",
-			url : "/home/getVideoByName",
-			data : {
-				"videoName" : videoName
-			},
-			dataType : "json",
-			success : function(result) {
-				window.location.href = "play.html";
-			}
-		});
-	});
-	$("#body_two_content2").on("click", "a", function(event) {
+	/* 视频点击绑定 */
+	$(".mtu").on("click", "a", function(event) {
 		var target = $(event.target);
 		var videoName = target.text();
 		$.ajax({
@@ -67,19 +53,19 @@ function getUserBySession() {
 			if (result != null && "" != result) {
 				$("#isLogin").val("1");
 				$.each(result, function(index, item) {
-					$("#userId").val(item.userId);
-					$("#userPhone").val(item.userPhone);
-					$("#userPower").val(item.userPower);
-					$("#userName").val(item.userName);
-					$("#userSex").val(item.userSex);
-					$("#userAddress").val(item.userAddress);
-					$("#userBirthday").val(item.userBirthday);
-					$("#userIntroduce").val(item.userIntroduce);
-					$("#userImage").val(item.userImage);
+					$("#userId").val(item.user_id);
+					$("#userPhone").val(item.user_phone);
+					$("#userPower").val(item.user_power);
+					$("#userName").val(item.user_name);
+					$("#userSex").val(item.user_sex);
+					$("#userAddress").val(item.user_address);
+					$("#userBirthday").val(item.user_birthday);
+					$("#userIntroduce").val(item.user_introduce);
+					$("#userImage").val(item.user_image);
 					if ($("#userImage").val() != null
 							&& $("#userImage").val() != "") {
 						$("#photoImg").css("background-image",
-								"url(item.get('userImage'))");
+								"url('" + $("#userImage").val() + "')");
 					} else {
 						$("#photoImg").css("background-image",
 								"url('../image/wcg_images/loginPhoto.jpg')");
@@ -382,15 +368,21 @@ function getMovie() {
 					var num = 0;
 					var firstId = "body_two_content1";
 					var otherId = "body_two_content2";
+					var v = "mtu";
 					$
 							.each(
 									result,
 									function(index, item) {
 										num = num + 1;
-										if (num > 1) {
+										if (num > 6) {
+											$("#moreMovie").show(100);
+											return false;
+										} else if (num > 1) {
 											if (item.video_image != null) {
 												$node = $("<div id="
 														+ otherId
+														+ " class="
+														+ v
 														+ "><img src="
 														+ item.video_image
 														+ " /><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
@@ -399,18 +391,19 @@ function getMovie() {
 											} else {
 												$node = $("<div id="
 														+ otherId
+														+ " class="
+														+ v
 														+ "><img src='../image/wcg_images/noPicture.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
 														+ item.video_name
 														+ "</a></div>");
 											}
 											$("#moreMovie").before($node);
-										} else if (num > 6) {
-											$("#moreMovie").show(100);
-											return false;
 										} else {
 											if (item.video_image != null) {
 												$node = $("<div id="
 														+ firstId
+														+ " class="
+														+ v
 														+ "><img src="
 														+ item.video_image
 														+ " /><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
@@ -419,6 +412,8 @@ function getMovie() {
 											} else {
 												$node = $("<div id="
 														+ otherId
+														+ " class="
+														+ v
 														+ "><img src='../image/wcg_images/noPicture.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
 														+ item.video_name
 														+ "</a></div>");
@@ -446,15 +441,21 @@ function getTeleplay() {
 					var num = 0;
 					var firstId = "body_two_content1";
 					var otherId = "body_two_content2";
+					var v = "mtu";
 					$
 							.each(
 									result,
 									function(index, item) {
 										num = num + 1;
-										if (num > 1) {
+										if (num > 6) {
+											$("#moreTvplay").show(100);
+											return false;
+										} else if (num > 1) {
 											if (item.video_image != null) {
 												$node = $("<div id="
 														+ otherId
+														+ " class="
+														+ v
 														+ "><img src="
 														+ item.video_image
 														+ " /><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
@@ -463,18 +464,19 @@ function getTeleplay() {
 											} else {
 												$node = $("<div id="
 														+ otherId
+														+ " class="
+														+ v
 														+ "><img src='../image/wcg_images/noPicture.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
 														+ item.video_name
 														+ "</a></div>");
 											}
 											$("#tvplayArea").before($node);
-										} else if (num > 6) {
-											$("#moreTvplay").show(100);
-											return false;
 										} else {
 											if (item.video_image != null) {
 												$node = $("<div id="
 														+ firstId
+														+ " class="
+														+ v
 														+ "><img src="
 														+ item.video_image
 														+ " /><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
@@ -483,6 +485,8 @@ function getTeleplay() {
 											} else {
 												$node = $("<div id="
 														+ otherId
+														+ " class="
+														+ v
 														+ "><img src='../image/wcg_images/noPicture.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
 														+ item.video_name
 														+ "</a></div>");
@@ -510,15 +514,21 @@ function getUpload() {
 					var num = 0;
 					var firstId = "body_two_content1";
 					var otherId = "body_two_content2";
+					var v = "mtu";
 					$
 							.each(
 									result,
 									function(index, item) {
 										num = num + 1;
-										if (num > 1) {
+										if (num > 6) {
+											$("#moreUpload").show(100);
+											return false;
+										} else if (num > 1) {
 											if (item.video_image != null) {
 												$node = $("<div id="
 														+ otherId
+														+ " class="
+														+ v
 														+ "><img src="
 														+ item.video_image
 														+ " /><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
@@ -527,18 +537,19 @@ function getUpload() {
 											} else {
 												$node = $("<div id="
 														+ otherId
+														+ " class="
+														+ v
 														+ "><img src='../image/wcg_images/noPicture.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
 														+ item.video_name
 														+ "</a></div>");
 											}
 											$("#uploadArea").before($node);
-										} else if (num > 6) {
-											$("#moreUpload").show(100);
-											return false;
 										} else {
 											if (item.video_image != null) {
 												$node = $("<div id="
 														+ firstId
+														+ " class="
+														+ v
 														+ "><img src="
 														+ item.video_image
 														+ " /><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
@@ -547,6 +558,8 @@ function getUpload() {
 											} else {
 												$node = $("<div id="
 														+ otherId
+														+ " class="
+														+ v
 														+ "><img src='../image/wcg_images/noPicture.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
 														+ item.video_name
 														+ "</a></div>");
