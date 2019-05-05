@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.graduation.dao.RegisterLoginDao">
+
+	<select id="getUserByPhone" parameterType="string"
+		resultType="java.util.HashMap">
+		SELECT *
+		FROM user t
+		where t.user_phone = ${userPhone}
+	</select>
+
+	<select id="register" parameterType="string"
+		resultType="java.util.HashMap">
+		insert into user(user_phone,user_password)
+		value(${userPhone},${password})
+	</select>
+
+
+
+</mapper> 
