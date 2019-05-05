@@ -188,7 +188,6 @@
                             /*取出每一条历史记录*/
                             $.each(result, function (n, value) {
                                 var videoName = value.video_name;
-                                // alert(value.history_time);
                                 /*取出历史时间*/
                                 var historyTime = new Date(value.history_time);
                                 /*取出年份*/
@@ -209,7 +208,7 @@
                                     $history = $(y + m + h);
                                     $("#forHistory").append($history);
                                     yearfirst = Number(historyTime.getFullYear());
-                                    monthfirst = Number(historyTime.getMonth());
+                                    monthfirst = Number(historyTime.getMonth()+1);
                                     datefirst = Number(historyTime.getDate());
                                     hourfirst = Number(historyTime.getHours());
                                     minutefirst = Number(historyTime.getMinutes());
@@ -217,7 +216,7 @@
                                     if ((Number(historyTime.getMonth()) > monthfirst) || (Number(historyTime.getMonth()) == monthfirst && Number(historyTime.getDate()) > datefirst)) {
                                         $history = $(m + h);
                                         $("#forHistory").children().eq(0).after($history);
-                                        monthfirst = Number(historyTime.getMonth());
+                                        monthfirst = Number(historyTime.getMonth()+1);
                                         datefirst = Number(historyTime.getDate());
                                         hourfirst = Number(historyTime.getHours());
                                         minutefirst = Number(historyTime.getMinutes());
@@ -307,116 +306,110 @@
                     })(i);
                 }
                 ;
-                //ts
-                // function load() {
-                //     $.ajax({
-                //         async: false,
-                //         url: "/ShowMessageServlet",
-                //         type: "post",
-                //         data: {"pagenumber": pagenumber},
-                //         dataType: "json",
-                //         success: function (jsonArray) {
-                //             var $u1_id;
-                //             for (var i = 0; i < (jsonArray.length - 1); i++) {
-                //                 $(".comments-text").eq(i).text(jsonArray[i].msg_text);
-                //                 $(".comment-time").eq(i).text(jsonArray[i].msg_date);
-                //                 // alert(jsonArray[i].user_id);
-                //                 $u1_id = jsonArray[i].user_id;
-                //                 //获取头像
-                //                 // 立即调用的函数表达式（IIFE）
-                //                 (function (i) {
-                //                     $.ajax({
-                //                         url: "/CdcGetphotoServlet",
-                //                         data: {"user_id": $u1_id},
-                //                         type: "post",
-                //                         dataType: "json",
-                //                         success: function (result) {
-                //                             //判断用户是否命名
-                //                             if(result[0].user_name !== null && result[0].user_name !== undefined && result[0].user_name !== ""){
-                //                                 $(".comments-user-info").children().eq(i).text("用户：" + result[0].user_name + "");
-                //                             }else {
-                //                                 $(".comments-user-info").children().eq(i).text("用户：未命名用户");
-                //                             }
-                //                             $(".comments-user-avatar").children().children().eq(i).attr("src",result[0].user_image);
-                //                         }, error: function () {
-                //                             // alert("展示数据错误！！");
-                //                         }
-                //                     });
-                //                 })(i);
-                //             }
-                //             rsCount = jsonArray[jsonArray.length - 1];
-                //         },
-                //         error: function () {
-                //             alert("第一页展示数据错误！！");
-                //         },
-                //     });
-                // }
 
-                // $.ajax({
-                //     async: false,
-                //     url: "/ShowVideoServlet",
-                //     data: {"video_id": $v_id},
-                //     type: "post",
-                //     dataType: "json",
-                //     success: function (list) {
-                //         for (var i = 0; i < 8; i++) {
-                //             var $node = $('<div class="item" style="width: 330px;height: 90px;float: left; margin-left: 10px;margin-right: 10px;overflow:hidden;"><a class="cover" href="####" target="_blank"><img src="' + list[i].video_image + '" style="width:180px;height:200px;overflow: hidden"></a> <div class="title"> <a href="####" target="_blank" title="' + list[i].video_introduce + '">' + list[i].video_name + '</a></div><div class="status" style="display:block;float:right;margin-right:10px;margin-top: 70px;"><span>' + list[i].video_playtimes + '次播放</span></div></div>');
-                //             $(".c").append($node);
-                //             // count=parseInt(list[list.length-1]);
-                //             // console.log(count);
-                //         }
-                //     },
-                //     error: function () {
-                //         alert("第一页展示数据错误！！");
-                //     }
-                // });
-                // load();
-                // $("input[value='下一页']").click(function () {
-                //     var count = Math.ceil(rsCount / 6);
-                //     if (pagenumber < count) {
-                //         pagenumber++;
-                //     } else {
-                //         pagenumber = count;
-                //     }
-                //     load();
-                // })
-                // $("input[value='上一页']").click(function () {
-                //     // var maxPage =Math.ceil(rsCount/pageSize);
-                //     // num=num<maxPage ? ++num:maxPage;
-                //     if (pagenumber <= 1) {
-                //         pagenumber = 1;
-                //     } else {
-                //         pagenumber--;
-                //     }
-                //     load();
-                // })
-                //分页数据
-                // changePage(pagenumber,pagesize);
-                //点发布，插入一条数据
-                // $("#buttom_sub").click(function () {
-                //     $.ajax({
-                //         async: false,
-                //         url: "/InsertMessageServlet",
-                //         type: "post",
-                //         data: {
-                //             "msg_text": $("#editor").children().eq(1).children().text(),
-                //             "video_id": $v_id,
-                //             "user_id": $u_id
-                //         },
-                //         dataType: "json",
-                //         success: function (result) {
-                //             // alert("成功")
-                //             layer.msg('评论成功！');
-                //             load();
-                //         },
-                //         error: function () {
-                //             alert("评论错误！！");
-                //         },
-                //         // complete: function () {
-                //         //     $(".comments-text").load("http://localhost:8080/play.html .comments-text");
-                //         // }
-                //     });
-                // });
+                function load() {
+                    $.ajax({
+                        async: false,
+                        url: "/message/getMessage",
+                        type: "post",
+                        data: {"pagenumber": pagenumber,"video_id":$v_id},
+                        success: function (jsonArray) {
+                            var $u1_id;
+                            for (var i = 0; i < (jsonArray.length - 1); i++) {
+                                $(".comments-text").eq(i).text(jsonArray[i].msg_text);
+                                var msg_date = new Date(jsonArray[i].msg_date);
+                                var hours = msg_date.getHours();
+                                var min = msg_date.getMinutes();
+                                var sec = msg_date.getSeconds();
+                                if(hours > 0 && hours < 10){
+                                    hours = "0" + hours;
+                                }else if(hours == 0){
+                                    hours = "00";
+                                }
+                                if(min > 0 && min < 10){
+                                    min = "0" + min;
+                                }else if(min == 0){
+                                    min = "00";
+                                }
+                                if(sec > 0 && sec < 10){
+                                    sec = "0" + sec;
+                                }else if(sec == 0){
+                                    sec = "00";
+                                }
+
+                                $(".comment-time").eq(i).text(msg_date.getFullYear()+"-"+(msg_date.getMonth()+1)+"-"+msg_date.getDate()+" "+hours+":"+min+":"+sec);
+                                $u1_id = jsonArray[i].user_id;
+                                if(jsonArray[i].user_name !== null && jsonArray[i].user_name !== undefined && jsonArray[i].user_name !== ""){
+                                    $(".comments-user-info").children().eq(i).text("用户：" + jsonArray[0].user_name + "");
+                                }else {
+                                    $(".comments-user-info").children().eq(i).text("用户：未命名用户");
+                                }
+                                $(".comments-user-avatar").children().children().eq(i).attr("src",jsonArray[i].user_image);
+                            }
+                            rsCount = jsonArray[jsonArray.length - 1].count;
+                        },
+                        error: function () {
+                            alert("第一页展示数据错误！！");
+                        },
+                    });
+                }
+
+                $.ajax({
+                    async: false,
+                    url: "/play/recommend",
+                    data: {"video_id": $v_id},
+                    type: "post",
+                    success: function (list) {
+                        for (var i = 0; i < 8; i++) {
+                            var $node = $('<div class="item" style="width: 330px;height: 90px;float: left; margin-left: 10px;margin-right: 10px;overflow:hidden;"><a class="cover" href="####" target="_blank"><img src="' + list[i].video_image + '" style="width:180px;height:200px;overflow: hidden"></a> <div class="title"> <a href="####" target="_blank" title="' + list[i].video_introduce + '">' + list[i].video_name + '</a></div><div class="status" style="display:block;float:right;margin-right:10px;margin-top: 70px;"><span>' + list[i].video_playtimes + '次播放</span></div></div>');
+                            $(".c").append($node);
+                        }
+                    },
+                    error: function () {
+                        alert("第一页展示数据错误！！");
+                    }
+                });
+                load();
+                $("input[value='下一页']").click(function () {
+                    var count = Math.ceil(rsCount / 6);
+                    if (pagenumber < count) {
+                        pagenumber++;
+                    } else {
+                        pagenumber = count;
+                    }
+                    load();
+                })
+                $("input[value='上一页']").click(function () {
+                    if (pagenumber <= 1) {
+                        pagenumber = 1;
+                    } else {
+                        pagenumber--;
+                    }
+                    load();
+                })
+                // 点发布，插入一条数据
+                $("#buttom_sub").click(function () {
+                    if ($u_id != -1) {
+                        $.ajax({
+                            async: false,
+                            url: "/message/addMessage",
+                            type: "post",
+                            data: {
+                                "msg_text": $("#editor").children().eq(1).children().text(),
+                                "video_id": $v_id
+                            },
+                            success: function () {
+                                layer.msg('评论成功！');
+                                load();
+                            },
+                            error: function () {
+                                alert("评论错误！！");
+                            },
+                        });
+                    }else {
+                        layer.msg('请先登陆！');
+                    }
+                });
             }
         });
     </script>
@@ -802,61 +795,5 @@
         </div>
     </div>
 </div>
-//视频
-<!--<script src="../js/DPlayer.min.js"></script>-->
-<!--<script>-->
-<!--console.log(" %c 该项目基于Dplayer.js", 'color:red')-->
-
-<!--// 弹出框-->
-<!--function alert_back(text) {-->
-<!--$(".alert_back").html(text).show();-->
-<!--setTimeout(function () {-->
-<!--$(".alert_back").fadeOut();-->
-<!--}, 1200)-->
-<!--}-->
-
-<!--//秒转分秒-->
-<!--function formatTime(seconds) {-->
-<!--return [-->
-<!--//            parseInt(seconds / 60 / 60),-->
-<!--parseInt(seconds / 60 % 60),-->
-<!--parseInt(seconds % 60)-->
-<!--]-->
-<!--.join(":")-->
-<!--.replace(/\b(\d)\b/g, "0$1");-->
-<!--}-->
-
-<!--$.ajax({-->
-<!--url: "https://api.prprpr.me/dplayer/v3/bilibili?aid=4157142",-->
-<!--success: function (data) {-->
-<!--if (data.code == "1") {-->
-<!--var danmaku = data.danmaku;-->
-<!--var autor = "农民";-->
-<!--$(".danmuku_num").text(danmaku.length)-->
-<!--$(danmaku).each(function (index, item) {-->
-<!--if (item.type == "right") {-->
-<!--} else {-->
-<!--autor = "地主"-->
-<!--}-->
-<!--var oLi = `   <ol class="danmuku_list" time="${item.time}">-->
-<!--<li>${formatTime(item.time)}</li>-->
-<!--<li title="${item.text}">${item.text}</li>-->
-<!--<li>${autor}</li>-->
-<!--</ol>-->
-<!--`-->
-<!--$(".list_ovefiow").append(oLi);-->
-<!--autor = "农民";-->
-<!--})-->
-<!--} else {-->
-<!--alert_back("弹幕加载失败 -v-!");-->
-<!--}-->
-<!--$(".danmuku_list").on("click", function () {-->
-
-<!--dp.seek($(this).attr("time"))-->
-<!--})-->
-<!--}-->
-<!--})-->
-
-<!--</script>-->
 </body>
 </html>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.graduation.dao.MessageDao">
+
+    <!-- 保存评价 -->
+    <insert id="addMessage">
+    insert into message (video_id,user_id,msg_text,msg_date)values(#{video_id},#{user_id},#{msg_text},NOW())
+	</insert>
+
+	<!--获取评价-->
+	<select id="getMessage" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+    SELECT
+	m.video_id,
+	m.user_id,
+	m.msg_date,
+	m.msg_text,
+	u.user_name,
+	u.user_image
+    FROM
+	message m
+    LEFT JOIN user u ON m.user_id = u.user_id
+    WHERE
+	m.video_id = #{video_id}
+    ORDER BY
+	m.msg_id DESC
+    LIMIT #{num1},#{num2}
+	</select>
+
+	<!--获取该视频评价数量-->
+	<select id="getCommentCount" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    SELECT count(*) FROM message WHERE video_id = #{video_id}
+	</select>
+
+</mapper> 

@@ -21,7 +21,8 @@
 	b.video_id,
 	b.video_image,
 	b.video_name,
-	b.video_playtimes
+	b.video_playtimes,
+	b.video_introduce
     FROM
 	video a,
 	video b
