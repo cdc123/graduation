@@ -32,4 +32,12 @@
 		where t.video_id = ${videoId}
 	</select>
 
+	<!-- 根据视频Id查询视频 -->
+	<select id="getVideoBySort" parameterType="string"
+		resultType="java.util.HashMap">
+		select *
+		from video t
+		where t.video_sort = ${videoSort}
+	</select>
+
 </mapper> 

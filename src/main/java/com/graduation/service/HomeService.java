@@ -14,4 +14,6 @@ public interface HomeService {
 	public List<Map<String, Object>> getHistoryByUserId(@Param("userId") String userId);
 
 	public List<Map<String, Object>> getVideoById(@Param("videoId") String videoId);
+
+	public List<Map<String, Object>> getVideoBySort(@Param("videoSort") String videoSort);
 }

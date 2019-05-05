@@ -106,4 +106,17 @@ public class HomeServiceImpl implements HomeService {
 		return list;
 	}
 
+	@Override
+	public List<Map<String, Object>> getVideoBySort(String videoSort) {
+		List<Map<String, Object>> list = null;
+		try {
+			list = new ArrayList<Map<String, Object>>();
+			videoSort = "'" + videoSort + "'";
+			list = dao.getVideoBySort(videoSort);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
 }

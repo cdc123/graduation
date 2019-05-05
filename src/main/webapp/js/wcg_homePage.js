@@ -1,5 +1,38 @@
 $(function() {
 	getUserBySession();
+	getMovie();
+	getTeleplay();
+	getUpload();
+	$("#body_two_content1").on("click", "a", function(event) {
+		var target = $(event.target);
+		var videoName = target.text();
+		$.ajax({
+			type : "post",
+			url : "/home/getVideoByName",
+			data : {
+				"videoName" : videoName
+			},
+			dataType : "json",
+			success : function(result) {
+				window.location.href = "play.html";
+			}
+		});
+	});
+	$("#body_two_content2").on("click", "a", function(event) {
+		var target = $(event.target);
+		var videoName = target.text();
+		$.ajax({
+			type : "post",
+			url : "/home/getVideoByName",
+			data : {
+				"videoName" : videoName
+			},
+			dataType : "json",
+			success : function(result) {
+				window.location.href = "play.html";
+			}
+		});
+	});
 	/* 事件绑定,点击搜索栏下拉框选项时将选项填入搜索框 */
 	$("#forSearch ul").on("click", "li", function(event) {
 		var target = $(event.target);
@@ -23,131 +56,8 @@ $(function() {
 			}
 		});
 	});
-	// 电影显示
-	$.ajax({
-		url : "/HomeShowServlet",
-		data : {
-			"video_sort" : "电影"
-		},
-		type : "post",
-		dataType : "json",
-		success : function(result) {
-			for (var j = 1; j < 6; j++) {
-				$("#body_two_content" + j + "").children().eq(1).children()
-						.children().children().text(result[j].video_name);
-				$("#body_two_content" + j + "").children().eq(0).attr("src",
-						result[j].video_image);
-				$("#body_two_content" + j + "").children().eq(0).attr("id",
-						result[j].video_id);
-			}
-		},
-		error : function() {
-			// alert("展示数据错误！！");
-		}
-	});
-	// 电影传session
-	for (var i = 1; i < 6; i++) {
-		// 立即调用的函数表达式（IIFE）
-		(function(i) {
-			$("#body_two_content" + i + "").children().eq(0).click(
-					function() {
-						var $vid_session = $("#body_two_content" + i + "")
-								.children().eq(0).attr("id");
-						$.ajax({
-							url : "/CdcMidSetsessionServlet",
-							data : {
-								"video_id" : $vid_session
-							},
-							type : "post",
-							dataType : "json",
-							success : function(result) {
-								// alert(2);
-								location.href = "play.html";
-							},
-							error : function() {
-								// alert("展示数据错误！！");
-							}
-						});
-					});
-		})(i);
-	}
-	;
-	// 剧集显示
-	$.ajax({
-		url : "/HomeShowServlet",
-		data : {
-			"video_sort" : "剧集"
-		},
-		type : "post",
-		dataType : "json",
-		success : function(result) {
-			// alert($("#body_three_content1").children().eq(1).children().eq(0).children().text());
-			for (var j = 1; j < 6; j++) {
-				$("#body_three_content" + j + "").children().eq(1).children()
-						.eq(0).children().text(result[j].video_name);
-				$("#body_three_content" + j + "").children().eq(0).attr("src",
-						result[j].video_image).css("width", "192px").css(
-						"height", "288px");
-				$("#body_three_content" + j + "").children().eq(0).attr("id",
-						result[j].video_id);
-			}
-		},
-		error : function() {
-			// alert("展示数据错误！！");
-		}
-	});
-	// 剧集传session
-	for (var i = 1; i < 6; i++) {
-		// 立即调用的函数表达式（IIFE）
-		(function(i) {
-			$("#body_three_content" + i + "").children().eq(0).click(
-					function() {
-						var $vid_session = $("#body_three_content" + i + "")
-								.children().eq(0).attr("id");
-						$.ajax({
-							url : "/CdcMidSetsessionServlet",
-							data : {
-								"video_id" : $vid_session
-							},
-							type : "post",
-							dataType : "json",
-							success : function(result) {
-								// alert(2);
-								location.href = "play.html";
-							},
-							error : function() {
-								// alert("展示数据错误！！");
-							}
-						});
-					});
-		})(i);
-	}
-	;
 });
-/* 轮播数组 */
-var $lunboarr = new Array("../image/lh_images/0.jpg",
-		"../image/lh_images/1.jpg", "../image/lh_images/2.jpg",
-		"../image/lh_images/3.jpg", "../image/lh_images/4.jpg",
-		"../image/lh_images/5.jpg", "../image/lh_images/6.jpg");
-var $i = 1;
-/* 单独加载轮播 */
-$(function() {
-	setTimeout("changeImage()", 3000);
-});
-
-/* 轮播函数(小花立功) */
-function changeImage() {
-	if ($i > 6) {
-		$i = 0;
-	}
-	$("#body").css("background-image", "url(" + $lunboarr[$i] + ")");
-	/* 设置背景图片 */
-	$i++;
-	setTimeout("changeImage()", 3000);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
-/* 查询session是否有有用户信息 */
+/* 查询session是否有有登录信息 */
 function getUserBySession() {
 	$.ajax({
 		type : "post",
@@ -454,4 +364,196 @@ function collection() {
 	} else {
 		window.location.href = "wcg_userInfo.html#miao";
 	}
+}
+/* 获取电影 */
+function getMovie() {
+	var videoSort = "电影";
+	$
+			.ajax({
+				url : "/home/getVideoBySort",
+				data : {
+					"videoSort" : videoSort
+				},
+				type : "post",
+				dataType : "json",
+				async : false,
+				success : function(result) {
+					var $node = null;
+					var num = 0;
+					var firstId = "body_two_content1";
+					var otherId = "body_two_content2";
+					$
+							.each(
+									result,
+									function(index, item) {
+										num = num + 1;
+										if (num > 1) {
+											if (item.video_image != null) {
+												$node = $("<div id="
+														+ otherId
+														+ "><img src="
+														+ item.video_image
+														+ " /><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ item.video_name
+														+ "</a></div>");
+											} else {
+												$node = $("<div id="
+														+ otherId
+														+ "><img src='../image/wcg_images/noPicture.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ item.video_name
+														+ "</a></div>");
+											}
+											$("#moreMovie").before($node);
+										} else if (num > 6) {
+											$("#moreMovie").show(100);
+											return false;
+										} else {
+											if (item.video_image != null) {
+												$node = $("<div id="
+														+ firstId
+														+ "><img src="
+														+ item.video_image
+														+ " /><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ item.video_name
+														+ "</a></div>");
+											} else {
+												$node = $("<div id="
+														+ otherId
+														+ "><img src='../image/wcg_images/noPicture.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ item.video_name
+														+ "</a></div>");
+											}
+											$("#moreMovie").before($node);
+										}
+									});
+				}
+			});
+}
+/* 获取连续剧 */
+function getTeleplay() {
+	var videoSort = "剧集";
+	$
+			.ajax({
+				url : "/home/getVideoBySort",
+				data : {
+					"videoSort" : videoSort
+				},
+				type : "post",
+				dataType : "json",
+				async : false,
+				success : function(result) {
+					var $node = null;
+					var num = 0;
+					var firstId = "body_two_content1";
+					var otherId = "body_two_content2";
+					$
+							.each(
+									result,
+									function(index, item) {
+										num = num + 1;
+										if (num > 1) {
+											if (item.video_image != null) {
+												$node = $("<div id="
+														+ otherId
+														+ "><img src="
+														+ item.video_image
+														+ " /><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ item.video_name
+														+ "</a></div>");
+											} else {
+												$node = $("<div id="
+														+ otherId
+														+ "><img src='../image/wcg_images/noPicture.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ item.video_name
+														+ "</a></div>");
+											}
+											$("#tvplayArea").before($node);
+										} else if (num > 6) {
+											$("#moreTvplay").show(100);
+											return false;
+										} else {
+											if (item.video_image != null) {
+												$node = $("<div id="
+														+ firstId
+														+ "><img src="
+														+ item.video_image
+														+ " /><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ item.video_name
+														+ "</a></div>");
+											} else {
+												$node = $("<div id="
+														+ otherId
+														+ "><img src='../image/wcg_images/noPicture.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ item.video_name
+														+ "</a></div>");
+											}
+											$("#tvplayArea").before($node);
+										}
+									});
+				}
+			});
+}
+/* 获取用户上传视频 */
+function getUpload() {
+	var videoSort = "上传";
+	$
+			.ajax({
+				url : "/home/getVideoBySort",
+				data : {
+					"videoSort" : videoSort
+				},
+				type : "post",
+				dataType : "json",
+				async : false,
+				success : function(result) {
+					var $node = null;
+					var num = 0;
+					var firstId = "body_two_content1";
+					var otherId = "body_two_content2";
+					$
+							.each(
+									result,
+									function(index, item) {
+										num = num + 1;
+										if (num > 1) {
+											if (item.video_image != null) {
+												$node = $("<div id="
+														+ otherId
+														+ "><img src="
+														+ item.video_image
+														+ " /><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ item.video_name
+														+ "</a></div>");
+											} else {
+												$node = $("<div id="
+														+ otherId
+														+ "><img src='../image/wcg_images/noPicture.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ item.video_name
+														+ "</a></div>");
+											}
+											$("#uploadArea").before($node);
+										} else if (num > 6) {
+											$("#moreUpload").show(100);
+											return false;
+										} else {
+											if (item.video_image != null) {
+												$node = $("<div id="
+														+ firstId
+														+ "><img src="
+														+ item.video_image
+														+ " /><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ item.video_name
+														+ "</a></div>");
+											} else {
+												$node = $("<div id="
+														+ otherId
+														+ "><img src='../image/wcg_images/noPicture.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ item.video_name
+														+ "</a></div>");
+											}
+											$("#uploadArea").before($node);
+										}
+									});
+				}
+			});
 }

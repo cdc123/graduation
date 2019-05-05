@@ -30,7 +30,7 @@ public class HomeController {
 
 	/* 查询session判断登录返回用户信息 */
 	@PostMapping(value = "/getUserBySession")
-	public List<Map<String, Object>> getUserBySession(HttpServletRequest request, HttpServletResponse response) {
+	public List<Map<String, Object>> getUserBySession(HttpServletRequest request) {
 		JSONArray json = null;
 		List<Map<String, Object>> list = null;
 		Map<String, Object> map = null;
@@ -113,7 +113,7 @@ public class HomeController {
 
 	/* 根据搜索框输入关键字进行模糊查询 */
 	@PostMapping(value = "/getVideoByFirstName")
-	public List<String> getVideoByFirstName(HttpServletRequest request, HttpServletResponse response) {
+	public List<String> getVideoByFirstName(HttpServletRequest request) {
 		List<String> list = null;
 		String firstName = request.getParameter("firstName");
 		try {
@@ -127,12 +127,19 @@ public class HomeController {
 
 	/* 点击搜索按钮查询影片 */
 	@PostMapping(value = "/getVideoByName")
-	public List<Map<String, Object>> getVideoByName(HttpServletRequest request, HttpServletResponse response) {
+	public List<Map<String, Object>> getVideoByName(HttpServletRequest request) {
 		List<Map<String, Object>> list = null;
+		JSONArray json = null;
 		String videoName = request.getParameter("videoName");
 		try {
 			list = new ArrayList<Map<String, Object>>();
 			list = service.getVideoByName(videoName);
+			json = JSONArray.fromObject(list);
+			String relVideoName = String.valueOf(((Map) (json.get(0))).get("video_name").toString());
+			if (list.size() == 1 && relVideoName.equals(videoName)) {
+				String videoId = String.valueOf(((Map) (json.get(0))).get("video_id").toString());
+				request.getSession().setAttribute("videosession", videoId);
+			}
 			request.getSession().setAttribute("searchVideoList", list);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -142,13 +149,13 @@ public class HomeController {
 
 	/* 登出 */
 	@PostMapping(value = "/logOut")
-	public void logOut(HttpServletRequest request, HttpServletResponse response) {
+	public void logOut(HttpServletRequest request) {
 		request.getSession().setAttribute("sessionListForUser", "");
 	}
 
 	/* 查询历史纪录 */
 	@PostMapping(value = "/getHistoryByUserId")
-	public List<Map<String, Object>> getHistoryByUserId(HttpServletRequest request, HttpServletResponse response) {
+	public List<Map<String, Object>> getHistoryByUserId(HttpServletRequest request) {
 		String userId = request.getParameter("userId");
 		List<Map<String, Object>> list = null;
 		JSONArray json = null;
@@ -164,7 +171,7 @@ public class HomeController {
 
 	/* 根据视频Id查询视频 */
 	@PostMapping(value = "/getVideoById")
-	public String getVideoById(HttpServletRequest request, HttpServletResponse response) {
+	public String getVideoById(HttpServletRequest request) {
 		String videoId = request.getParameter("videoId");
 		JSONArray json = null;
 		String videoName = null;
@@ -179,7 +186,7 @@ public class HomeController {
 
 	/* 根据视频Name查询视频 */
 	@PostMapping(value = "/getVideoByNameForHistory")
-	public void getVideoByNameForHistory(HttpServletRequest request, HttpServletResponse response) {
+	public void getVideoByNameForHistory(HttpServletRequest request) {
 		String videoName = request.getParameter("videoName");
 		List<Map<String, Object>> list = null;
 		try {
@@ -195,5 +202,19 @@ public class HomeController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/* 根据视频Name查询视频 */
+	@PostMapping(value = "/getVideoBySort")
+	public List<Map<String, Object>> getVideoBySort(HttpServletRequest request) {
+		String videoSort = request.getParameter("videoSort");
+		List<Map<String, Object>> list = null;
+		try {
+			list = new ArrayList<Map<String, Object>>();
+			list = service.getVideoBySort(videoSort);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 }
