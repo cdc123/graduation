@@ -66,10 +66,27 @@ function getUserBySession() {
 							&& $("#userImage").val() != "") {
 						$("#photoImg").css("background-image",
 								"url('" + $("#userImage").val() + "')");
+						$("#finalImg").attr("src", $("#userImage").val());
 					} else {
 						$("#photoImg").css("background-image",
 								"url('../image/wcg_images/loginPhoto.jpg')");
+						$("#finalImg").attr("src",
+								"../image/wcg_images/loginPhoto.jpg");
 					}
+					showUserInfo();
+					/* 给个人信息页日期赋初值 */
+					var date = new Date(item.user_birthday);
+					var year = date.getFullYear() + "";
+					var month = date.getMonth() + 1 + "";
+					if (month.length == 1) {
+						month = "0" + month;
+					}
+					var day = date.getDate() + "";
+					if (day.length == 1) {
+						day = "0" + day;
+					}
+					var dateString = year + "-" + month + "-" + day;
+					$("input[name='birth']").attr("value", dateString);
 				});
 			}
 		}
@@ -569,4 +586,19 @@ function getUpload() {
 									});
 				}
 			});
+}
+/* 个人信息页面初始化赋值 */
+function showUserInfo() {
+	/* 昵称初始值 */
+	$("input[name='user_name']").attr("value", $("#userName").val());
+	/* 性别初始值 */
+	var gender = $("#userSex").val();
+	;
+	if (gender == "女") {
+		$("input[value='女']").attr("checked", true);
+	}
+	/* 地址初始值 */
+	$("input[name='user_address']").attr("value", $("#userAddress").val());
+	/* 简介初始值 */
+	$("textarea").text($("#userIntroduce").val());
 }

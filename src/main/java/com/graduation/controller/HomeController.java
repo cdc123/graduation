@@ -29,14 +29,17 @@ public class HomeController {
 	HomeService service;
 
 	/* 查询session判断登录返回用户信息 */
-	@SuppressWarnings("unchecked")
 	@PostMapping(value = "/getUserBySession")
 	public List<Map<String, Object>> getUserBySession(HttpServletRequest request) {
-		JSONArray json = null;
 		List<Map<String, Object>> list = null;
 		try {
 			list = new ArrayList<Map<String, Object>>();
-			list = (List<Map<String, Object>>) request.getSession().getAttribute("sessionListForUser");
+			if (request.getSession().getAttribute("sessionListForUser") != null
+					&& !"".equals(request.getSession().getAttribute("sessionListForUser"))) {
+				list = (List<Map<String, Object>>) request.getSession().getAttribute("sessionListForUser");
+			} else {
+				list = null;
+			}
 			/* 提示信息 */
 			System.out.println("loginUser : " + request.getSession().getAttribute("sessionListForUser"));
 		} catch (Exception e) {

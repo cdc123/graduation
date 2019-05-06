@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.graduation.dao.PersonalInfoDao">
+
+	<update id="updateUserName" parameterType="string">
+		update user t
+		set
+		t.user_name = ${userName}
+		where t.user_phone = ${userPhone}
+	</update>
+
+	<update id="updateUserSex" parameterType="string">
+		update user t
+		set
+		t.user_sex = ${userSex}
+		where t.user_phone = ${userPhone}
+	</update>
+
+	<update id="updateUserAddress" parameterType="string">
+		update user t
+		set
+		t.user_address = ${userAddress}
+		where t.user_phone = ${userPhone}
+	</update>
+
+	<update id="updateUserBirthday" parameterType="string">
+		update user t
+		set
+		t.user_birthday = ${userBirthday}
+		where t.user_phone = ${userPhone}
+	</update>
+
+	<update id="updateUserIntroduce" parameterType="string">
+		update user t
+		set
+		t.user_introduce = ${userIntroduce}
+		where t.user_phone = ${userPhone}
+	</update>
+
+</mapper>
