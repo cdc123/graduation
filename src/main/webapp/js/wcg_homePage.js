@@ -3,7 +3,7 @@ $(function() {
 	getMovie();
 	getTeleplay();
 	getUpload();
-	/* 视频点击绑定 */
+	/* 电影，剧集视频点击绑定 */
 	$(".mt").on("click", "a", function(event) {
 		var target = $(event.target);
 		var videoName = target.text();
@@ -19,12 +19,67 @@ $(function() {
 			}
 		});
 	});
+	$(".mt").on("click", "img", function(event) {
+		var target = $(event.target);
+		var videoName = target.attr("title");
+		$.ajax({
+			type : "post",
+			url : "/home/getVideoByName",
+			data : {
+				"videoName" : videoName
+			},
+			dataType : "json",
+			success : function(result) {
+				window.location.href = "play.html";
+			}
+		});
+	});
+	/* 上传视频点击绑定 */
+	// $(".u").on("click", "a", function(event) {
+	// var target = $(event.target);
+	// var videoName = target.text();
+	// $.ajax({
+	// type : "post",
+	// url : "",
+	// data : {
+	// "videoName" : videoName
+	// },
+	// dataType : "json",
+	// success : function(result) {
+	// window.location.href = "play.html";
+	// }
+	// });
+	// });
+	// $(".u").on("click", "img", function(event) {
+	// var target = $(event.target);
+	// var videoName = target.attr("title");
+	// $.ajax({
+	// type : "post",
+	// url : "",
+	// data : {
+	// "videoName" : videoName
+	// },
+	// dataType : "json",
+	// success : function(result) {
+	// window.location.href = "play.html";
+	// }
+	// });
+	// });
 	/* 事件绑定,点击搜索栏下拉框选项时将选项填入搜索框 */
 	$("#forSearch ul").on("click", "li", function(event) {
 		var target = $(event.target);
-		var value = target.text();
-		$("input[name='search']").val(value);
-		$("#forSearch").hide();
+		var value = target.attr("title");
+		$.ajax({
+			type : "post",
+			url : "/home/getVideoByName",
+			data : {
+				"videoName" : value
+			},
+			dataType : "json",
+			success : function(result) {
+				window.location.href = "play.html";
+			}
+		});
 	});
 	/* 事件委托,续播 */
 	$("#forHistory").on("click", "a", function(event) {
@@ -38,7 +93,7 @@ $(function() {
 			},
 			dataType : "json",
 			success : function(res) {
-				window.location.href = "play.html";
+				location.href = "wcg_videoSearched.html";
 			}
 		});
 	});
@@ -136,14 +191,43 @@ function getVideoByFirstName() {
 			success : function(result) {
 				var keyWord;
 				var array = [];
-				$.each(result, function(n, value) {
-					keyWord = $("input[name='search']").val();
-					array = value.split(keyWord);
-					var $node = $("<li style='cursor:pointer'>" + array[0]
-							+ "<span style='color:red'>" + keyWord + "</span>"
-							+ array[1] + "</li>");
-					$("#forSearch ul").append($node);
-				});
+				$.each(result,
+						function(n, value) {
+							keyWord = $("input[name='search']").val();
+							var num1 = value.indexOf(keyWord);
+							var num2 = num1 + keyWord.length;
+							var str1 = value.substring(0, num1);
+							var str2 = value.substring(num2, value.length);
+							var $node;
+							var str1KeyWord = str1 + keyWord;
+							var str1KeywordStr2 = str1 + keyWord + str2;
+							var cha;
+							if (str1.length > 15) {
+								$node = $("<li style='cursor:pointer' title="
+										+ str1KeywordStr2 + ">"
+										+ str1.substring(0, 15) + "...</li>");
+							} else if (str1KeyWord.length > 15) {
+								cha = 15 - str1.length;
+								$node = $("<li style='cursor:pointer' title="
+										+ str1KeywordStr2 + ">" + str1
+										+ "<span style='color:red'>"
+										+ keyWord.substring(0, cha)
+										+ "...</span></li>");
+							} else if (str1KeywordStr2.length > 15) {
+								cha = 15 - str1KeyWord.length;
+								$node = $("<li style='cursor:pointer' title="
+										+ str1KeywordStr2 + ">" + str1
+										+ "<span style='color:red'>" + keyWord
+										+ "</span>" + str2.substring(0, cha)
+										+ "...</li>");
+							} else {
+								$node = $("<li style='cursor:pointer' title="
+										+ str1KeywordStr2 + ">" + str1
+										+ "<span style='color:red'>" + keyWord
+										+ "</span>" + str2 + "</li>");
+							}
+							$("#forSearch ul").append($node);
+						});
 			}
 		});
 	}
@@ -194,7 +278,7 @@ function ShowLoginText() {
 	} else {
 		window.location.href = "wcg_userInfo.html";
 	}
-}/**/
+}
 /* 登出 */
 function logOut() {
 	$.ajax({
@@ -404,6 +488,11 @@ function getMovie() {
 							.each(
 									result,
 									function(index, item) {
+										var name = item.video_name;
+										if (name.length > 12) {
+											name = name.substring(0, 12)
+													+ "...";
+										}
 										num = num + 1;
 										if (num > 6) {
 											$("#moreMovie").show(100);
@@ -416,17 +505,19 @@ function getMovie() {
 														+ v
 														+ "><img src="
 														+ item.video_image
-														+ " /><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ " title="
 														+ item.video_name
-														+ "</a></div>");
+														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ name + "</a></div>");
 											} else {
 												$node = $("<div id="
 														+ otherId
 														+ " class="
 														+ v
-														+ "><img src='../image/wcg_images/noPicture.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ "><img src='../image/wcg_images/noPicture.jpg' title="
 														+ item.video_name
-														+ "</a></div>");
+														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ name + "</a></div>");
 											}
 											$("#moreMovie").before($node);
 										} else {
@@ -437,23 +528,26 @@ function getMovie() {
 														+ v
 														+ "><img src="
 														+ item.video_image
-														+ " /><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ " title="
 														+ item.video_name
-														+ "</a></div>");
+														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ name + "</a></div>");
 											} else {
 												$node = $("<div id="
 														+ otherId
 														+ " class="
 														+ v
-														+ "><img src='../image/wcg_images/noPicture.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ "><img src='../image/wcg_images/noPicture.jpg' title="
 														+ item.video_name
-														+ "</a></div>");
+														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ name + "</a></div>");
 											}
 											$("#moreMovie").before($node);
 										}
 									});
 				}
 			});
+
 }
 /* 获取连续剧 */
 function getTeleplay() {
@@ -477,6 +571,11 @@ function getTeleplay() {
 							.each(
 									result,
 									function(index, item) {
+										var name = item.video_name;
+										if (name.length > 12) {
+											name = name.substring(0, 12)
+													+ "...";
+										}
 										num = num + 1;
 										if (num > 6) {
 											$("#moreTvplay").show(100);
@@ -489,17 +588,19 @@ function getTeleplay() {
 														+ v
 														+ "><img src="
 														+ item.video_image
-														+ " /><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ " title="
 														+ item.video_name
-														+ "</a></div>");
+														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ name + "</a></div>");
 											} else {
 												$node = $("<div id="
 														+ otherId
 														+ " class="
 														+ v
-														+ "><img src='../image/wcg_images/noPicture.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ "><img src='../image/wcg_images/noPicture.jpg' title="
 														+ item.video_name
-														+ "</a></div>");
+														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ name + "</a></div>");
 											}
 											$("#tvplayArea").before($node);
 										} else {
@@ -510,17 +611,19 @@ function getTeleplay() {
 														+ v
 														+ "><img src="
 														+ item.video_image
-														+ " /><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ " title="
 														+ item.video_name
-														+ "</a></div>");
+														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ name + "</a></div>");
 											} else {
 												$node = $("<div id="
 														+ otherId
 														+ " class="
 														+ v
-														+ "><img src='../image/wcg_images/noPicture.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ "><img src='../image/wcg_images/noPicture.jpg' title="
 														+ item.video_name
-														+ "</a></div>");
+														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ name + "</a></div>");
 											}
 											$("#tvplayArea").before($node);
 										}
@@ -546,6 +649,11 @@ function getUpload() {
 							.each(
 									result,
 									function(index, item) {
+										var name = item.upv_name;
+										if (name.length > 12) {
+											name = name.substring(0, 12)
+													+ "...";
+										}
 										num = num + 1;
 										if (num > 6) {
 											$("#moreUpload").show(100);
@@ -555,18 +663,20 @@ function getUpload() {
 													+ otherId
 													+ " class="
 													+ v
-													+ "><img src='../image/wcg_images/upPic.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+													+ "><img src='../image/wcg_images/upPic.jpg' title="
 													+ item.upv_name
-													+ "</a></div>");
+													+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+													+ name + "</a></div>");
 											$("#uploadArea").before($node);
 										} else {
 											$node = $("<div id="
 													+ firstId
 													+ " class="
 													+ v
-													+ "><img src='../image/wcg_images/upPic.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+													+ "><img src='../image/wcg_images/upPic.jpg' title="
 													+ item.upv_name
-													+ "</a></div>");
+													+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+													+ name + "</a></div>");
 											$("#uploadArea").before($node);
 										}
 									});
@@ -616,27 +726,60 @@ function showFavourite() {
 							.each(
 									result,
 									function(index, item) {
+										var name = item.video_name;
+										if (name.length > 11) {
+											name = name.substring(0, 11)
+													+ "...";
+										}
 										num = num + 1;
 										if (item.video_image != null
 												&& item.video_image != '') {
-											$node = $("<div class='collection'><img alt="
+											$node = $("<div class='collection'><img title="
 													+ item.video_name
 													+ " src='"
 													+ item.video_image
 													+ "'> <a style='cursor: pointer;'>"
-													+ item.video_name
-													+ "</a></div>");
+													+ name + "</a></div>");
 										} else {
-											$node = $("<div class='collection'><img alt="
+											$node = $("<div class='collection'><img title="
 													+ item.video_name
 													+ " src='../image/wcg_images/noPicture.jpg'> <a style='cursor: pointer;'>"
-													+ item.video_name
-													+ "</a></div>");
+													+ name + "</a></div>");
 										}
 										$("#sowingListBody").append($node);
 									});
 				}
 			});
+	$(".collection").on("click", "a", function(event) {
+		var target = $(event.target);
+		var videoName = target.text();
+		$.ajax({
+			type : "post",
+			url : "/home/getVideoByName",
+			data : {
+				"videoName" : videoName
+			},
+			dataType : "json",
+			success : function(result) {
+				window.location.href = "play.html";
+			}
+		});
+	});
+	$(".collection").on("click", "img", function(event) {
+		var target = $(event.target);
+		var videoName = target.attr("title");
+		$.ajax({
+			type : "post",
+			url : "/home/getVideoByName",
+			data : {
+				"videoName" : videoName
+			},
+			dataType : "json",
+			success : function(result) {
+				window.location.href = "play.html";
+			}
+		});
+	});
 }
 /* 个人主页显示上传视频 */
 function showUpLoad() {
@@ -644,7 +787,7 @@ function showUpLoad() {
 	$
 			.ajax({
 				type : "post",
-				url : "/infoChange/getFavouriteByUserId",
+				url : "/infoChange/getUploadByUserId",
 				data : {
 					"userId" : userId
 				},
@@ -667,23 +810,15 @@ function showUpLoad() {
 							.each(
 									result,
 									function(index, item) {
-										num = num + 1;
-										if (item.video_image != null
-												&& item.video_image != '') {
-											$node = $("<div class='collection'><img alt="
-													+ item.upv_name
-													+ " src='"
-													+ item.video_image
-													+ "'> <a style='cursor: pointer;'>"
-													+ item.video_name
-													+ "</a></div>");
-										} else {
-											$node = $("<div class='collection'><img alt="
-													+ item.video_name
-													+ " src='../image/wcg_images/noPicture.jpg'> <a style='cursor: pointer;'>"
-													+ item.video_name
-													+ "</a></div>");
+										var name = item.upv_name;
+										if (name.length > 11) {
+											name = name.substring(0, 11);
 										}
+										num = num + 1;
+										$node = $("<div class='collection'><img title="
+												+ item.upv_name
+												+ " src='../image/wcg_images/noPicture.jpg'> <a style='cursor: pointer;'>"
+												+ name + "</a></div>");
 										$("#videosBody").append($node);
 									});
 				}

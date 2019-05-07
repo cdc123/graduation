@@ -214,7 +214,7 @@ public class PersonalInfoController {
 		return list;
 	}
 
-	/* 查询收藏视频 */
+	/* 查询上传视频 */
 	@PostMapping(value = "/getUploadByUserId")
 	public List<Map<String, Object>> getUploadByUserId(HttpServletRequest request, HttpServletResponse response) {
 		JSONArray json = null;
