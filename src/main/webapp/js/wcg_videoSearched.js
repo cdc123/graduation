@@ -1,6 +1,20 @@
 $(function() {
+	getKeyword();
 	getData();
 });
+
+function getKeyword() {
+	$.ajax({
+		type : "post",
+		url : "/videoSearched/getKeyword",
+		dataType : "text",
+		async : false,
+		success : function(result) {
+			var keyword = result;
+			$("#key").text(keyword);
+		}
+	});
+}
 
 function getData() {
 	$

@@ -68,6 +68,7 @@ public class HomeController {
 		List<Map<String, Object>> list = null;
 		JSONArray json = null;
 		String videoName = request.getParameter("videoName");
+		request.getSession().setAttribute("searchKeyword", videoName);
 		try {
 			list = new ArrayList<Map<String, Object>>();
 			list = service.getVideoByName(videoName);
