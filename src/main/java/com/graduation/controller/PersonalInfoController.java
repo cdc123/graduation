@@ -1,6 +1,5 @@
 package com.graduation.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -197,5 +196,37 @@ public class PersonalInfoController {
 			e.printStackTrace();
 		}
 		return flag;/* 1：成功；0：失败；2：无变化 */
+	}
+
+	/* 查询收藏视频 */
+	@PostMapping(value = "/getFavouriteByUserId")
+	public List<Map<String, Object>> getFavouriteByUserId(HttpServletRequest request, HttpServletResponse response) {
+		JSONArray json = null;
+		String userId = "";
+		List<Map<String, Object>> list = null;
+		try {
+			json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
+			userId = String.valueOf(((Map) (json.get(0))).get("user_id").toString());
+			list = service.getFavouriteByUserId(userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	/* 查询收藏视频 */
+	@PostMapping(value = "/getUploadByUserId")
+	public List<Map<String, Object>> getUploadByUserId(HttpServletRequest request, HttpServletResponse response) {
+		JSONArray json = null;
+		String userId = "";
+		List<Map<String, Object>> list = null;
+		try {
+			json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
+			userId = String.valueOf(((Map) (json.get(0))).get("user_id").toString());
+			list = service.getUploadByUserId(userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 }

@@ -40,4 +40,11 @@
 		where t.video_sort = ${videoSort}
 	</select>
 
+	<select id="getUploadVideo" parameterType="string"
+		resultType="java.util.HashMap">
+		select *
+		from uploadVideo
+	</select>
+
+
 </mapper> 

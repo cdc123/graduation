@@ -565,7 +565,7 @@ a {
 }
 
 #zhuye {
-	width: 50px;
+	width: 80px;
 	height: 50px;
 	margin-left: 20px;
 	border: solid 5px #31b6ff;
@@ -575,15 +575,12 @@ a {
 }
 
 #zhuye p {
-	width: 50px;
+	width: 80px;
 	height: 58px;
 	line-height: 58px;
 	font-size: 25px;
 	text-align: center;
-}
-
-#zhuye p:hover {
-	color: red;
+	cursor: pointer;
 }
 
 #searchSelfVideo {
@@ -637,17 +634,17 @@ a {
 
 #video_out {
 	width: 1080px;
-	background-color: #eaeaea;
 }
 
 #video {
-	width: 870px;
+	width: 1080px;
 	margin: 0 auto;
 	background-color: rgba(0, 0, 0, 0.3);
+	padding-bottom: 30px;
 }
 
 #video:hover {
-	background-color: rgba(0, 0, 0, 0.4);
+	background-color: rgba(0, 0, 0, 0.2);
 }
 
 #sowingList {
@@ -655,7 +652,7 @@ a {
 	height: 30px;
 	margin-left: 20px;
 	margin-top: 10px;
-	color: #31b6ff;
+	color: white;
 }
 
 #sowingList p {
@@ -664,11 +661,12 @@ a {
 }
 
 #sowingListBody {
-	min-height: 307px;
-	width: 830px;
-	margin-left: 20px;
+	min-height: 320px;
 	margin-top: 10px;
-	background-color: gainsboro;
+	width: 1040px;
+	margin: 0 auto;
+	padding-top: 15px;
+	margin-top: 10px;
 }
 
 .cover {
@@ -729,14 +727,15 @@ a {
 #videos p {
 	font-size: 18px;
 	line-height: 30px;
-	color: #31b6ff;
+	color: white;
 }
 
 #videosBody {
-	width: 830px;
-	margin-left: 20px;
+	min-height: 320px;
 	margin-top: 10px;
-	background-color: gainsboro;
+	width: 1040px;
+	margin: 0 auto;
+	padding-top: 15px;
 }
 
 #footer {
@@ -749,4 +748,21 @@ a {
 	text-align: center;
 	line-height: 10px;
 	margin-top: 40px;
+}
+/*----------------------------------------------------------------------------------------*/
+.collection {
+	width: 192px;
+	height: 320px;
+	float: left;
+	margin-left: 15px;
+}
+
+.collection img {
+	height: 278px;
+	width: 182px;
+}
+
+.collection a {
+	line-height: 28px;
+	font-size: 15px;
 }

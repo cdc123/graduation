@@ -119,4 +119,16 @@ public class HomeServiceImpl implements HomeService {
 		return list;
 	}
 
+	@Override
+	public List<Map<String, Object>> getUploadVideo() {
+		List<Map<String, Object>> list = null;
+		try {
+			list = new ArrayList<Map<String, Object>>();
+			list = dao.getUploadVideo();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
 }

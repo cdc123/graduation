@@ -12,6 +12,8 @@ import com.graduation.dao.PersonalInfoDao;
 import com.graduation.dao.RegisterLoginDao;
 import com.graduation.service.PersonalInfoService;
 
+import net.sf.json.JSONArray;
+
 @Service
 public class PersonalInfoServiceImpl implements PersonalInfoService {
 
@@ -92,6 +94,28 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
 			list = rlDao.getUserByPhone(userPhone);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public List<Map<String, Object>> getFavouriteByUserId(String userId) {
+		List<Map<String, Object>> list = null;
+		try {
+			list = new ArrayList<Map<String, Object>>();
+			list = dao.getFavouriteByUserId(userId);
+		} catch (Exception e) {
+		}
+		return list;
+	}
+	
+	@Override
+	public List<Map<String, Object>> getUploadByUserId(String userId) {
+		List<Map<String, Object>> list = null;
+		try {
+			list = new ArrayList<Map<String, Object>>();
+			list = dao.getUploadByUserId(userId);
+		} catch (Exception e) {
 		}
 		return list;
 	}

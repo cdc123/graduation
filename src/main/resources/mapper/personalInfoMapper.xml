@@ -37,4 +37,20 @@
 		where t.user_phone = ${userPhone}
 	</update>
 
+	<select id="getFavouriteByUserId" parameterType="string"
+		resultType="java.util.HashMap">
+		select *
+		from video v
+		where v.video_id in
+		(select t.video_id
+		from favourite t where
+		t.user_id = ${userId})
+	</select>
+
+	<select id="getUploadByUserId" parameterType="string"
+		resultType="java.util.HashMap">
+		select *
+		from uploadVideo t
+		where t.user_id = ${userId}
+	</select>
 </mapper>

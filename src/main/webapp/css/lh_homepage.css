@@ -724,3 +724,24 @@ a:hover {
 	height: 330px;
 	float: right;
 }
+
+#u1 {
+	width: 192px;
+	height: 125px;
+	float: left;
+}
+
+#u1 img {
+	width: 192px;
+}
+
+#u2 {
+	width: 192px;
+	height: 125px;
+	margin-left: 20px;
+	float: left;
+}
+
+#u2 img {
+	width: 192px;
+}

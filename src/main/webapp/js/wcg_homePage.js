@@ -4,7 +4,7 @@ $(function() {
 	getTeleplay();
 	getUpload();
 	/* 视频点击绑定 */
-	$(".mtu").on("click", "a", function(event) {
+	$(".mt").on("click", "a", function(event) {
 		var target = $(event.target);
 		var videoName = target.text();
 		$.ajax({
@@ -57,23 +57,37 @@ function getUserBySession() {
 					$("#userPhone").val(item.user_phone);
 					$("#userPower").val(item.user_power);
 					$("#userName").val(item.user_name);
+					if ($("#userName").val() != null
+							&& $("#userName").val() != "") {
+						$("#selfUsername b").text($("#userName").val());
+					}
 					$("#userSex").val(item.user_sex);
 					$("#userAddress").val(item.user_address);
 					$("#userBirthday").val(item.user_birthday);
 					$("#userIntroduce").val(item.user_introduce);
+					if ($("#userIntroduce").val() != null
+							&& $("#userIntroduce").val() != "") {
+						$("#introduce").text($("#userIntroduce").val());
+					}
 					$("#userImage").val(item.user_image);
 					if ($("#userImage").val() != null
 							&& $("#userImage").val() != "") {
 						$("#photoImg").css("background-image",
 								"url('" + $("#userImage").val() + "')");
 						$("#finalImg").attr("src", $("#userImage").val());
+						$("#pictrue").css("background-image",
+								"url('" + $("#userImage").val() + "')");
 					} else {
 						$("#photoImg").css("background-image",
 								"url('../image/wcg_images/loginPhoto.jpg')");
 						$("#finalImg").attr("src",
 								"../image/wcg_images/loginPhoto.jpg");
+						$("#pictrue").css("background-image",
+								"url('../image/wcg_images/loginPhoto.jpg')");
 					}
 					showUserInfo();
+					showFavourite();
+					showUpLoad();
 					/* 给个人信息页日期赋初值 */
 					var date = new Date(item.user_birthday);
 					var year = date.getFullYear() + "";
@@ -188,7 +202,7 @@ function logOut() {
 		type : "post",
 		dataType : "text",
 		success : function(result) {
-			window.location.reload();
+			window.location.href = "homepage.html";
 		}
 	});
 }/* 上传 */
@@ -385,7 +399,7 @@ function getMovie() {
 					var num = 0;
 					var firstId = "body_two_content1";
 					var otherId = "body_two_content2";
-					var v = "mtu";
+					var v = "mt";
 					$
 							.each(
 									result,
@@ -458,7 +472,7 @@ function getTeleplay() {
 					var num = 0;
 					var firstId = "body_two_content1";
 					var otherId = "body_two_content2";
-					var v = "mtu";
+					var v = "mt";
 					$
 							.each(
 									result,
@@ -516,22 +530,18 @@ function getTeleplay() {
 }
 /* 获取用户上传视频 */
 function getUpload() {
-	var videoSort = "上传";
 	$
 			.ajax({
-				url : "/home/getVideoBySort",
-				data : {
-					"videoSort" : videoSort
-				},
+				url : "/home/getUploadVideo",
 				type : "post",
 				dataType : "json",
 				async : false,
 				success : function(result) {
 					var $node = null;
 					var num = 0;
-					var firstId = "body_two_content1";
-					var otherId = "body_two_content2";
-					var v = "mtu";
+					var firstId = "u1";
+					var otherId = "u2";
+					var v = "u";
 					$
 							.each(
 									result,
@@ -541,59 +551,34 @@ function getUpload() {
 											$("#moreUpload").show(100);
 											return false;
 										} else if (num > 1) {
-											if (item.video_image != null) {
-												$node = $("<div id="
-														+ otherId
-														+ " class="
-														+ v
-														+ "><img src="
-														+ item.video_image
-														+ " /><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ item.video_name
-														+ "</a></div>");
-											} else {
-												$node = $("<div id="
-														+ otherId
-														+ " class="
-														+ v
-														+ "><img src='../image/wcg_images/noPicture.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ item.video_name
-														+ "</a></div>");
-											}
+											$node = $("<div id="
+													+ otherId
+													+ " class="
+													+ v
+													+ "><img src='../image/wcg_images/upPic.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+													+ item.upv_name
+													+ "</a></div>");
 											$("#uploadArea").before($node);
 										} else {
-											if (item.video_image != null) {
-												$node = $("<div id="
-														+ firstId
-														+ " class="
-														+ v
-														+ "><img src="
-														+ item.video_image
-														+ " /><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ item.video_name
-														+ "</a></div>");
-											} else {
-												$node = $("<div id="
-														+ otherId
-														+ " class="
-														+ v
-														+ "><img src='../image/wcg_images/noPicture.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ item.video_name
-														+ "</a></div>");
-											}
+											$node = $("<div id="
+													+ firstId
+													+ " class="
+													+ v
+													+ "><img src='../image/wcg_images/upPic.jpg'/><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+													+ item.upv_name
+													+ "</a></div>");
 											$("#uploadArea").before($node);
 										}
 									});
 				}
 			});
 }
-/* 个人信息页面初始化赋值 */
+/* 个人信息修改页面初始化赋值 */
 function showUserInfo() {
 	/* 昵称初始值 */
 	$("input[name='user_name']").attr("value", $("#userName").val());
 	/* 性别初始值 */
 	var gender = $("#userSex").val();
-	;
 	if (gender == "女") {
 		$("input[value='女']").attr("checked", true);
 	}
@@ -601,4 +586,106 @@ function showUserInfo() {
 	$("input[name='user_address']").attr("value", $("#userAddress").val());
 	/* 简介初始值 */
 	$("textarea").text($("#userIntroduce").val());
+}
+/* 个人主页显示收藏视频 */
+function showFavourite() {
+	var userId = $("#userId").val();
+	$
+			.ajax({
+				type : "post",
+				url : "/infoChange/getFavouriteByUserId",
+				data : {
+					"userId" : userId
+				},
+				dataType : "json",
+				async : false,
+				success : function(result) {
+					var sum = result.length;
+					$("#sowingList span").text(sum);
+					var shang = sum / 5;
+					var yu = sum % 5;
+					shang = Math.floor(shang);
+					if (yu > 0) {
+						shang += 1;
+					}
+					var height = shang * 320 + "px";
+					$("#sowingListBody").css("height", height);
+					var num = 0;
+					var $node;
+					$
+							.each(
+									result,
+									function(index, item) {
+										num = num + 1;
+										if (item.video_image != null
+												&& item.video_image != '') {
+											$node = $("<div class='collection'><img alt="
+													+ item.video_name
+													+ " src='"
+													+ item.video_image
+													+ "'> <a style='cursor: pointer;'>"
+													+ item.video_name
+													+ "</a></div>");
+										} else {
+											$node = $("<div class='collection'><img alt="
+													+ item.video_name
+													+ " src='../image/wcg_images/noPicture.jpg'> <a style='cursor: pointer;'>"
+													+ item.video_name
+													+ "</a></div>");
+										}
+										$("#sowingListBody").append($node);
+									});
+				}
+			});
+}
+/* 个人主页显示上传视频 */
+function showUpLoad() {
+	var userId = $("#userId").val();
+	$
+			.ajax({
+				type : "post",
+				url : "/infoChange/getFavouriteByUserId",
+				data : {
+					"userId" : userId
+				},
+				dataType : "json",
+				async : false,
+				success : function(result) {
+					var sum = result.length;
+					$("#videos span").text(sum);
+					var shang = sum / 5;
+					var yu = sum % 5;
+					shang = Math.floor(shang);
+					if (yu > 0) {
+						shang += 1;
+					}
+					var height = shang * 320 + "px";
+					$("#videosBody").css("height", height);
+					var num = 0;
+					var $node;
+					$
+							.each(
+									result,
+									function(index, item) {
+										num = num + 1;
+										if (item.video_image != null
+												&& item.video_image != '') {
+											$node = $("<div class='collection'><img alt="
+													+ item.upv_name
+													+ " src='"
+													+ item.video_image
+													+ "'> <a style='cursor: pointer;'>"
+													+ item.video_name
+													+ "</a></div>");
+										} else {
+											$node = $("<div class='collection'><img alt="
+													+ item.video_name
+													+ " src='../image/wcg_images/noPicture.jpg'> <a style='cursor: pointer;'>"
+													+ item.video_name
+													+ "</a></div>");
+										}
+										$("#videosBody").append($node);
+									});
+				}
+			});
 }

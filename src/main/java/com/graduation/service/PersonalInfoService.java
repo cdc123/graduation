@@ -22,4 +22,7 @@ public interface PersonalInfoService {
 	public List<Map<String, Object>> updateUserIntroduce(@Param("userPhone") String userPhone,
 			@Param("userIntroduce") String userIntroduce);
 
+	public List<Map<String, Object>> getFavouriteByUserId(@Param("userId") String userId);
+
+	public List<Map<String, Object>> getUploadByUserId(@Param("userId") String userId);
 }

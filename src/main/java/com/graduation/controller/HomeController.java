@@ -141,7 +141,7 @@ public class HomeController {
 		}
 	}
 
-	/* 根据视频Name查询视频 */
+	/* 根据视频分类查询视频 */
 	@PostMapping(value = "/getVideoBySort")
 	public List<Map<String, Object>> getVideoBySort(HttpServletRequest request) {
 		String videoSort = request.getParameter("videoSort");
@@ -149,6 +149,19 @@ public class HomeController {
 		try {
 			list = new ArrayList<Map<String, Object>>();
 			list = service.getVideoBySort(videoSort);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	/* 查询上传视频 */
+	@PostMapping(value = "/getUploadVideo")
+	public List<Map<String, Object>> getUploadVideo(HttpServletRequest request) {
+		List<Map<String, Object>> list = null;
+		try {
+			list = new ArrayList<Map<String, Object>>();
+			list = service.getUploadVideo();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
