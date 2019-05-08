@@ -1,7 +1,7 @@
 .pb-carouselWarp {
 	position: relative;
-	width: 96%;
-	height: 480px;
+	width: 92%;
+	height: 600px;
 	overflow: hidden;
 	margin-left: auto;
 	margin-right: auto;
@@ -26,6 +26,7 @@
 	width: 100%;
 	height: 100%;
 	vertical-align: middle;
+	cursor: pointer;
 }
 
 .pb-carouselWarp .pb-carousel .pb-this {
