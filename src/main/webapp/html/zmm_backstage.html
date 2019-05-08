@@ -36,41 +36,12 @@
     </style>
     <script type="text/javascript">
         var win ;
-        // function show1() {
-        //     $.ajax({
-        //         url: "/zmm_ShowUserServlet",   //要提交的URL路径
-        //         type: "post",                          //发送请求的方式
-        //         dataType: "json",
-        //         //指定传输的数据格式
-        //         success: function (list) {//请求成功后要执行的代码console.log(list);
-        //             $(this).children().remove();
-        //             for (var i = 0; i < list.length; i++) {
-        //                 var $node = $('<tr><td lay-data="{width:120}">' + list[i].user_id + '</td> <td lay-data="{width:90}">' + list[i].user_name + '</td> <td lay-data="{width:90}">' + list[i].user_image + '</td> <td lay-data="{width:90}">' + list[i].user_sex + '</td> <td lay-data="{width:120}">' + list[i].user_introduce + '</td> <td lay-data="{ width:120}">' + list[i].user_address + '</td> <td lay-data="{width:90}">' + list[i].user_birthday + '</td> <td lay-data="{width:110}">' + list[i].user_phone + '</td> <td lay-data="{width:90}">' + list[i].user_password + '</td><td lay-data="{width:90}">' + list[i].user_power + '</td> <td lay-data="{width:90}"><button class="button1">删除</button></td></tr> ');
-        //                 $(".tr_1").append($node);
-        //             }
-        //         },
-        //     });
-        // }
-        // function show2() {
-        //     $.ajax({
-        //         url: "/zmm_ShowVideoServlet",   //要提交的URL路径
-        //         type: "post",                          //发送请求的方式
-        //         dataType: "json",
-        //         //指定传输的数据格式
-        //         success: function (list) {//请求成功后要执行的代码console.log(list);
-        //             $(".tr_2").children().remove();
-        //             for (var i = 0; i < list.length; i++) {
-        //                 var $node1 = $(' <tr> <td lay-data="{width:90}">'+list[i].video_id+'</td> <td lay-data="{width:90}">'+list[i].video_name+'</td> <td lay-data="{width:90}"> '+list[i].video_introduce+'</td> <td lay-data="{width:120}">'+list[i].video_sort+'</td> <td lay-data="{width:90}">'+list[i].video_region+'</td> <td lay-data="{width:90}">'+list[i].video_type+'</td> <td lay-data="{ width:90}">'+list[i].video_playtimes+'</td> <td lay-data="{width:100}">'+list[i].video_commentnum+'</td> <td lay-data="{width:90}"> <button class="button2_1">修改</button> </td> <td lay-data="{width:90}"> <button class="button2_2">删除</button> </td> </tr> ');
-        //                 $(".tr_2").append($node1);
-        //             }
-        //         },
-        //     });
-        // }
+
         function show3() {
             $.ajax({
-                url: "/zmm_ShowUploadServlet",   //要提交的URL路径
+                url: "/admin/getUpVideo",   //要提交的URL路径
                 type: "post",                          //发送请求的方式
-                dataType: "json",
+                // dataType: "json",
                 //指定传输的数据格式
                 success: function (list) {//请求成功后要执行的代码console.log(list);
                     $(".tr_3").children().remove();
@@ -81,23 +52,7 @@
                 },
             });
         }
-        // function show4() {
-        //     $.ajax({
-        //         url: "/zmm_ShowMessageServlet",   //要提交的URL路径
-        //         type: "post",                          //发送请求的方式
-        //         dataType: "json",
-        //         //指定传输的数据格式
-        //         success: function (list) {//请求成功后要执行的代码console.log(list);
-        //             $(".tr_4").children().remove();
-        //             for (var i = 0; i < list.length; i++) {
-        //                 var $node = $('<tr><td lay-data="{width:120}">' + list[i].msg_id + '</td> <td lay-data="{width:90}">' + list[i].video_id + '</td> <td lay-data="{width:90}">' + list[i].user_id + '</td> <td lay-data="{width:90}">' + list[i].msg_date + '</td> <td lay-data="{width:120}">' + list[i].msg_text + '</td><td lay-data="{width:120}">' + list[i].msg_praise + '</td><td lay-data="{width:90}"><button class="button4">删除</button></td></tr> ');
-        //                 $(".tr_4").append($node);
-        //                 // count=parseInt(list[list.length-1]);
-        //                 // console.log(count);
-        //             }
-        //         },
-        //     });
-        // }
+
         function reloadLi2(){
             layer.close(win);
             pageload2()
@@ -112,36 +67,36 @@
         var rsCount = 0;
         function pageload1() {
             $.ajax({
-                url: "/zmm_ShowUserServlet",
+                url: "/admin/getUser",
                 type: "post",
                 data: {"pagenumber": pagenumber},
-                dataType: "json",
+                // dataType: "json",
                 success: function (jsonArray) {
                     $(".tr_1").children().remove();
                     for (var i = 0; i < jsonArray.length-1; i++) {
                         var $node = $('<tr><td lay-data="{width:120}">' + jsonArray[i].user_id + '</td> <td lay-data="{width:90}">' + jsonArray[i].user_name + '</td><td lay-data="{width:90}">' + jsonArray[i].user_sex + '</td> <td lay-data="{width:120}">' + jsonArray[i].user_introduce + '</td> <td lay-data="{ width:120}">' + jsonArray[i].user_address + '</td> <td lay-data="{width:90}">' + jsonArray[i].user_birthday + '</td> <td lay-data="{width:110}">' + jsonArray[i].user_phone + '</td> <td lay-data="{width:90}">' + jsonArray[i].user_password + '</td><td lay-data="{width:90}">' + jsonArray[i].user_power + '</td> <td lay-data="{width:90}"><button class="button1">删除</button></td></tr> ');
                         $(".tr_1").append($node);
                     }
-                    rsCount = jsonArray[jsonArray.length-1];
+                    rsCount = jsonArray[jsonArray.length-1].count;
                 },
                 error: function () {
-                    alert("第一页展示数据错误！！");
+                    alert("第一页展示数据错误???");
                 },
             });
         }
         function pageload2() {
             $.ajax({
-                url: "/zmm_ShowVideoServlet",
+                url: "/admin/getVideo",
                 type: "post",
                 data: {"pagenumber": pagenumber},
-                dataType: "json",
+                // dataType: "json",
                 success: function (list) {
                     $(".tr_2").children().remove();
                    for (var i = 0; i < list.length-1; i++) {
                         var $node1 = $(' <tr> <td lay-data="{width:90}">'+list[i].video_id+'</td> <td lay-data="{width:90}">'+list[i].video_name+'</td> <td lay-data="{width:90}"> '+list[i].video_introduce+'</td> <td lay-data="{width:120}">'+list[i].video_sort+'</td> <td lay-data="{width:90}">'+list[i].video_region+'</td> <td lay-data="{width:90}">'+list[i].video_type+'</td> <td lay-data="{ width:90}">'+list[i].video_playtimes+'</td> <td lay-data="{width:100}">'+list[i].video_commentnum+'</td> <td lay-data="{width:90}"> <button class="button2_1">修改</button> </td> <td lay-data="{width:90}"> <button class="button2_2">删除</button> </td> </tr> ');
                         $(".tr_2").append($node1);
                     }
-                    rsCount = list[list.length-1];
+                    rsCount = list[list.length-1].count;
                 },
                 error: function () {
                     alert("第一页展示数据错误！！");
@@ -150,17 +105,17 @@
         }
         function pageload4() {
             $.ajax({
-                url: "/zmm_ShowMessageServlet",
+                url: "/admin/getMessage",
                 type: "post",
                 data: {"pagenumber": pagenumber},
-                dataType: "json",
+                // dataType: "json",
                 success: function (jsonArray) {
                     $(".tr_4").children().remove();
                     for (var i = 0; i < (jsonArray.length-1); i++) {
                         var $node = $('<tr><td lay-data="{width:120}">' + jsonArray[i].msg_id + '</td> <td lay-data="{width:90}">' + jsonArray[i].video_id + '</td> <td lay-data="{width:90}">' + jsonArray[i].user_id + '</td> <td lay-data="{width:90}">' + jsonArray[i].msg_date + '</td> <td lay-data="{width:120}">' + jsonArray[i].msg_text + '</td><td lay-data="{width:120}">' + jsonArray[i].msg_praise + '</td><td lay-data="{width:90}"><button class="button4">删除</button></td></tr> ');
                         $(".tr_4").append($node);
                     }
-                    rsCount = jsonArray[jsonArray.length-1];
+                    rsCount = jsonArray[jsonArray.length-1].count;
                 },
                 error: function () {
                     alert("第一页展示数据错误！！");
@@ -217,14 +172,14 @@
                         , btn: ['是', '否']
                         , yes: function (index) {
                             $.ajax({
-                                url: "/zmm_deleteUser",   //要提交的URL路径
+                                url: "/admin/deleteUser",   //要提交的URL路径
                                 type: "post", //发送请求的方式
-                                data: {"id": $m.closest("tr").children().eq(0).text()},
-                                dataType: "json",
-                                success: function (ret) {
-                                    if (ret == 1) {
+                                data: {"user_id": $m.closest("tr").children().eq(0).text()},
+                                // dataType: "json",
+                                success: function () {
+                                    // if (ret == 1) {
                                        pageload1();
-                                    }
+                                    // }
                                 }
                             });
                             layer.close(index);
@@ -258,15 +213,14 @@
                                 icon: 6
                             });
                             $.ajax({
-                                url: "/zmm_deleteVideoServlet",   //要提交的URL路径
+                                url: "/admin/deleteVideo",   //要提交的URL路径
                                 type: "post", //发送请求的方式
-                                data: {"id": $m.closest("tr").children().eq(0).text()},
-                                dataType: "json",
-                               success:function (ret) {
-                                   if(ret==1){
+                                data: {"video_id": $m.closest("tr").children().eq(0).text()},
+                               success:function () {
+                                   // if(ret==1){
                                        pageload2();
                                        $(".li_2").trigger("click");
-                                   }
+                                   // }
                                }
                             });
                         }
@@ -293,14 +247,14 @@
                                 icon: 6
                             });
                             $.ajax({
-                                url: "/zmm_deleteUploadServlet",   //要提交的URL路径
+                                url: "/admin/deleteUpVideo",   //要提交的URL路径
                                 type: "post", //发送请求的方式
-                                data: {"id": $m.closest("tr").children().eq(0).text()},
-                                dataType: "json",
-                                success: function (ret) {
-                                    if (ret == 1) {
+                                data: {"upv_id": $m.closest("tr").children().eq(0).text()},
+                                // dataType: "json",
+                                success: function () {
+                                    // if (ret == 1) {
                                         $m.closest("tr").remove();
-                                    }
+                                    // }
                                 }
                             });
                         }
@@ -313,15 +267,15 @@
                         , btn: ['是', '否']
                         , yes: function (index) {
                             $.ajax({
-                                url: "/zmm_deleteMessage",   //要提交的URL路径
+                                url: "/admin/deleteMessage",   //要提交的URL路径
                                 type: "post", //发送请求的方式
-                                data: {"id": $m.closest("tr").children().eq(0).text()},
-                                dataType: "json",
-                                success:function (ret) {
-                                    if(ret==1){
+                                data: {"msg_id": $m.closest("tr").children().eq(0).text()},
+                                success:function () {
+                                    // if(ret==1){
                                       pageload4();
                                        $(".li_4").trigger("click");
-                                    }}
+                                    // }
+                                    }
                                 //指定传输的数据格式
                             });
                             layer.close(index);
@@ -411,6 +365,23 @@
                     pageload4();
                 })
             })
+            // $("input[value='下一页']").click(function () {
+            //     var count = Math.ceil(rsCount / 6);
+            //     if (pagenumber < count) {
+            //         pagenumber++;
+            //     } else {
+            //         pagenumber = count;
+            //     }
+            //     load();
+            // })
+            // $("input[value='上一页']").click(function () {
+            //     if (pagenumber <= 1) {
+            //         pagenumber = 1;
+            //     } else {
+            //         pagenumber--;
+            //     }
+            //     load();
+            // })
 
         })
     </script>
