@@ -40,7 +40,7 @@
 			</div>
 			<!--导航-->
 			<div id="nav" onclick="showForNav()">
-				<a href="#">
+				<a style="cursor: pointer;">
 					<div id="navLogo"></div>
 					<p>导视</p>
 				</a>
@@ -111,23 +111,41 @@
 	<!-- 轮播 -->
 	<div class="pb-carouselWarp demo1">
 		<ul class="pb-carousel">
-			<li class="pb-this"><img
+			<li class="pb-this"><img class="lunboImg"
 				src="../image/video_image/darenwuHengban.jpg" title="大人物" /></li>
-			<li><img src="../image/video_image/fengshenyanyiHengban.jpg"
-				title="封神演义" /></li>
-			<li><img src="../image/video_image/laoshihaoHengban.jpg"
-				title="老师好" /></li>
-			<li><img src="../image/video_image/quanlideyouxi8Hengban.jpeg"
-				title="权力的游戏8" /></li>
-			<li><img src="../image/video_image/liulangdiqiuHengban.jpg"
-				title="流浪地球" /></li>
-			<li><img src="../image/video_image/tingxuelouHengban.jpg"
-				title="听雪楼" /></li>
-			<li><img src="../image/video_image/yigetongHengban.jpg"
-				title="一个桶" /></li>
-			<li><img src="../image/video_image/zhumengqingyuanHengban.jpeg"
-				title="筑梦情缘" /></li>
+			<li><img class="lunboImg"
+				src="../image/video_image/fengshenyanyiHengban.jpeg" title="封神演义" /></li>
+			<li><img class="lunboImg"
+				src="../image/video_image/laoshihaoHengban.jpg" title="老师好" /></li>
+			<li><img class="lunboImg"
+				src="../image/video_image/quanlideyouxi8Hengban.jpg" title="权力的游戏8" /></li>
+			<li><img class="lunboImg"
+				src="../image/video_image/liulangdiqiuHengban.jpg" title="流浪地球" /></li>
+			<li><img class="lunboImg"
+				src="../image/video_image/tingxuelouHengban.jpeg" title="听雪楼" /></li>
+			<li><img class="lunboImg"
+				src="../image/video_image/yigetongHengban.jpg" title="一个桶" /></li>
+			<li><img class="lunboImg"
+				src="../image/video_image/zhumengqingyuanHengban.jpeg" title="筑梦情缘" /></li>
 		</ul>
+		<script type="text/javascript">
+			/* 点击轮播图播放视频 */
+			$(".lunboImg").on("click", function(event) {
+				var target = $(event.target);
+				var videoName = target.attr("title");
+				$.ajax({
+					type : "post",
+					url : "/home/getVideoByName",
+					data : {
+						"videoName" : videoName
+					},
+					dataType : "json",
+					success : function(res) {
+						location.href = "play.html";
+					}
+				});
+			});
+		</script>
 		<ul class="pb-carousel-ind">
 			<li class="pb-this"></li>
 			<li></li>
@@ -142,7 +160,7 @@
 		<button class="pb-arrow pb-arrow-next" id="aa"></button>
 	</div>
 	<!-- 电影 -->
-	<a name="movie" style="float: left; margin-top: -90px"></a>
+	<a name="movie" style="float: left; margin-top: -40px"></a>
 	<div id="body_two">
 		<div id="movie_logo">
 			<a href="#(片库电影)">电影>></a>
@@ -193,22 +211,6 @@
 		autoplay : true, //可选，默认true - true / false (开启轮播/关闭轮播)
 		time : 5000
 	//可选，默认3000
-	});
-	/* 点击轮播图播放视频 */
-	$(".pb-carousel .pb-this").on("click", "img", function(event) {
-		var target = $(event.target);
-		var videoName = target.attr("title");
-		$.ajax({
-			type : "post",
-			url : "/home/getVideoByName",
-			data : {
-				"videoName" : videoName
-			},
-			dataType : "json",
-			success : function(res) {
-				location.href = "play.html";
-			}
-		});
 	});
 </script>
 </html>
