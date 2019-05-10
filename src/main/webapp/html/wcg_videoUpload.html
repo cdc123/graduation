@@ -139,15 +139,135 @@
 	</div>
 	<div id="body">
 		<div id="kongbai"></div>
-		<div style="width: 1080px; height: 600px; background-color: #1E9FFF">
+		<div
+			style="width: 1080px; height: 600px; background-color: rgba(15, 15, 15, 0.2)">
 			<div
-				style="width: 1000px; height: 500px; float: left; margin-top: 50px; margin-left: 40px; background-color: #009E94">
-
+				style="width: 1000px; height: 500px; float: left; margin-top: 50px; margin-left: 40px">
+				<h1>视频上传</h1>
+				<input type="file" accept="video/*" id="video" name="video"
+					style="float: left; width: 900px; margin-left: 50px; margin-right: 50px; padding: 0; margin-top: 50px"
+					onchange="getVideoSrc(event)" />
+				<div style="float: left; margin-left: 50px; margin-top: 40px;">
+					上传视频的名称：<input type="text" id="uploadVideoName" />(可选)
+				</div>
+				<input type="button"
+					style="width: 80px; height: 40px; margin-top: 30px; margin-left: 50px; border: 0px; border-radius: 5px; background-color: #31b6ff; color: white; font-size: 15px; cursor: pointer;"
+					onclick="upload()" value="上传" />
+				<div class="modal-body"
+					style="color: black; margin-left: 50px; margin-top: 30px;">
+					上传进度：
+					<progress style="width: 30em;"></progress>
+					<p id="info" style="margin-top: 10px"></p>
+				</div>
 			</div>
 		</div>
 	</div>
 	<div id="footer">
-		<p>Copyright©2018 泉青酷 weteam.online 版权所有</p>
+		<p>Copyright©2019 泉青酷 weteam.online 版权所有</p>
 	</div>
 </body>
+<script type="text/javascript">
+	var video;
+	/*视频转换base64*/
+	var videoSrc;
+	var totalSize = 0;/*文件大小*/
+	function getVideoSrc(event) {
+		video = event.target.files[0];
+		if (video != null && video != '') {
+			var reader = new FileReader();
+			reader.readAsDataURL(video);
+			reader.onload = function(event) {
+				videoSrc = event.target.result;
+				totalSize = videoSrc.length;
+				$("#info").html(
+						"已上传/总大小： " + '0KB/' + Math.ceil(totalSize / 1000)
+								+ "KB");
+				console.log(videoSrc);
+			}
+		}
+	}
+	/*base64上传*/
+	function upload() {
+		var file = video;/*获取的文件*/
+		if (file != null && file != '') {
+			var fileName = file.name;/*文件名*/
+			var ext;/*文件后缀*/
+			var extIndex = fileName.lastIndexOf(".");
+			ext = fileName.substring(extIndex + 1);
+			videoName = fileName.substring(0, extIndex);
+			var inputVideoName = $("#uploadVideoName").val();
+			if (inputVideoName != null && inputVideoName != '') {
+				videoName = inputVideoName;
+				$.ajax({
+					type : "post",
+					url : "/infoChange/checkUpvName",
+					data : {
+						"videoName" : videoName
+					},
+					dataType : "text",
+					success : function(result) {
+						if (result == "1") {
+							/*判断是否为视频文件*/
+							if (ext != "mp4") {
+								layer.msg('上传文件的格式有误');
+							} else {
+								$("#info").html(
+										"已上传/总大小： " + '0KB/'
+												+ Math.ceil(totalSize / 1000)
+												+ "KB");
+
+								videoSrc = videoSrc.split(",")[1];
+								$.ajax({
+									type : "post",
+									url : "/infoChange/uploadVideo",
+									data : {
+										"videoName" : videoName,
+										"stringVideo" : videoSrc
+									},
+									dataType : "text",
+									xhr : function() { //获取ajaxSettings中的xhr对象，为它的upload属性绑定progress事件的处理函数
+										myXhr = $.ajaxSettings.xhr();
+										if (myXhr.upload) { //检查upload属性是否存在
+											//绑定progress事件的回调函数
+											myXhr.upload.addEventListener(
+													'progress',
+													progressHandlingFunction,
+													false);
+										}
+										return myXhr; //xhr对象返回给jQuery使用
+									},
+									success : function(result) {
+										if (result == "1") {
+											console.log("上传成功");
+										}
+									}
+								});
+							}
+						} else {
+							layer.msg('这个视频名字用过了，换个试试');
+						}
+					}
+				});
+			}
+		} else {
+			layer.msg('请选择要上传的视频文件');
+		}
+	}
+
+	//上传进度回调函数：
+	function progressHandlingFunction(e) {
+		total = Math.ceil(e.total / 1000);
+		if (e.lengthComputable) {
+			loaded = Math.ceil(e.loaded / 1000);
+			$('progress').attr({
+				value : loaded,
+				max : total
+			}); //更新数据到进度条
+			var percent = loaded / total * 100;
+			$('#info').html(
+					loaded + "/" + total + " KB " + "<span>"
+							+ percent.toFixed(2) + "</span>" + "%");
+		}
+	}
+</script>
 </html>

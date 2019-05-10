@@ -60,4 +60,17 @@
 		from uploadVideo t
 		where t.user_id = ${userId}
 	</select>
+
+	<select id="getUpvVideoByName" parameterType="string"
+		resultType="java.util.HashMap">
+		select * 
+		from uploadVideo t
+		where t.upv_name = ${upvName}
+	</select>
+
+	<insert id="uploadVideo" parameterType="string">
+		insert into
+		uploadVideo(upv_name,user_id,upv_date,upv_video)
+		values(${upvName},${userId},${upvDate},${upvVideo})
+	</insert>
 </mapper>

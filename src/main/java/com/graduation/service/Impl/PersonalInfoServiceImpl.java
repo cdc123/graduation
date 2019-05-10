@@ -134,4 +134,23 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
 		}
 		return list;
 	}
+
+	@Override
+	public List<Map<String, Object>> uploadVideo(String upvName, String userId, String upvDate, String upvVideo) {
+		upvName = "'" + upvName + "'";
+		userId = "'" + userId + "'";
+		upvDate = "'" + upvDate + "'";
+		upvVideo = upvVideo.replace("\\", "/");
+		upvVideo = "'" + upvVideo + "'";
+		dao.uploadVideo(upvName, userId, upvDate, upvVideo);
+		List<Map<String, Object>> list = dao.getUpvVideoByName(upvName);
+		return list;
+	}
+
+	@Override
+	public List<Map<String, Object>> checkUpvName(String videoName) {
+		videoName = "'" + videoName + "'";
+		List<Map<String, Object>> list = dao.getUpvVideoByName(videoName);
+		return list;
+	}
 }

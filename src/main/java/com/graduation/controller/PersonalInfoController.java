@@ -1,9 +1,6 @@
 package com.graduation.controller;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,13 +14,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.graduation.service.PersonalInfoService;
 
 import net.sf.json.JSONArray;
 import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 @RestController
 @RequestMapping("/infoChange")
@@ -293,5 +290,56 @@ public class PersonalInfoController {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+
+	@PostMapping(value = "/checkUpvName")
+	public String checkUpvName(HttpServletRequest request, HttpServletResponse response) {
+		String flag = "0";
+		String videoName = request.getParameter("videoName");
+		List<Map<String, Object>> list = service.checkUpvName(videoName);
+		if(list.size() == 0) {
+			flag = "1";
+		}
+		return flag;
+	}
+
+	/* 视频上传 */
+	@PostMapping(value = "/uploadVideo")
+	public String uploadVideo(HttpServletRequest request, HttpServletResponse response) {
+		/* 获取指定视频名称 */
+		String videoName = request.getParameter("videoName");
+		/* 获取视频base64编码 */
+		String stringVideo = request.getParameter("stringVideo");
+		/* 获取上传用户信息 */
+		JSONArray json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
+		/* 设置视频存放路径 */
+		String realPath = request.getServletContext().getRealPath("/video/uploadVideos");
+		/* 默认视频名 */
+		Date t = new Date();
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+		SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String uploadDate = df.format(t);
+		/* 设置插入数据库数据 */
+		String upvName;
+		String userId = String.valueOf(((Map) (json.get(0))).get("user_id").toString());
+		String upvDate = df2.format(t);
+		String upvVideo;
+		if (videoName != null && !videoName.equals("")) {
+			/* 保存视频 */
+			GenerateImage(stringVideo, realPath + "\\" + videoName + ".mp4");
+			upvName = videoName;
+			upvVideo = realPath + "\\" + videoName + ".mp4";
+		} else {
+			/* 保存视频 */
+			GenerateImage(stringVideo, realPath + "\\" + uploadDate + ".mp4");
+			upvName = uploadDate;
+			upvVideo = realPath + "\\" + uploadDate + ".mp4";
+		}
+		String flag = "0";
+		List<Map<String, Object>> list = service.uploadVideo(upvName, userId, upvDate, upvVideo);
+		if (list.size() > 0) {
+			flag = "1";
+		}
+		return flag;
 	}
 }
