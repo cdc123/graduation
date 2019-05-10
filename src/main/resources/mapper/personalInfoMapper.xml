@@ -37,6 +37,13 @@
 		where t.user_phone = ${userPhone}
 	</update>
 
+	<update id="updateUserImage" parameterType="string">
+		update user t
+		set
+		t.user_image = ${userImage}
+		where t.user_phone = ${userPhone}
+	</update>
+
 	<select id="getFavouriteByUserId" parameterType="string"
 		resultType="java.util.HashMap">
 		select *

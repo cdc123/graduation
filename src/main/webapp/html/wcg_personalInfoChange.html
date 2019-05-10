@@ -344,10 +344,6 @@
 						style="font-size: 35px; line-height: 100px; font-weight: bolder; color: white">
 						修改头像</p>
 				</div>
-				<!-- <iframe src="../fileUpload.html"
-					style="margin-left: 100px; width: 700px; height: 800px; border: none"
-					frameborder="0"></iframe> -->
-				<!-- 上传头像 -->
 				<button id="replaceImg" class="l-btn" style="margin-left: 160px;">更换头像</button>
 				<div
 					style="width: 320px; height: 320px; border: solid 1px #555; padding: 5px; margin-left: 280px">
@@ -475,6 +471,26 @@
         }else{
             var cas = $('#tailoringImg').cropper('getCroppedCanvas');//获取被裁剪后的canvas
             var base64url = cas.toDataURL('image/png'); //转换为base64地址形式
+            
+            /*start*/
+            var stringImage = base64url.split(",")[1];
+            $.ajax({
+					type : "post",
+					url : "/infoChange/updateUserImage",
+					data : {
+						"stringImage" : stringImage
+					},
+					dataType : "text",
+					success : function(result) {
+						if(result == "1"){
+							console.log("上传成功");
+						}
+					}
+				});
+            /*end*/
+            
+            $("#photoImg").css("background-image","url("+base64url+")");
+            
             $("#finalImg").prop("src",base64url);//显示为图片的形式
             //关闭裁剪框
             closeTailor();

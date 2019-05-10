@@ -99,6 +99,21 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
 	}
 
 	@Override
+	public List<Map<String, Object>> updateUserImage(String userPhone, String userImage) {
+		List<Map<String, Object>> list = null;
+		try {
+			list = new ArrayList<Map<String, Object>>();
+			userPhone = "'" + userPhone + "'";
+			userImage = "'" + userImage + "'";
+			dao.updateUserImage(userPhone, userImage);
+			list = rlDao.getUserByPhone(userPhone);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
 	public List<Map<String, Object>> getFavouriteByUserId(String userId) {
 		List<Map<String, Object>> list = null;
 		try {
@@ -108,7 +123,7 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
 		}
 		return list;
 	}
-	
+
 	@Override
 	public List<Map<String, Object>> getUploadByUserId(String userId) {
 		List<Map<String, Object>> list = null;

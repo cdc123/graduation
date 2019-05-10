@@ -19,6 +19,8 @@ public interface PersonalInfoDao {
 
 	public void updateUserIntroduce(@Param("userPhone") String userPhone, @Param("userIntroduce") String userIntroduce);
 
+	public void updateUserImage(@Param("userPhone") String userPhone, @Param("userImage") String userImage);
+
 	public List<Map<String, Object>> getFavouriteByUserId(@Param("userId") String userId);
 
 	public List<Map<String, Object>> getUploadByUserId(@Param("userId") String userId);

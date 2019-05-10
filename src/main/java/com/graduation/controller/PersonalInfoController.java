@@ -1,6 +1,13 @@
 package com.graduation.controller;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.graduation.service.PersonalInfoService;
 
 import net.sf.json.JSONArray;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 @RestController
 @RequestMapping("/infoChange")
@@ -228,5 +237,61 @@ public class PersonalInfoController {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	/* 上传头像 */
+	@PostMapping(value = "/updateUserImage")
+	public String updateUserImage(HttpServletRequest request, HttpServletResponse response) {
+		String stringImage = request.getParameter("stringImage");
+		Date t = new Date();
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+		String uploadDate = df.format(t);
+		String realPath = request.getServletContext().getRealPath("/image/userPhotos");
+		GenerateImage(stringImage, realPath + "\\" + uploadDate + ".png");
+		String userImage = "../image/userPhotos/" + uploadDate + ".png";
+		JSONArray json = null;
+		String userPhone = null;
+		List<Map<String, Object>> list = null;
+		String relUserImage = null;
+		String flag = "0";
+		try {
+			list = new ArrayList<Map<String, Object>>();
+			json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
+			userPhone = String.valueOf(((Map) (json.get(0))).get("user_phone").toString());
+			list = service.updateUserImage(userPhone, userImage);
+			json = JSONArray.fromObject(list);
+			relUserImage = String.valueOf(((Map) (json.get(0))).get("user_image").toString());
+			if (userImage.equals(relUserImage)) {
+				flag = "1";
+				request.getSession().setAttribute("sessionListForUser", list);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return flag;
+	}
+
+	// 对字节数组字符串进行Base64解码并生成图片
+	public static boolean GenerateImage(String imgStr, String imgFilePath) {// 对字节数组字符串进行Base64解码并生成图片
+		if (imgStr == null) // 图像数据为空
+			return false;
+		BASE64Decoder decoder = new BASE64Decoder();
+		try {
+			// Base64解码
+			byte[] bytes = decoder.decodeBuffer(imgStr);
+			for (int i = 0; i < bytes.length; ++i) {
+				if (bytes[i] < 0) {// 调整异常数据
+					bytes[i] += 256;
+				}
+			}
+			// 生成jpeg图片
+			OutputStream out = new FileOutputStream(imgFilePath);
+			out.write(bytes);
+			out.flush();
+			out.close();
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 }
