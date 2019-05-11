@@ -1,6 +1,5 @@
 package com.graduation.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,13 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.sf.json.JSONArray;
-
 @RestController
 @RequestMapping("/videoSearched")
 public class VideoSearchedController {
 
-	/* 返回查找关键字查询结果 */
+	/* 返回查找关键字 */
 	@PostMapping(value = "/getKeyword")
 	public String getKeyword(HttpServletRequest request, HttpServletResponse response) {
 		String keyword = "";
@@ -29,7 +26,7 @@ public class VideoSearchedController {
 		return keyword;
 	}
 
-	/* 返回收藏查询结果 */
+	/* 返回关键字查询结果 */
 	@PostMapping(value = "/getDataForVideoSearched")
 	public List<Map<String, Object>> getDataForVideoSearched(HttpServletRequest request, HttpServletResponse response) {
 		List<Map<String, Object>> list = null;

@@ -1,9 +1,45 @@
 $(function() {
+	/* 查询当前登录信息 */
 	getUserBySession();
+	/* 首页获取电影 */
 	getMovie();
+	/* 首页获取剧集 */
 	getTeleplay();
+	/* 首页获取上传 */
 	getUpload();
-	/* 电影，剧集视频点击绑定 */
+	/* 点击搜索栏下拉框选项时直接播放影片 */
+	$("#forSearch ul").on("click", "li", function(event) {
+		var target = $(event.target);
+		var value = target.attr("title");
+		$.ajax({
+			type : "post",
+			url : "/home/getVideoByName",
+			data : {
+				"videoName" : value
+			},
+			dataType : "json",
+			success : function(result) {
+				window.location.href = "play.html";
+			}
+		});
+	});
+	/* 续播 */
+	$("#forHistory").on("click", "a", function(event) {
+		var target = $(event.target);
+		var videoName = target.text();
+		$.ajax({
+			type : "post",
+			url : "/home/getVideoByName",
+			data : {
+				"videoName" : videoName
+			},
+			dataType : "json",
+			success : function(res) {
+				location.href = "play.html";
+			}
+		});
+	});
+	/* 点击电影，剧集文字播放 */
 	$(".mt").on("click", "a", function(event) {
 		var target = $(event.target);
 		var videoName = target.text();
@@ -19,6 +55,7 @@ $(function() {
 			}
 		});
 	});
+	/* 点击电影，剧集图片播放 */
 	$(".mt").on("click", "img", function(event) {
 		var target = $(event.target);
 		var videoName = target.attr("title");
@@ -65,46 +102,14 @@ $(function() {
 	// }
 	// });
 	// });
-	/* 事件绑定,点击搜索栏下拉框选项时直接播放影片 */
-	$("#forSearch ul").on("click", "li", function(event) {
-		var target = $(event.target);
-		var value = target.attr("title");
-		$.ajax({
-			type : "post",
-			url : "/home/getVideoByName",
-			data : {
-				"videoName" : value
-			},
-			dataType : "json",
-			success : function(result) {
-				window.location.href = "play.html";
-			}
-		});
-	});
-	/* 事件委托,续播 */
-	$("#forHistory").on("click", "a", function(event) {
-		var target = $(event.target);
-		var videoName = target.text();
-		$.ajax({
-			type : "post",
-			url : "/home/getVideoByName",
-			data : {
-				"videoName" : videoName
-			},
-			dataType : "json",
-			success : function(res) {
-				location.href = "play.html";
-			}
-		});
-	});
 });
-/*---------------------------------------------------------------------------------------*/
-/* 查询session是否有有登录信息 */
+/*--------------------------------------------------*/
 function getUserBySession() {
 	$.ajax({
 		type : "post",
 		url : "/home/getUserBySession",
 		dataType : "json",
+		async : false,
 		success : function(result) {
 			if (result != null && "" != result) {
 				$("#isLogin").val("1");
@@ -115,6 +120,7 @@ function getUserBySession() {
 					$("#userName").val(item.user_name);
 					if ($("#userName").val() != null
 							&& $("#userName").val() != "") {
+						/* 为个人信息页面用户名赋值 */
 						$("#selfUsername b").text($("#userName").val());
 					}
 					$("#userSex").val(item.user_sex);
@@ -123,17 +129,22 @@ function getUserBySession() {
 					$("#userIntroduce").val(item.user_introduce);
 					if ($("#userIntroduce").val() != null
 							&& $("#userIntroduce").val() != "") {
+						/* 为个人信息页面个人简介赋值 */
 						$("#introduce").text($("#userIntroduce").val());
 					}
 					$("#userImage").val(item.user_image);
 					if ($("#userImage").val() != null
 							&& $("#userImage").val() != "") {
+						/* 为头部头像赋值 */
 						$("#photoImg").css("background-image",
 								"url('" + $("#userImage").val() + "')");
+						/* 为信息修改页面头像赋值 */
 						$("#finalImg").attr("src", $("#userImage").val());
+						/* 为个人信息页面头像赋值 */
 						$("#pictrue").css("background-image",
 								"url('" + $("#userImage").val() + "')");
 					} else {
+						/* 当没有头像数据时，为各页面赋默认值 */
 						$("#photoImg").css("background-image",
 								"url('../image/wcg_images/loginPhoto.jpg')");
 						$("#finalImg").attr("src",
@@ -141,10 +152,13 @@ function getUserBySession() {
 						$("#pictrue").css("background-image",
 								"url('../image/wcg_images/loginPhoto.jpg')");
 					}
+					/* 信息修改页面其余项初始化赋值 */
 					showUserInfo();
+					/* 个人信息页面显示收藏视频 */
 					showFavourite();
+					/* 个人信息页面显示上传视频 */
 					showUpLoad();
-					/* 给个人信息页日期赋初值 */
+					/* 为个人信息页生日赋初值 */
 					var date = new Date(item.user_birthday);
 					var year = date.getFullYear() + "";
 					var month = date.getMonth() + 1 + "";
@@ -256,7 +270,6 @@ function getVideoByName() {
 		layer.msg('请输入视频关键字 ！！！');
 	}
 }
-/* 点击头像判断登录状态响应 */
 /* 鼠标经过头像 */
 function showForPhoto() {
 	if ($("#isLogin").val() == "1") {
@@ -291,7 +304,7 @@ function logOut() {
 		}
 	});
 }/* 上传 */
-/* 上传功能 */
+/* 上传按钮 */
 function upload() {
 	if ($("#isLogin").val() == "1") {
 		window.location.href = "wcg_userInfo.html#up";
@@ -477,7 +490,7 @@ function collection() {
 		window.location.href = "wcg_userInfo.html#miao";
 	}
 }
-/* 获取电影 */
+
 function getMovie() {
 	var videoSort = "电影";
 	$
@@ -560,7 +573,7 @@ function getMovie() {
 			});
 
 }
-/* 获取连续剧 */
+
 function getTeleplay() {
 	var videoSort = "剧集";
 	$
@@ -642,7 +655,7 @@ function getTeleplay() {
 				}
 			});
 }
-/* 获取用户上传视频 */
+
 function getUpload() {
 	$
 			.ajax({
@@ -694,7 +707,7 @@ function getUpload() {
 				}
 			});
 }
-/* 个人信息修改页面初始化赋值 */
+
 function showUserInfo() {
 	/* 昵称初始值 */
 	$("input[name='user_name']").attr("value", $("#userName").val());
@@ -708,7 +721,7 @@ function showUserInfo() {
 	/* 简介初始值 */
 	$("textarea").text($("#userIntroduce").val());
 }
-/* 个人主页显示收藏视频 */
+
 function showFavourite() {
 	var userId = $("#userId").val();
 	$
@@ -792,7 +805,7 @@ function showFavourite() {
 		});
 	});
 }
-/* 个人主页显示上传视频 */
+
 function showUpLoad() {
 	var userId = $("#userId").val();
 	$

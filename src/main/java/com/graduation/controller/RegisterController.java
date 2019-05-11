@@ -1,6 +1,5 @@
 package com.graduation.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,10 +23,9 @@ public class RegisterController {
 	/* 判断手机号是否可注册 */
 	@PostMapping(value = "/checkUserPhone")
 	public boolean checkUserPhone(HttpServletRequest request, HttpServletResponse response) {
-		String userPhone = request.getParameter("userPhone");
 		boolean flag = false;
 		try {
-			flag = service.getUserByPhone(userPhone);
+			flag = service.getUserByPhone(request.getParameter("userPhone"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -37,13 +35,10 @@ public class RegisterController {
 	/* 注册 */
 	@PostMapping(value = "/register")
 	public boolean register(HttpServletRequest request, HttpServletResponse response) {
-		String userPhone = request.getParameter("userPhone");
-		String password = request.getParameter("password");
 		List<Map<String, Object>> list = null;
 		boolean flag = false;
 		try {
-			list = new ArrayList<Map<String, Object>>();
-			list = service.register(userPhone, password);
+			list = service.register(request.getParameter("userPhone"), request.getParameter("password"));
 			if (list != null && !"".equals(list)) {
 				flag = true;
 				request.getSession().setAttribute("sessionListForUser", list);

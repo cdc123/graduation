@@ -1,6 +1,5 @@
 package com.graduation.service.Impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +21,6 @@ public class RegisterLoginServiceImpl implements RegisterLoginService {
 		List<Map<String, Object>> list = null;
 		boolean flag = false;
 		try {
-			list = new ArrayList<Map<String, Object>>();
 			list = dao.getUserByPhone(userPhone);
 			if (list.size() == 0) {
 				flag = true;
@@ -37,7 +35,6 @@ public class RegisterLoginServiceImpl implements RegisterLoginService {
 	public List<Map<String, Object>> register(String userPhone, String password) {
 		List<Map<String, Object>> list = null;
 		try {
-			list = new ArrayList<Map<String, Object>>();
 			dao.register(userPhone, password);
 			list = dao.getUserByPhone(userPhone);
 		} catch (Exception e) {
@@ -50,7 +47,6 @@ public class RegisterLoginServiceImpl implements RegisterLoginService {
 	public List<Map<String, Object>> login(String userPhone, String password) {
 		List<Map<String, Object>> list = null;
 		try {
-			list = new ArrayList<Map<String,Object>>();
 			list = dao.getUserByPhone(userPhone);
 		} catch (Exception e) {
 			e.printStackTrace();

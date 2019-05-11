@@ -26,36 +26,53 @@ public class FileUploadController {
 	@Autowired
 	PersonalInfoService service;
 
+	/* 视频上传 */
 	@RequestMapping("/videoUpload")
 	public String videoUpload(MultipartFile file, String setVideoName, HttpServletRequest request) throws Exception {
 		String flag = "0";
 		/* 视频名 */
-		String upvName = setVideoName;
-		Date date = new Date();
-		if (upvName == null || "".equals(upvName)) {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
-			String defultVideoName = sdf.format(date);
-			upvName = defultVideoName;
-		}
-		JSONArray json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
+		String upvName = null;
+		JSONArray json = null;
 		/* 用户Id */
-		String userId = String.valueOf(((Map) (json.get(0))).get("user_id").toString());
-		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		String userId = null;
+		SimpleDateFormat sdf = null;
+		SimpleDateFormat sdf2 = null;
 		/* 上传日期 */
-		String upvDate = sdf2.format(date);
-		String realPath = request.getServletContext().getRealPath("/video/uploadVideos/");
-		String fileName = file.getOriginalFilename();
-		int extIndex = fileName.lastIndexOf(".");
-		String ext = fileName.substring(extIndex, fileName.length());
-		/* 视频存放路径 */
-		String upvVideo = realPath + upvName + ext;
-		/* 上传文件 */
-		file.transferTo(new File(upvVideo));
-		/* 插入操作并返回插入数据 */
-		List<Map<String, Object>> list = service.uploadVideo(upvName, userId, upvDate, upvVideo);
-		if (list.size() > 0) {
-			flag = "1";
+		String upvDate = null;
+		String realPath = null;
+		String fileName = null;
+		int extIndex = 0;
+		String ext = null;
+		String upvVideo = null;
+		try {
+			upvName = setVideoName;
+			Date date = new Date();
+			if (upvName == null || "".equals(upvName)) {
+				sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+				String defultVideoName = sdf.format(date);
+				upvName = defultVideoName;
+			}
+			json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
+			userId = String.valueOf(((Map) (json.get(0))).get("user_id").toString());
+			sdf2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			upvDate = sdf2.format(date);
+			realPath = request.getServletContext().getRealPath("/video/uploadVideos/");
+			fileName = file.getOriginalFilename();
+			extIndex = fileName.lastIndexOf(".");
+			ext = fileName.substring(extIndex, fileName.length());
+			/* 视频存放路径 */
+			upvVideo = realPath + upvName + ext;
+			/* 上传文件 */
+			file.transferTo(new File(upvVideo));
+			/* 插入操作并返回插入数据 */
+			List<Map<String, Object>> list = service.uploadVideo(upvName, userId, upvDate, upvVideo);
+			if (list.size() > 0) {
+				flag = "1";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return flag;
 	}
+
 }

@@ -1,19 +1,14 @@
 package com.graduation.service.Impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.graduation.dao.HomeDao;
 import com.graduation.service.HomeService;
-
-import net.sf.json.JSONArray;
 
 @Service
 public class HomeServiceImpl implements HomeService {
@@ -29,8 +24,7 @@ public class HomeServiceImpl implements HomeService {
 		String sql = null;
 		if (!firstName.contains("'")) {
 			try {
-				list = new ArrayList<>();
-				list2 = new ArrayList<>();
+				list2 = new ArrayList<String>();
 				sql = "select t.video_name as 'videoName' from video t where t.video_name like ";
 				sql += "'%" + firstName + "%' ";
 				sql += "order by (case when t.video_name = '" + firstName + "' then 1 ";
@@ -53,14 +47,9 @@ public class HomeServiceImpl implements HomeService {
 	@Override
 	public List<Map<String, Object>> getVideoByName(String videoName) {
 		List<Map<String, Object>> list = null;
-		List<Map<String, Object>> list2 = null;
-		Map<String, Object> map = null;
 		String sql = null;
 		if (!videoName.contains("'")) {
 			try {
-				list = new ArrayList<Map<String, Object>>();
-				list2 = new ArrayList<Map<String, Object>>();
-				map = new HashMap<String, Object>();
 				sql = "select * from video t where t.video_name = '" + videoName + "'";
 				list = dao.getVideoByName(sql);
 				if (list.size() == 0) {
@@ -72,8 +61,6 @@ public class HomeServiceImpl implements HomeService {
 					sql += "limit 10";
 					list = dao.getVideoByName(sql);
 				}
-				/* 查询影片结果 */
-				System.out.println(list);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -86,7 +73,6 @@ public class HomeServiceImpl implements HomeService {
 	public List<Map<String, Object>> getHistoryByUserId(String userId) {
 		List<Map<String, Object>> list = null;
 		try {
-			list = new ArrayList<Map<String, Object>>();
 			list = dao.getHistoryByUserId(userId);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -98,7 +84,6 @@ public class HomeServiceImpl implements HomeService {
 	public List<Map<String, Object>> getVideoById(String videoId) {
 		List<Map<String, Object>> list = null;
 		try {
-			list = new ArrayList<Map<String, Object>>();
 			list = dao.getVideoById(videoId);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -110,7 +95,6 @@ public class HomeServiceImpl implements HomeService {
 	public List<Map<String, Object>> getVideoBySort(String videoSort) {
 		List<Map<String, Object>> list = null;
 		try {
-			list = new ArrayList<Map<String, Object>>();
 			videoSort = "'" + videoSort + "'";
 			list = dao.getVideoBySort(videoSort);
 		} catch (Exception e) {
@@ -123,7 +107,6 @@ public class HomeServiceImpl implements HomeService {
 	public List<Map<String, Object>> getUploadVideo() {
 		List<Map<String, Object>> list = null;
 		try {
-			list = new ArrayList<Map<String, Object>>();
 			list = dao.getUploadVideo();
 		} catch (Exception e) {
 			e.printStackTrace();

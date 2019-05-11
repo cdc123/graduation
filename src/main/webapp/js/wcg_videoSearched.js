@@ -1,5 +1,7 @@
 $(function() {
+	/* 获取影片查找关键字 */
 	getKeyword();
+	/* 获取查找到的影片信息 */
 	getData();
 });
 

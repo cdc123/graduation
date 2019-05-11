@@ -29,19 +29,20 @@ public class PersonalInfoController {
 	@Autowired
 	PersonalInfoService service;
 
-	/* 更新昵称 */
+	/* 设置昵称 */
 	@PostMapping(value = "/updateUserName")
 	public String updateUserName(HttpServletRequest request, HttpServletResponse response) {
 		JSONArray json = null;
+		String userPhone = null;
+		String relUserName = null;
 		List<Map<String, Object>> list = null;
-		String userName = request.getParameter("userName");
+		String userName = null;
 		String flag = "0";
 		try {
-			json = new JSONArray();
-			list = new ArrayList<Map<String, Object>>();
+			userName = request.getParameter("userName");
 			json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
-			String userPhone = String.valueOf(((Map) (json.get(0))).get("user_phone").toString());
-			String relUserName = String.valueOf(((Map) (json.get(0))).get("user_name").toString());
+			userPhone = String.valueOf(((Map) (json.get(0))).get("user_phone").toString());
+			relUserName = String.valueOf(((Map) (json.get(0))).get("user_name").toString());
 			if (!userName.equals(relUserName)) {
 				list = service.updateUserName(userPhone, userName);
 				json = JSONArray.fromObject(list);
@@ -59,19 +60,20 @@ public class PersonalInfoController {
 		return flag;/* 1：成功；0：失败；2：无变化 */
 	}
 
-	/* 更新性别 */
+	/* 设置性别 */
 	@PostMapping(value = "/updateUserSex")
 	public String updateUserSex(HttpServletRequest request, HttpServletResponse response) {
 		JSONArray json = null;
+		String userPhone = null;
+		String relUserSex = null;
 		List<Map<String, Object>> list = null;
-		String userSex = request.getParameter("userSex");
+		String userSex = null;
 		String flag = "0";
 		try {
-			json = new JSONArray();
-			list = new ArrayList<Map<String, Object>>();
+			userSex = request.getParameter("userSex");
 			json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
-			String userPhone = String.valueOf(((Map) (json.get(0))).get("user_phone").toString());
-			String relUserSex = String.valueOf(((Map) (json.get(0))).get("user_sex").toString());
+			userPhone = String.valueOf(((Map) (json.get(0))).get("user_phone").toString());
+			relUserSex = String.valueOf(((Map) (json.get(0))).get("user_sex").toString());
 			if (!userSex.equals(relUserSex)) {
 				list = service.updateUserSex(userPhone, userSex);
 				json = JSONArray.fromObject(list);
@@ -89,19 +91,20 @@ public class PersonalInfoController {
 		return flag;/* 1：成功；0：失败；2：无变化 */
 	}
 
-	/* 更新地址 */
+	/* 设置地址 */
 	@PostMapping(value = "/updateUserAddress")
 	public String updateUserAddress(HttpServletRequest request, HttpServletResponse response) {
 		JSONArray json = null;
+		String userPhone = null;
+		String relUserAddress = null;
 		List<Map<String, Object>> list = null;
-		String userAddress = request.getParameter("userAddress");
+		String userAddress = null;
 		String flag = "0";
 		try {
-			json = new JSONArray();
-			list = new ArrayList<Map<String, Object>>();
+			userAddress = request.getParameter("userAddress");
 			json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
-			String userPhone = String.valueOf(((Map) (json.get(0))).get("user_phone").toString());
-			String relUserAddress = String.valueOf(((Map) (json.get(0))).get("user_address").toString());
+			userPhone = String.valueOf(((Map) (json.get(0))).get("user_phone").toString());
+			relUserAddress = String.valueOf(((Map) (json.get(0))).get("user_address").toString());
 			if (!userAddress.equals(relUserAddress)) {
 				list = service.updateUserAddress(userPhone, userAddress);
 				json = JSONArray.fromObject(list);
@@ -123,26 +126,31 @@ public class PersonalInfoController {
 	@PostMapping(value = "/updateUserBirthday")
 	public String updateUserBirthday(HttpServletRequest request, HttpServletResponse response) {
 		JSONArray json = null;
+		String userPhone = null;
+		Map<String, Object> m = null;
+		String year = null;
+		String month = null;
+		String day = null;
+		String relUserBirthday = null;
 		List<Map<String, Object>> list = null;
-		String userBirthday = request.getParameter("userBirthday");
+		String userBirthday = null;
 		String flag = "0";
 		try {
-			json = new JSONArray();
-			list = new ArrayList<Map<String, Object>>();
+			userBirthday = request.getParameter("userBirthday");
 			if (userBirthday != null && !"".equals(userBirthday)) {
 				json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
-				String userPhone = String.valueOf(((Map) (json.get(0))).get("user_phone").toString());
-				Map<String, Object> m = (Map<String, Object>) ((Map) (json.get(0))).get("user_birthday");
-				String year = (int) (m.get("year")) + 1900 + "";
-				String month = (int) (m.get("month")) + 1 + "";
+				userPhone = String.valueOf(((Map) (json.get(0))).get("user_phone").toString());
+				m = (Map<String, Object>) ((Map) (json.get(0))).get("user_birthday");
+				year = (int) (m.get("year")) + 1900 + "";
+				month = (int) (m.get("month")) + 1 + "";
 				if (month.length() == 1) {
 					month = "0" + month;
 				}
-				String day = m.get("date") + "";
+				day = m.get("date") + "";
 				if (day.length() == 1) {
 					day = "0" + day;
 				}
-				String relUserBirthday = year + "-" + month + "-" + day;
+				relUserBirthday = year + "-" + month + "-" + day;
 				if (!userBirthday.equals(relUserBirthday)) {
 					list = service.updateUserBirthday(userPhone, userBirthday);
 					json = JSONArray.fromObject(list);
@@ -174,19 +182,20 @@ public class PersonalInfoController {
 		return flag;/* 1：成功；0：失败；2：无变化 */
 	}
 
-	/* 更新简介 */
+	/* 设置简介 */
 	@PostMapping(value = "/updateUserIntroduce")
 	public String updateUserIntroduce(HttpServletRequest request, HttpServletResponse response) {
 		JSONArray json = null;
+		String userPhone = null;
+		String relUserIntroduce = null;
 		List<Map<String, Object>> list = null;
-		String userIntroduce = request.getParameter("userIntroduce");
+		String userIntroduce = null;
 		String flag = "0";
 		try {
-			json = new JSONArray();
-			list = new ArrayList<Map<String, Object>>();
+			userIntroduce = request.getParameter("userIntroduce");
 			json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
-			String userPhone = String.valueOf(((Map) (json.get(0))).get("user_phone").toString());
-			String relUserIntroduce = String.valueOf(((Map) (json.get(0))).get("user_introduce").toString());
+			userPhone = String.valueOf(((Map) (json.get(0))).get("user_phone").toString());
+			relUserIntroduce = String.valueOf(((Map) (json.get(0))).get("user_introduce").toString());
 			if (!userIntroduce.equals(relUserIntroduce)) {
 				list = service.updateUserIntroduce(userPhone, userIntroduce);
 				json = JSONArray.fromObject(list);
@@ -207,13 +216,11 @@ public class PersonalInfoController {
 	/* 查询收藏视频 */
 	@PostMapping(value = "/getFavouriteByUserId")
 	public List<Map<String, Object>> getFavouriteByUserId(HttpServletRequest request, HttpServletResponse response) {
-		JSONArray json = null;
-		String userId = "";
 		List<Map<String, Object>> list = null;
 		try {
-			json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
-			userId = String.valueOf(((Map) (json.get(0))).get("user_id").toString());
-			list = service.getFavouriteByUserId(userId);
+			list = service.getFavouriteByUserId(String.valueOf(
+					((Map) ((JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"))).get(0)))
+							.get("user_id").toString()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -223,13 +230,11 @@ public class PersonalInfoController {
 	/* 查询上传视频 */
 	@PostMapping(value = "/getUploadByUserId")
 	public List<Map<String, Object>> getUploadByUserId(HttpServletRequest request, HttpServletResponse response) {
-		JSONArray json = null;
-		String userId = "";
 		List<Map<String, Object>> list = null;
 		try {
-			json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
-			userId = String.valueOf(((Map) (json.get(0))).get("user_id").toString());
-			list = service.getUploadByUserId(userId);
+			list = service.getUploadByUserId(String.valueOf(
+					((Map) ((JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"))).get(0)))
+							.get("user_id").toString()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -292,14 +297,19 @@ public class PersonalInfoController {
 		}
 	}
 
-	@PostMapping(value = "/checkUpvName")
-	public String checkUpvName(HttpServletRequest request, HttpServletResponse response) {
-		String flag = "0";
-		String videoName = request.getParameter("videoName");
-		List<Map<String, Object>> list = service.checkUpvName(videoName);
-		if (list.size() == 0) {
-			flag = "1";
-		}
-		return flag;
-	}
+	/* 检查上传的视频名称是否重复使用 */
+//	@PostMapping(value = "/checkUpvName")
+//	public String checkUpvName(HttpServletRequest request, HttpServletResponse response) {
+//		String flag = "0";
+//		List<Map<String, Object>> list = null;
+//		try {
+//			list = service.checkUpvName(request.getParameter("videoName"));
+//			if (list.size() == 0) {
+//				flag = "1";
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return flag;
+//	}
 }
