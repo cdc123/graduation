@@ -21,7 +21,6 @@
 <script src="../layui/layui.js"></script>
 <script src="../layui/lay/modules/carousel.js"></script>
 <script src="../layui/lay/modules/code.js"></script>
-<script src="../layui/lay/modules/colorpicker.js"></script>
 <script src="../layui/lay/modules/element.js"></script>
 <script src="../layui/lay/modules/flow.js"></script>
 <script src="../layui/lay/modules/form.js"></script>
@@ -33,7 +32,6 @@
 <script src="../layui/lay/modules/laytpl.js"></script>
 <script src="../layui/lay/modules/mobile.js"></script>
 <script src="../layui/lay/modules/rate.js"></script>
-<script src="../layui/lay/modules/slider.js"></script>
 <script src="../layui/lay/modules/table.js"></script>
 <script src="../layui/lay/modules/tree.js"></script>
 <script src="../layui/lay/modules/upload.js"></script>
@@ -142,23 +140,18 @@
 		<div
 			style="width: 1080px; height: 600px; background-color: rgba(15, 15, 15, 0.2)">
 			<div
-				style="width: 1000px; height: 500px; float: left; margin-top: 50px; margin-left: 40px">
+				style="width: 1000px; height: 500px; float: left; margin-top: 50px; margin-left: 40px; font-size: 18px">
 				<h1>视频上传</h1>
-				<input type="file" accept="video/*" id="video" name="video"
-					style="float: left; width: 900px; margin-left: 50px; margin-right: 50px; padding: 0; margin-top: 50px"
-					onchange="getVideoSrc(event)" />
-				<div style="float: left; margin-left: 50px; margin-top: 40px;">
-					上传视频的名称：<input type="text" id="uploadVideoName" />(可选)
-				</div>
-				<input type="button"
-					style="width: 80px; height: 40px; margin-top: 30px; margin-left: 50px; border: 0px; border-radius: 5px; background-color: #31b6ff; color: white; font-size: 15px; cursor: pointer;"
-					onclick="upload()" value="上传" />
-				<div class="modal-body"
-					style="color: black; margin-left: 50px; margin-top: 30px;">
-					上传进度：
-					<progress style="width: 30em;"></progress>
-					<p id="info" style="margin-top: 10px"></p>
-				</div>
+				<form method="post" enctype="multipart/form-data" id="form"
+					style="margin-top: 30px; font-size: 18px;">
+					上传视频：<input type="file" name="file"
+						style="width: 400px; height: 30px; margin-left: 30px;" />(必选)<br />
+					设置视频名称：<input type="text" name="setVideoName" />（可选） <input
+						type="button" value="提交" onclick="videoUpload()"
+						style="cursor: pointer; margin-left: 200px; width: 100px; height: 30px; border: 0; color: white; background-color: #31b6ff; border-radius: 5px;" />
+				</form>
+				<br /> 上传进度：
+				<progress id="progress" value="0" max="100" style="width: 500px"></progress>
 			</div>
 		</div>
 	</div>
@@ -167,106 +160,42 @@
 	</div>
 </body>
 <script type="text/javascript">
-	var video;
-	/*视频转换base64*/
-	var videoSrc;
-	var totalSize = 0;/*文件大小*/
-	function getVideoSrc(event) {
-		video = event.target.files[0];
-		if (video != null && video != '') {
-			var reader = new FileReader();
-			reader.readAsDataURL(video);
-			reader.onload = function(event) {
-				videoSrc = event.target.result;
-				totalSize = videoSrc.length;
-				$("#info").html(
-						"已上传/总大小： " + '0KB/' + Math.ceil(totalSize / 1000)
-								+ "KB");
-				console.log(videoSrc);
-			}
-		}
-	}
-	/*base64上传*/
-	function upload() {
-		var file = video;/*获取的文件*/
-		if (file != null && file != '') {
-			var fileName = file.name;/*文件名*/
-			var ext;/*文件后缀*/
-			var extIndex = fileName.lastIndexOf(".");
-			ext = fileName.substring(extIndex + 1);
-			videoName = fileName.substring(0, extIndex);
-			var inputVideoName = $("#uploadVideoName").val();
-			if (inputVideoName != null && inputVideoName != '') {
-				videoName = inputVideoName;
-				$.ajax({
-					type : "post",
-					url : "/infoChange/checkUpvName",
-					data : {
-						"videoName" : videoName
-					},
-					dataType : "text",
-					success : function(result) {
-						if (result == "1") {
-							/*判断是否为视频文件*/
-							if (ext != "mp4") {
-								layer.msg('上传文件的格式有误');
-							} else {
-								$("#info").html(
-										"已上传/总大小： " + '0KB/'
-												+ Math.ceil(totalSize / 1000)
-												+ "KB");
-
-								videoSrc = videoSrc.split(",")[1];
-								$.ajax({
-									type : "post",
-									url : "/infoChange/uploadVideo",
-									data : {
-										"videoName" : videoName,
-										"stringVideo" : videoSrc
-									},
-									dataType : "text",
-									xhr : function() { //获取ajaxSettings中的xhr对象，为它的upload属性绑定progress事件的处理函数
-										myXhr = $.ajaxSettings.xhr();
-										if (myXhr.upload) { //检查upload属性是否存在
-											//绑定progress事件的回调函数
-											myXhr.upload.addEventListener(
-													'progress',
-													progressHandlingFunction,
-													false);
-										}
-										return myXhr; //xhr对象返回给jQuery使用
-									},
-									success : function(result) {
-										if (result == "1") {
-											console.log("上传成功");
-										}
-									}
-								});
-							}
-						} else {
-							layer.msg('这个视频名字用过了，换个试试');
-						}
-					}
-				});
-			}
+	function videoUpload() {
+		if ($("input[name='file']").val() == null
+				&& $("input[name='file']").val() == '') {
+			layer.msg('请选择要上传的视频');
 		} else {
-			layer.msg('请选择要上传的视频文件');
-		}
-	}
-
-	//上传进度回调函数：
-	function progressHandlingFunction(e) {
-		total = Math.ceil(e.total / 1000);
-		if (e.lengthComputable) {
-			loaded = Math.ceil(e.loaded / 1000);
-			$('progress').attr({
-				value : loaded,
-				max : total
-			}); //更新数据到进度条
-			var percent = loaded / total * 100;
-			$('#info').html(
-					loaded + "/" + total + " KB " + "<span>"
-							+ percent.toFixed(2) + "</span>" + "%");
+			var xhr = new XMLHttpRequest();
+			var progressBar = document.getElementById('progress');
+			var form = new FormData(document.getElementById("form"));
+			$.ajax({
+				url : "/upload/videoUpload",
+				type : "post",
+				data : form,
+				processData : false,
+				contentType : false,
+				xhr: function() {
+			    　　　　var xhr = $.ajaxSettings.xhr();
+			    　　　　if (xhr.upload) {
+			    　　　　　　xhr.upload.onprogress = function(progress) {
+			                    if (progress.lengthComputable) {
+			                        console.log(progress.loaded / progress.total * 100);
+			                        progressBar.max = progress.total;
+			                        progressBar.value = progress.loaded;
+			                    }
+			                };
+			                xhr.upload.onloadstart = function() {
+			                	layer.msg('上传开始');
+			                };
+			     　　　 }
+			              return xhr;
+			    },
+				success : function(result) {
+					if (result == "1") {
+						layer.msg('上传成功');
+					}
+				}
+			});
 		}
 	}
 </script>
