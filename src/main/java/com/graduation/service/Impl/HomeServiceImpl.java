@@ -114,4 +114,22 @@ public class HomeServiceImpl implements HomeService {
 		return list;
 	}
 
+	@Override
+	public void cancelCollection(int userId, int videoId) {
+		try {
+			dao.cancelCollection(userId, videoId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void deleteUploadVideo(int userId, int upvId) {
+		try {
+			dao.deleteUploadVideo(userId, upvId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }

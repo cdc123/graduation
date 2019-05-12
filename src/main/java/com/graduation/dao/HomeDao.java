@@ -18,6 +18,10 @@ public interface HomeDao {
 	public List<Map<String, Object>> getVideoById(@Param("videoId") String videoId);
 
 	public List<Map<String, Object>> getVideoBySort(@Param("videoSort") String videoSort);
-	
+
 	public List<Map<String, Object>> getUploadVideo();
+
+	public void cancelCollection(@Param("userId") int userId, @Param("videoId") int videoId);
+
+	public void deleteUploadVideo(@Param("userId") int userId, @Param("upvId") int upvId);
 }

@@ -147,4 +147,32 @@ public class HomeController {
 		}
 		return list;
 	}
+
+	/* 取消收藏视频 */
+	@PostMapping(value = "/cancelCollection")
+	public String cancelCollection(HttpServletRequest request) {
+		try {
+			service.cancelCollection(Integer.valueOf(
+					((Map) ((JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"))).get(0)))
+							.get("user_id").toString()),
+					Integer.valueOf(request.getParameter("videoId")));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "1";
+	}
+
+	/* 删除上传视频 */
+	@PostMapping(value = "/deleteUploadVideo")
+	public String deleteUploadVideo(HttpServletRequest request) {
+		try {
+			service.deleteUploadVideo(Integer.valueOf(
+					((Map) ((JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"))).get(0)))
+							.get("user_id").toString()),
+					Integer.valueOf(request.getParameter("upvId")));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "1";
+	}
 }

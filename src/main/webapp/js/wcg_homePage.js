@@ -763,12 +763,18 @@ function showFavourite() {
 													+ " src='"
 													+ item.video_image
 													+ "'> <a style='cursor: pointer;'>"
-													+ name + "</a></div>");
+													+ name
+													+ "</a></div><img onclick='cancelCollection(this)' src='../image/wcg_images/cancel.png' style='width: 20px;height: 20px;float: left;margin-left: -30px;' name="
+													+ item.video_id
+													+ " title='取消收藏'>");
 										} else {
 											$node = $("<div class='collection'><img title="
 													+ item.video_name
 													+ " src='../image/wcg_images/noPicture.jpg'> <a style='cursor: pointer;'>"
-													+ name + "</a></div>");
+													+ name
+													+ "</a></div><img onclick='cancelCollection(this)' src='../image/wcg_images/cancel.png' style='width: 20px;height: 20px;float: left;margin-left: -30px;' name="
+													+ item.video_id
+													+ " title='取消收藏'>");
 										}
 										$("#sowingListBody").append($node);
 									});
@@ -803,6 +809,23 @@ function showFavourite() {
 				window.location.href = "play.html";
 			}
 		});
+	});
+}
+
+function cancelCollection(event) {
+	var videoId = event.name;
+	$.ajax({
+		type : "post",
+		url : "/home/cancelCollection",
+		data : {
+			"videoId" : Number(videoId)
+		},
+		dataType : "json",
+		success : function(result) {
+			if (result == "1") {
+				window.location.reload();
+			}
+		}
 	});
 }
 
@@ -842,9 +865,29 @@ function showUpLoad() {
 										$node = $("<div class='collection'><img title="
 												+ item.upv_name
 												+ " src='../image/wcg_images/noPicture.jpg'> <a style='cursor: pointer;'>"
-												+ name + "</a></div>");
+												+ name
+												+ "</a></div><img onclick='deleteUploadVideo(this)' src='../image/wcg_images/cancel.png' style='width: 20px;height: 20px;float: left;margin-left: -30px;' name="
+												+ item.upv_id
+												+ " title='删除上传'>");
 										$("#videosBody").append($node);
 									});
 				}
 			});
+}
+
+function deleteUploadVideo(event) {
+	var upvId = event.name;
+	$.ajax({
+		type : "post",
+		url : "/home/deleteUploadVideo",
+		data : {
+			"upvId" : Number(upvId)
+		},
+		dataType : "json",
+		success : function(result) {
+			if (result == "1") {
+				window.location.reload();
+			}
+		}
+	});
 }

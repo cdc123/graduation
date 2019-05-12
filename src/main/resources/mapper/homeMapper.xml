@@ -46,5 +46,18 @@
 		from uploadVideo
 	</select>
 
+	<delete id="cancelCollection" parameterType="int">
+		delete from
+		favourite
+		where user_id = ${userId}
+		and video_id = ${videoId}
+	</delete>
+	
+	<delete id="deleteUploadVideo" parameterType="int">
+		delete from
+		uploadVideo
+		where user_id = ${userId}
+		and upv_id = ${upvId}
+	</delete>
 
 </mapper> 
