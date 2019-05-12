@@ -175,4 +175,18 @@ public class HomeController {
 		}
 		return "1";
 	}
+
+	@PostMapping(value = "/playUpVideo")
+	public String playUpVideo(HttpServletRequest request) {
+		int upvId = 0;
+		try {
+			upvId = Integer.valueOf(request.getParameter("upvId"));
+			upvId = -upvId;
+			System.out.println("upvId : " + upvId);
+			request.getSession().setAttribute("videosession", upvId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "1";
+	}
 }

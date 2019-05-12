@@ -71,37 +71,6 @@ $(function() {
 			}
 		});
 	});
-	/* 上传视频点击绑定 */
-	// $(".u").on("click", "a", function(event) {
-	// var target = $(event.target);
-	// var videoName = target.text();
-	// $.ajax({
-	// type : "post",
-	// url : "",
-	// data : {
-	// "videoName" : videoName
-	// },
-	// dataType : "json",
-	// success : function(result) {
-	// window.location.href = "play.html";
-	// }
-	// });
-	// });
-	// $(".u").on("click", "img", function(event) {
-	// var target = $(event.target);
-	// var videoName = target.attr("title");
-	// $.ajax({
-	// type : "post",
-	// url : "",
-	// data : {
-	// "videoName" : videoName
-	// },
-	// dataType : "json",
-	// success : function(result) {
-	// window.location.href = "play.html";
-	// }
-	// });
-	// });
 });
 /*--------------------------------------------------*/
 function getUserBySession() {
@@ -687,9 +656,13 @@ function getUpload() {
 													+ otherId
 													+ " class="
 													+ v
-													+ "><img src='../image/wcg_images/upPic.jpg' title="
+													+ "><img onclick='playUpVideo(this)' src='../image/wcg_images/upPic.jpg' name="
+													+ item.upv_id
+													+ " title="
 													+ item.upv_name
-													+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+													+ "><br/><a onclick='playUpVideo(this)' name="
+													+ item.upv_id
+													+ " style='font-size: 14px; line-height: 40px;cursor:pointer'>"
 													+ name + "</a></div>");
 											$("#uploadArea").before($node);
 										} else {
@@ -697,15 +670,36 @@ function getUpload() {
 													+ firstId
 													+ " class="
 													+ v
-													+ "><img src='../image/wcg_images/upPic.jpg' title="
+													+ "><img onclick='playUpVideo(this)' src='../image/wcg_images/upPic.jpg' name="
+													+ item.upv_id
+													+ " title="
 													+ item.upv_name
-													+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+													+ "><br/><a onclick='playUpVideo(this)' name="
+													+ item.upv_id
+													+ " style='font-size: 14px; line-height: 40px;cursor:pointer'>"
 													+ name + "</a></div>");
 											$("#uploadArea").before($node);
 										}
 									});
 				}
 			});
+}
+
+function playUpVideo(event) {
+	var upvId = event.name;
+	$.ajax({
+		type : "post",
+		url : "/home/playUpVideo",
+		data : {
+			"upvId" : Number(upvId)
+		},
+		dataType : "json",
+		success : function(result) {
+			if (result == "1") {
+				window.location.href = "play.html";
+			}
+		}
+	});
 }
 
 function showUserInfo() {
@@ -862,9 +856,13 @@ function showUpLoad() {
 											name = name.substring(0, 11);
 										}
 										num = num + 1;
-										$node = $("<div class='collection'><img title="
+										$node = $("<div class='collection'><img onclick='playUpVideo(this)' name="
+												+ item.upv_id
+												+ " title="
 												+ item.upv_name
-												+ " src='../image/wcg_images/noPicture.jpg'> <a style='cursor: pointer;'>"
+												+ " src='../image/wcg_images/noPicture.jpg'> <a onclick='playUpVideo(this)' name="
+												+ item.upv_id
+												+ " style='cursor: pointer;'>"
 												+ name
 												+ "</a></div><img onclick='deleteUploadVideo(this)' src='../image/wcg_images/cancel.png' style='width: 20px;height: 20px;float: left;margin-left: -30px;' name="
 												+ item.upv_id
