@@ -64,6 +64,7 @@ public class FileUploadController {
 			upvVideo = realPath + upvName + ext;
 			/* 上传文件 */
 			file.transferTo(new File(upvVideo));
+			upvVideo = "../video/uploadVideos/" + upvName + ext;
 			/* 插入操作并返回插入数据 */
 			List<Map<String, Object>> list = service.uploadVideo(upvName, userId, upvDate, upvVideo);
 			if (list.size() > 0) {
