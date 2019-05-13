@@ -1,5 +1,6 @@
 package com.graduation.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.graduation.dao.PlayDao;
 import com.graduation.service.PlayService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,16 @@ public class PlayServiceImpl implements PlayService {
     @Override
     public List getVideo(String video_id) {
         try {
-            return dao.getVideo(Integer.parseInt(video_id));
+            if (Integer.parseInt(video_id) > 0) {
+                return dao.getVideo(Integer.parseInt(video_id));
+            } else {
+                int upv_id = -Integer.parseInt(video_id);
+                List<Map<String, Object>> list = dao.getVideo_u(upv_id);
+                String introduce = "原创视频，这里可以记录您的生活小趣味，分享游戏竞猜瞬间！";
+                list.get(0).put("video_introduce", introduce);
+                list.get(0).put("video_danmu", "../aiqing.html");
+                return list;
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
@@ -40,7 +50,11 @@ public class PlayServiceImpl implements PlayService {
     @Override
     public List recommend(String video_id) {
         try {
-            return dao.recommend(Integer.parseInt(video_id));
+            int id = Integer.parseInt(video_id);
+            if (id < 0) {
+                id = 1;
+            }
+            return dao.recommend(id);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
@@ -139,6 +153,7 @@ public class PlayServiceImpl implements PlayService {
     public List history(int user_id) {
         try {
             List<Map<String, Object>> list = dao.getHistory(user_id);
+            System.out.println(JSON.toJSONString(list));
             return list;
         } catch (Exception e) {
             System.out.println(e.getMessage());

@@ -85,4 +85,11 @@ public interface PlayDao {
      * @return String
      */
     String getVidByName(@Param("video_name")String video_name);
+
+    /**
+     * 获取上传视频信息
+     * @param video_id
+     * @return List<Map<String, Object>>
+     */
+    List<Map<String,Object>> getVideo_u(@Param("video_id")int video_id);
 }

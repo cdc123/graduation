@@ -27,13 +27,13 @@ public class TestController {
 
     @PostMapping(value = {"/videoSession"})
     public String videoSession(HttpServletRequest request){
-        SessionUtils.set_session_int(request,"videosession",1); //存
+        SessionUtils.set_session_int(request,"videosession",-4); //存
         return SessionUtils.get_session_String(request,"videosession");  //取
     }
 
     @PostMapping(value = {"/userSession"})
     public String userSession(HttpServletRequest request,String user_id){
-        List<Map<String,Object>> list = service.usertest(user_id);
+        List<Map<String,Object>> list = service.usertest("34");
         SessionUtils.set_session_List(request,"sessionListForUser",list);//存
         System.out.println(JSON.toJSONString(list));
         return null;

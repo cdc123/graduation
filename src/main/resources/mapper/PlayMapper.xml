@@ -68,25 +68,51 @@
 
 	<!-- 获取历史记录 -->
 	<select id="getHistory" resultType="java.util.HashMap" parameterType="java.lang.Integer">
-    SELECT
-	h.user_id,
-	h.video_id,
-	h.history_time,
-	h.history_holder,
-	h.history_total,
-	v.video_name
-    FROM
-	history h
-    LEFT JOIN video v ON h.video_id = v.video_id
-    WHERE
-	h.user_id = #{user_id}
-    ORDER BY
-	h.history_time ASC
+		SELECT
+		h.user_id,
+		h.video_id,
+		h.history_time,
+		h.history_holder,
+		h.history_total,
+		v.video_name
+		FROM
+		history h
+		LEFT JOIN video v ON h.video_id = v.video_id
+		WHERE
+		h.user_id = #{user_id}
+		AND h.video_id &gt; 0
+		UNION
+		SELECT
+		h.user_id,
+		h.video_id,
+		h.history_time,
+		h.history_holder,
+		h.history_total,
+		u.upv_name 'video_name'
+		FROM
+		history h
+		LEFT JOIN uploadVideo u ON h.video_id = - u.upv_id
+		WHERE
+		h.user_id = #{user_id}
+		AND h.video_id &lt; 0
+		ORDER BY
+		history_time ASC
 	</select>
 
 	<!-- 获取视频id -->
 	<select id="getVidByName" resultType="java.lang.String" parameterType="java.lang.String">
     SELECT video_id FROM video WHERE video_name = #{video_name}
+	</select>
+
+	<!-- 获取上传视频信息 -->
+	<select id="getVideo_u" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+		SELECT
+	upv_video 'video_video',
+	upv_name 'video_name'
+        FROM
+	uploadVideo
+        WHERE
+	upv_id = #{video_id}
 	</select>
 
 </mapper> 
