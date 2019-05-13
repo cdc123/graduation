@@ -114,11 +114,35 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
 	}
 
 	@Override
+	public List<Map<String, Object>> getLimitFavouriteByUserId(int userId, int start) {
+		int end = start + 10;
+		List<Map<String, Object>> list = null;
+		try {
+			list = dao.getLimitFavouriteByUserId(userId, start, end);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
 	public List<Map<String, Object>> getUploadByUserId(String userId) {
 		List<Map<String, Object>> list = null;
 		try {
 			list = dao.getUploadByUserId(userId);
 		} catch (Exception e) {
+		}
+		return list;
+	}
+
+	@Override
+	public List<Map<String, Object>> getLimitUploadByUserId(int userId, int start) {
+		int end = start + 10;
+		List<Map<String, Object>> list = null;
+		try {
+			list = dao.getLimitUploadByUserId(userId, start, end);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return list;
 	}
@@ -151,4 +175,5 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
 		}
 		return list;
 	}
+
 }

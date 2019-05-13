@@ -5,6 +5,17 @@
 <title>个人信息主页</title>
 <link type="text/css" rel="stylesheet" href="../css/base.css">
 <link type="text/css" rel="stylesheet" href="../css/wcg_userInfo.css">
+<style type="text/css">
+#paging a {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+#paging2 a {
+	text-decoration: underline;
+	cursor: pointer;
+}
+</style>
 <script type="text/javascript" src="../js/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="../js/wcg_homePage.js"></script>
 <script type="text/javascript">
@@ -153,6 +164,28 @@
 					</p>
 				</div>
 				<div id="sowingListBody"></div>
+				<div style="width: 1000px; height: 80px; margin: 0 auto;">
+					<input type="text" id="currentPageNum1" style="display: none" />
+					<div id="paging"
+						style="width: 800px; height: 80px; margin: 0 auto;">
+						<div
+							style="width: 800px; height: 40px; text-align: center; font-size: 15px; line-height: 40px;">
+							<a onclick="showFirstPage()">首页</a>&nbsp;<a
+								onclick="showPreviousPage()">上一页</a>&nbsp;
+							<div id="pageNumItem" style="display: inline;">
+								<a title="1" onclick="choosePageNumItem(this)">1</a>
+							</div>
+							&nbsp;<a onclick="showNextPage()">下一页</a>&nbsp;<a
+								onclick="showLastPage()">尾页</a>
+						</div>
+						<div
+							style="width: 800px; height: 40px; text-align: center; font-size: 15px; line-height: 40px;">
+							跳转到&nbsp;<input type="text" id="collectionPageNum"
+								style="width: 30px;">&nbsp;页 <a onclick="gotoPage()">确定</a>,&nbsp;共[<span
+								id="totalPageNum">1</span>]页,&nbsp;[<span id="totalVideoNum">0</span>]条记录
+						</div>
+					</div>
+				</div>
 				<hr>
 				<a name="up" style="float: left; margin-top: -90px"></a>
 				<div id="videos">
@@ -164,6 +197,28 @@
 					</p>
 				</div>
 				<div id="videosBody"></div>
+				<div style="width: 1000px; height: 80px; margin: 0 auto;">
+					<input type="text" id="currentPageNum2" style="display: none">
+					<div id="paging2"
+						style="width: 800px; height: 80px; margin: 0 auto;">
+						<div
+							style="width: 800px; height: 40px; text-align: center; font-size: 15px; line-height: 40px;">
+							<a onclick="showFirstPage2()">首页</a>&nbsp;<a
+								onclick="showPreviousPage2()">上一页</a>&nbsp;
+							<div id="pageNumItem2" style="display: inline;">
+								<a title="1" onclick="choosePageNumItem2(this)">1</a>
+							</div>
+							&nbsp;<a onclick="showNextPage2()">下一页</a>&nbsp;<a
+								onclick="showLastPage2()">尾页</a>
+						</div>
+						<div
+							style="width: 800px; height: 40px; text-align: center; font-size: 15px; line-height: 40px;">
+							跳转到&nbsp;<input type="text" id="uploadPageNum"
+								style="width: 30px;">&nbsp;页 <a onclick="gotoPage2()">确定</a>,&nbsp;共[<span
+								id="totalPageNum2">1</span>]页,&nbsp;[<span id="totalVideoNum2">0</span>]条记录
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -54,6 +54,18 @@
 		t.user_id = ${userId})
 	</select>
 
+	<select id="getLimitFavouriteByUserId" parameterType="int"
+		resultType="java.util.HashMap">
+		select *
+		from video v
+		where v.video_id in
+		(select t.video_id
+		from favourite t where
+		t.user_id = ${userId})
+		order by v.video_id asc
+		limit ${start},${end}
+	</select>
+
 	<select id="getUploadByUserId" parameterType="string"
 		resultType="java.util.HashMap">
 		select *
@@ -61,9 +73,19 @@
 		where t.user_id = ${userId}
 	</select>
 
+	<select id="getLimitUploadByUserId" parameterType="int"
+		resultType="java.util.HashMap">
+		select *
+		from uploadVideo t
+		where t.user_id = ${userId}
+		order
+		by t.upv_id asc
+		limit ${start},${end}
+	</select>
+
 	<select id="getUpvVideoByName" parameterType="string"
 		resultType="java.util.HashMap">
-		select * 
+		select *
 		from uploadVideo t
 		where t.upv_name = ${upvName}
 	</select>
@@ -73,4 +95,6 @@
 		uploadVideo(upv_name,user_id,upv_date,upv_video)
 		values(${upvName},${userId},${upvDate},${upvVideo})
 	</insert>
+
+
 </mapper>

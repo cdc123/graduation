@@ -227,6 +227,22 @@ public class PersonalInfoController {
 		return list;
 	}
 
+	/* 分页显示收藏视频 */
+	@PostMapping(value = "/getLimitFavouriteByUserId")
+	public List<Map<String, Object>> getLimitFavouriteByUserId(HttpServletRequest request,
+			HttpServletResponse response) {
+		List<Map<String, Object>> list = null;
+		try {
+			list = service.getLimitFavouriteByUserId(Integer.valueOf(
+					((Map) ((JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"))).get(0)))
+							.get("user_id").toString()),
+					Integer.valueOf(request.getParameter("start")));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
 	/* 查询上传视频 */
 	@PostMapping(value = "/getUploadByUserId")
 	public List<Map<String, Object>> getUploadByUserId(HttpServletRequest request, HttpServletResponse response) {
@@ -235,6 +251,21 @@ public class PersonalInfoController {
 			list = service.getUploadByUserId(String.valueOf(
 					((Map) ((JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"))).get(0)))
 							.get("user_id").toString()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	/* 分页显示上传视频 */
+	@PostMapping(value = "/getLimitUploadByUserId")
+	public List<Map<String, Object>> getLimitUploadByUserId(HttpServletRequest request, HttpServletResponse response) {
+		List<Map<String, Object>> list = null;
+		try {
+			list = service.getLimitUploadByUserId(Integer.valueOf(
+					((Map) ((JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"))).get(0)))
+							.get("user_id").toString()),
+					Integer.valueOf(request.getParameter("start")));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -312,4 +343,5 @@ public class PersonalInfoController {
 //		}
 //		return flag;
 //	}
+
 }

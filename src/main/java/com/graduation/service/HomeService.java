@@ -15,6 +15,10 @@ public interface HomeService {
 
 	public List<Map<String, Object>> getVideoById(@Param("videoId") String videoId);
 
+	public List<Map<String, Object>> getUpVideoById(@Param("upvId") String upvId);
+
+	public List<Map<String, Object>> getUpVideoByName(@Param("upvName") String upvName);
+
 	public List<Map<String, Object>> getVideoBySort(@Param("videoSort") String videoSort);
 
 	public List<Map<String, Object>> getUploadVideo();

@@ -92,6 +92,29 @@ public class HomeServiceImpl implements HomeService {
 	}
 
 	@Override
+	public List<Map<String, Object>> getUpVideoById(String upvId) {
+		List<Map<String, Object>> list = null;
+		try {
+			list = dao.getUpVideoById(upvId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public List<Map<String, Object>> getUpVideoByName(String upvName) {
+		List<Map<String, Object>> list = null;
+		try {
+			upvName = "'" + upvName + "'";
+			list = dao.getUpVideoByName(upvName);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
 	public List<Map<String, Object>> getVideoBySort(String videoSort) {
 		List<Map<String, Object>> list = null;
 		try {

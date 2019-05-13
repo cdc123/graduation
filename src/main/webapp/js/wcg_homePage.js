@@ -23,22 +23,6 @@ $(function() {
 			}
 		});
 	});
-	/* 续播 */
-	$("#forHistory").on("click", "a", function(event) {
-		var target = $(event.target);
-		var videoName = target.text();
-		$.ajax({
-			type : "post",
-			url : "/home/getVideoByName",
-			data : {
-				"videoName" : videoName
-			},
-			dataType : "json",
-			success : function(res) {
-				location.href = "play.html";
-			}
-		});
-	});
 	/* 点击电影，剧集文字播放 */
 	$(".mt").on("click", "a", function(event) {
 		var target = $(event.target);
@@ -73,6 +57,7 @@ $(function() {
 	});
 });
 /*--------------------------------------------------*/
+/* 查询当前登录信息 */
 function getUserBySession() {
 	$.ajax({
 		type : "post",
@@ -319,86 +304,73 @@ function showHistory() {
 											function(n, value) {
 												/* 取出video_id */
 												var videoId = value.video_id;
-												var videoName = "";
-												/* 根据videoId查出视频名称,存入videoName */
-												$.ajax({
-													type : "post",
-													url : "/home/getVideoById",
-													data : {
-														"videoId" : videoId
-													},
-													dataType : "text",
-													async : false,
-													success : function(res) {
-														videoName = res;
-													}
-												});
-												/* 取出历史时间 */
-												var historyTime = new Date(
-														value.history_time);/* value.history_time */
-												/* 取出年份 */
-												var year = historyTime
-														.getFullYear()
-														+ "年";
-												/* 取出月，日 */
-												var month_date = historyTime
-														.getMonth()
-														+ 1
-														+ "月"
-														+ historyTime.getDate()
-														+ "日";
-												/* 取出时，分 */
-												var hour_minute = historyTime
-														.getHours()
-														+ "时"
-														+ historyTime
-																.getMinutes()
-														+ "分";
-												/* 取出数据计算出百分比 */
-												var historyHolder = Number(value.history_holder);
-												var historyTotal = Number(value.history_total);
-												var percent = Number(
-														(historyHolder / historyTotal) * 100)
-														.toFixed()
-														+ "%";
-												/* 组装$node */
-												var y = "<div class='year'>"
-														+ year + "</div>";
-												var m = "<div class='month_day'>"
-														+ month_date + "</div>";
-												var h = "<div class='sItem'><div class='hour_minute'>"
-														+ hour_minute
-														+ "</div><div class='context'><a id='play' href='#videoPlay(本视频播放页)'>"
-														+ videoName
-														+ "</a></div><div class='rate'>看到"
-														+ percent
-														+ "</div></div>";
-												if (Number(historyTime
-														.getFullYear()) > yearfirst) {
-													$history = $(y + m + h);
-													$("#forHistory").append(
-															$history);
-													yearfirst = Number(historyTime
-															.getFullYear());
-													monthfirst = Number(historyTime
-															.getMonth());
-													datefirst = Number(historyTime
-															.getDate());
-													hourfirst = Number(historyTime
-															.getHours());
-													minutefirst = Number(historyTime
-															.getMinutes());
-												} else {
-													if ((Number(historyTime
-															.getMonth()) > monthfirst)
-															|| (Number(historyTime
-																	.getMonth()) == monthfirst && Number(historyTime
-																	.getDate()) > datefirst)) {
-														$history = $(m + h);
+												if (Number(videoId) > 0) {
+													var videoName = "";
+													/* 根据videoId查出视频名称,存入videoName */
+													$
+															.ajax({
+																type : "post",
+																url : "/home/getVideoById",
+																data : {
+																	"videoId" : videoId
+																},
+																dataType : "text",
+																async : false,
+																success : function(
+																		res) {
+																	videoName = res;
+																}
+															});
+													/* 取出历史时间 */
+													var historyTime = new Date(
+															value.history_time);/* value.history_time */
+													/* 取出年份 */
+													var year = historyTime
+															.getFullYear()
+															+ "年";
+													/* 取出月，日 */
+													var month_date = historyTime
+															.getMonth()
+															+ 1
+															+ "月"
+															+ historyTime
+																	.getDate()
+															+ "日";
+													/* 取出时，分 */
+													var hour_minute = historyTime
+															.getHours()
+															+ "时"
+															+ historyTime
+																	.getMinutes()
+															+ "分";
+													/* 取出数据计算出百分比 */
+													var historyHolder = Number(value.history_holder);
+													var historyTotal = Number(value.history_total);
+													var percent = Number(
+															(historyHolder / historyTotal) * 100)
+															.toFixed()
+															+ "%";
+													/* 组装$node */
+													var y = "<div class='year'>"
+															+ year + "</div>";
+													var m = "<div class='month_day'>"
+															+ month_date
+															+ "</div>";
+													var h = "<div class='sItem'><div class='hour_minute'>"
+															+ hour_minute
+															+ "</div><div class='context'><a style='cursor:pointer' id='play' onclick='continuedBroadcasting(this)'>"
+															+ videoName
+															+ "</a></div><div class='rate'>看到"
+															+ percent
+															+ "</div></div>";
+													if (Number(historyTime
+															.getFullYear()) > yearfirst) {
+														$history = $(y + m + h);
 														$("#forHistory")
-																.children()
-																.eq(0)
-																.after($history);
+																.append(
+																		$history);
+														yearfirst = Number(historyTime
+																.getFullYear());
 														monthfirst = Number(historyTime
 																.getMonth());
 														datefirst = Number(historyTime
@@ -408,21 +380,156 @@ function showHistory() {
 														minutefirst = Number(historyTime
 																.getMinutes());
 													} else {
-														if ((historyTime
-																.getHours() > hourfirst)
-																|| ((historyTime
-																		.getHours() == hourfirst) && historyTime
-																		.getMinutes() > minutefirst)) {
-															$history = $(h);
+														if ((Number(historyTime
+																.getMonth()) > monthfirst)
+																|| (Number(historyTime
+																		.getMonth()) == monthfirst && Number(historyTime
+																		.getDate()) > datefirst)) {
+															$history = $(m + h);
 															$("#forHistory")
 																	.children()
-																	.eq(1)
+																	.eq(0)
 																	.after(
 																			$history);
+															monthfirst = Number(historyTime
+																	.getMonth());
+															datefirst = Number(historyTime
+																	.getDate());
 															hourfirst = Number(historyTime
 																	.getHours());
 															minutefirst = Number(historyTime
 																	.getMinutes());
+														} else {
+															if ((historyTime
+																	.getHours() > hourfirst)
+																	|| ((historyTime
+																			.getHours() == hourfirst) && historyTime
+																			.getMinutes() > minutefirst)) {
+																$history = $(h);
+																$("#forHistory")
+																		.children()
+																		.eq(1)
+																		.after(
+																				$history);
+																hourfirst = Number(historyTime
+																		.getHours());
+																minutefirst = Number(historyTime
+																		.getMinutes());
+															}
+														}
+													}
+												} else {
+													var videoName = "";
+													/* 根据upVideoId查出视频名称,存入upVideoName */
+													$
+															.ajax({
+																type : "post",
+																url : "/home/getUpVideoById",
+																data : {
+																	"upVideoId" : videoId
+																},
+																dataType : "text",
+																async : false,
+																success : function(
+																		res) {
+																	videoName = res;
+																}
+															});
+													/* 取出历史时间 */
+													var historyTime = new Date(
+															value.history_time);/* value.history_time */
+													/* 取出年份 */
+													var year = historyTime
+															.getFullYear()
+															+ "年";
+													/* 取出月，日 */
+													var month_date = historyTime
+															.getMonth()
+															+ 1
+															+ "月"
+															+ historyTime
+																	.getDate()
+															+ "日";
+													/* 取出时，分 */
+													var hour_minute = historyTime
+															.getHours()
+															+ "时"
+															+ historyTime
+																	.getMinutes()
+															+ "分";
+													/* 取出数据计算出百分比 */
+													var historyHolder = Number(value.history_holder);
+													var historyTotal = Number(value.history_total);
+													var percent = Number(
+															(historyHolder / historyTotal) * 100)
+															.toFixed()
+															+ "%";
+													/* 组装$node */
+													var y = "<div class='year'>"
+															+ year + "</div>";
+													var m = "<div class='month_day'>"
+															+ month_date
+															+ "</div>";
+													var h = "<div class='sItem'><div class='hour_minute'>"
+															+ hour_minute
+															+ "</div><div class='context'><a style='cursor:pointer' id='play' onclick='continuedBroadcasting2(this)'>"
+															+ videoName
+															+ "</a></div><div class='rate'>看到"
+															+ percent
+															+ "</div></div>";
+													if (Number(historyTime
+															.getFullYear()) > yearfirst) {
+														$history = $(y + m + h);
+														$("#forHistory")
+																.append(
+																		$history);
+														yearfirst = Number(historyTime
+																.getFullYear());
+														monthfirst = Number(historyTime
+																.getMonth());
+														datefirst = Number(historyTime
+																.getDate());
+														hourfirst = Number(historyTime
+																.getHours());
+														minutefirst = Number(historyTime
+																.getMinutes());
+													} else {
+														if ((Number(historyTime
+																.getMonth()) > monthfirst)
+																|| (Number(historyTime
+																		.getMonth()) == monthfirst && Number(historyTime
+																		.getDate()) > datefirst)) {
+															$history = $(m + h);
+															$("#forHistory")
+																	.children()
+																	.eq(0)
+																	.after(
+																			$history);
+															monthfirst = Number(historyTime
+																	.getMonth());
+															datefirst = Number(historyTime
+																	.getDate());
+															hourfirst = Number(historyTime
+																	.getHours());
+															minutefirst = Number(historyTime
+																	.getMinutes());
+														} else {
+															if ((historyTime
+																	.getHours() > hourfirst)
+																	|| ((historyTime
+																			.getHours() == hourfirst) && historyTime
+																			.getMinutes() > minutefirst)) {
+																$history = $(h);
+																$("#forHistory")
+																		.children()
+																		.eq(1)
+																		.after(
+																				$history);
+																hourfirst = Number(historyTime
+																		.getHours());
+																minutefirst = Number(historyTime
+																		.getMinutes());
+															}
 														}
 													}
 												}
@@ -442,6 +549,36 @@ function showHistory() {
 		});
 	}
 }
+/* 续播 */
+function continuedBroadcasting(event) {
+	var videoName = event.innerText;
+	$.ajax({
+		type : "post",
+		url : "/home/getVideoByName",
+		data : {
+			"videoName" : videoName
+		},
+		dataType : "json",
+		success : function(res) {
+			location.href = "play.html";
+		}
+	});
+}
+/* 续播2 */
+function continuedBroadcasting2(event) {
+	var videoName = event.innerText;
+	$.ajax({
+		type : "post",
+		url : "/home/getUpVideoByName",
+		data : {
+			"videoName" : videoName
+		},
+		dataType : "json",
+		success : function(res) {
+			location.href = "play.html";
+		}
+	});
+}
 /* 隐藏历史纪录 */
 function hideHistory() {
 	$("#forHistory").hide(200);
@@ -459,7 +596,7 @@ function collection() {
 		window.location.href = "wcg_userInfo.html#miao";
 	}
 }
-
+/* 首页显示电影 */
 function getMovie() {
 	var videoSort = "电影";
 	$
@@ -542,7 +679,7 @@ function getMovie() {
 			});
 
 }
-
+/* 首页显示剧集 */
 function getTeleplay() {
 	var videoSort = "剧集";
 	$
@@ -624,7 +761,7 @@ function getTeleplay() {
 				}
 			});
 }
-
+/* 首页显示上传 */
 function getUpload() {
 	$
 			.ajax({
@@ -684,7 +821,7 @@ function getUpload() {
 				}
 			});
 }
-
+/* 上传视频播放 */
 function playUpVideo(event) {
 	var upvId = event.name;
 	$.ajax({
@@ -701,7 +838,7 @@ function playUpVideo(event) {
 		}
 	});
 }
-
+/* 信息修改页面其余项初始化赋值 */
 function showUserInfo() {
 	/* 昵称初始值 */
 	$("input[name='user_name']").attr("value", $("#userName").val());
@@ -715,7 +852,7 @@ function showUserInfo() {
 	/* 简介初始值 */
 	$("textarea").text($("#userIntroduce").val());
 }
-
+/* 个人信息页面显示收藏视频 */
 function showFavourite() {
 	var userId = $("#userId").val();
 	$
@@ -729,48 +866,59 @@ function showFavourite() {
 				async : false,
 				success : function(result) {
 					var sum = result.length;
+					/* 显示总记录数 */
 					$("#sowingList span").text(sum);
-					var shang = sum / 5;
-					var yu = sum % 5;
+					$("#totalVideoNum").text(sum);
+					var shang = sum / 10;
+					var yu = sum % 10;
 					shang = Math.floor(shang);
 					if (yu > 0) {
 						shang += 1;
 					}
-					var height = shang * 320 + "px";
-					$("#sowingListBody").css("height", height);
-					var num = 0;
+					/* 显示总页数 */
+					$("#totalPageNum").text(shang);
+					/* 显示各页数选项 */
+					for (var i = 2; i < (shang + 1); i++) {
+						$pageNumItem = $("<a title=" + i
+								+ " onclick='choosePageNumItem(this)'>" + i
+								+ "</a>");
+						$("#pageNumItem").append($pageNumItem);
+					}
+					/* 显示当前页数为1 */
+					$("#currentPageNum1").val("1");
+					cleanUnderline();
 					var $node;
+					var num = 0;
 					$
 							.each(
 									result,
 									function(index, item) {
-										var name = item.video_name;
-										if (name.length > 11) {
-											name = name.substring(0, 11)
-													+ "...";
-										}
-										num = num + 1;
-										if (item.video_image != null
-												&& item.video_image != '') {
-											$node = $("<div class='collection'><img title="
-													+ item.video_name
-													+ " src='"
-													+ item.video_image
-													+ "'> <a style='cursor: pointer;'>"
-													+ name
-													+ "</a></div><img onclick='cancelCollection(this)' src='../image/wcg_images/cancel.png' style='width: 20px;height: 20px;float: left;margin-left: -30px;' name="
-													+ item.video_id
-													+ " title='取消收藏'>");
+										if (num > 9) {
+											return false;
 										} else {
-											$node = $("<div class='collection'><img title="
-													+ item.video_name
-													+ " src='../image/wcg_images/noPicture.jpg'> <a style='cursor: pointer;'>"
-													+ name
-													+ "</a></div><img onclick='cancelCollection(this)' src='../image/wcg_images/cancel.png' style='width: 20px;height: 20px;float: left;margin-left: -30px;' name="
-													+ item.video_id
-													+ " title='取消收藏'>");
+											var name = item.video_name;
+											if (name.length > 11) {
+												name = name.substring(0, 11)
+														+ "...";
+											}
+											var videoImage = "../image/wcg_images/noPicture.jpg";
+											if (item.video_image != null
+													&& item.video_image != '') {
+												videoImage = item.video_image;
+												$node = $("<div class='collection'><img title="
+														+ item.video_name
+														+ " src="
+														+ videoImage
+														+ "> <a style='cursor: pointer;'>"
+														+ name
+														+ "</a></div><img onclick='cancelCollection(this)' src='../image/wcg_images/cancel.png' style='width: 20px;height: 20px;float: left;margin-left: -30px;' name="
+														+ item.video_id
+														+ " title='取消收藏'>");
+											}
+											$("#sowingListBody").append($node);
+											num = num + 1;
 										}
-										$("#sowingListBody").append($node);
+
 									});
 				}
 			});
@@ -805,7 +953,141 @@ function showFavourite() {
 		});
 	});
 }
+/* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
+/* 收藏视频分页 */
+var start;
+/* 收藏视频分页点击首页 */
+function showFirstPage() {
+	var currentPageNum1 = Number($("#currentPageNum1").val());
+	if (currentPageNum1 != 1) {
+		$("#currentPageNum1").val(1);
+		start = 0;
+		cleanUnderline();
+		refreshCollection();
+	}
+}
+/* 收藏视频分页点击上一页 */
+function showPreviousPage() {
+	var currentPageNum1 = Number($("#currentPageNum1").val());
+	if (currentPageNum1 != 1) {
+		var previousPageNum = Number(currentPageNum1 - 1);
+		$("#currentPageNum1").val(previousPageNum);
+		start = Number(previousPageNum - 1) * 10;
+		cleanUnderline();
+		refreshCollection();
+	} else {
+		alert("这已经是第一页了");
+	}
+}
+/* 收藏视频分页点击数字页 */
+function choosePageNumItem(event) {
+	var currentPageNum1 = Number($("#currentPageNum1").val());
+	var choose = Number(event.title);
+	if (currentPageNum1 != choose) {
+		$("#currentPageNum1").val(choose);
+		start = (choose - 1) * 10;
+		cleanUnderline();
+		refreshCollection();
+	}
+}
+/* 收藏视频分页点击下一页 */
+function showNextPage() {
+	var currentPageNum1 = Number($("#currentPageNum1").val());
+	var totalPageNum = Number($("#totalPageNum").text());
+	if (currentPageNum1 != totalPageNum) {
+		var nextPageNum = currentPageNum1 + 1;
+		$("#currentPageNum1").val(nextPageNum);
+		start = currentPageNum1 * 10;
+		cleanUnderline();
+		refreshCollection();
+	} else {
+		alert("这已经是最后一页了");
+	}
+}
+/* 收藏视频分页点击尾页 */
+function showLastPage() {
+	var currentPageNum1 = Number($("#currentPageNum1").val());
+	var totalPageNum = Number($("#totalPageNum").text());
+	if (currentPageNum1 != totalPageNum) {
+		$("#currentPageNum1").val(totalPageNum);
+		start = (totalPageNum - 1) * 10;
+		cleanUnderline();
+		refreshCollection();
+	}
+}
+/* goto1 */
+function gotoPage() {
+	var gotoPageNum = $("#collectionPageNum").val();
+	var totalPageNum = Number($("#totalPageNum").text());
+	if (gotoPageNum != null && gotoPageNum != "") {
+		var regexNum = /^[0-9]+.?[0-9]*$/;
+		if (!regexNum.test(gotoPageNum)) {
+			alert("请输入数字");
+			$("#collectionPageNum").val("")
+		} else if (gotoPageNum < 1 || gotoPageNum > totalPageNum) {
+			alert("请输入正确的页数");
+			$("#collectionPageNum").val("")
+		} else {
+			$("#currentPageNum1").val(Number(gotoPageNum));
+			start = (Number(gotoPageNum) - 1) * 10;
+			cleanUnderline();
+			refreshCollection();
+		}
+	}
+}
+/* 清除当前页数的页数下划线 */
+function cleanUnderline() {
+	var currentPageNum1 = Number($("#currentPageNum1").val());
+	$("#pageNumItem a").attr("style",
+			"text-decoration: underline;cursor: pointer;");
+	$("#pageNumItem a[title=" + currentPageNum1 + "]").attr("style",
+			"text-decoration: none;cursor: pointer;");
+}
+/* 刷新收藏视频 */
+function refreshCollection() {
+	$
+			.ajax({
+				type : "post",
+				url : "/infoChange/getLimitFavouriteByUserId",
+				data : {
+					"start" : Number(start)
+				},
+				dataType : "json",
+				success : function(result) {
+					if (result != null && result != '') {
+						$("#sowingListBody").html("");
+						var $node;
+						$
+								.each(
+										result,
+										function(index, item) {
+											var name = item.video_name;
+											if (name.length > 11) {
+												name = name.substring(0, 11)
+														+ "...";
+											}
+											var videoImage = "../image/wcg_images/noPicture.jpg";
+											if (item.video_image != null
+													&& item.video_image != '') {
+												videoImage = item.video_image;
+												$node = $("<div class='collection'><img title="
+														+ item.video_name
+														+ " src="
+														+ videoImage
+														+ "> <a style='cursor: pointer;'>"
+														+ name
+														+ "</a></div><img onclick='cancelCollection(this)' src='../image/wcg_images/cancel.png' style='width: 20px;height: 20px;float: left;margin-left: -30px;' name="
+														+ item.video_id
+														+ " title='取消收藏'>");
+											}
+											$("#sowingListBody").append($node);
+										});
 
+					}
+				}
+			});
+}
+/* 取消收藏 */
 function cancelCollection(event) {
 	var videoId = event.name;
 	$.ajax({
@@ -822,7 +1104,9 @@ function cancelCollection(event) {
 		}
 	});
 }
-
+/* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+/* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
+/* 个人信息页面显示上传视频 */
 function showUpLoad() {
 	var userId = $("#userId").val();
 	$
@@ -836,43 +1120,194 @@ function showUpLoad() {
 				async : false,
 				success : function(result) {
 					var sum = result.length;
+					/* 显示总记录数 */
 					$("#videos span").text(sum);
-					var shang = sum / 5;
-					var yu = sum % 5;
+					$("#totalVideoNum2").text(sum);
+					var shang = sum / 10;
+					var yu = sum % 10;
 					shang = Math.floor(shang);
 					if (yu > 0) {
 						shang += 1;
 					}
-					var height = shang * 320 + "px";
-					$("#videosBody").css("height", height);
+					/* 显示总页数 */
+					$("#totalPageNum2").text(shang);
+					/* 显示各页数选项 */
+					for (var i = 2; i < (shang + 1); i++) {
+						$pageNumItem = $("<a title=" + i
+								+ " onclick='choosePageNumItem2(this)'>" + i
+								+ "</a>");
+						$("#pageNumItem2").append($pageNumItem);
+					}
+					/* 显示当前页数为1 */
+					$("#currentPageNum2").val("1");
+					cleanUnderline2();
 					var num = 0;
 					var $node;
 					$
 							.each(
 									result,
 									function(index, item) {
-										var name = item.upv_name;
-										if (name.length > 11) {
-											name = name.substring(0, 11);
+										if (num > 9) {
+											return false;
+										} else {
+											var name = item.upv_name;
+											if (name.length > 11) {
+												name = name.substring(0, 11);
+											}
+											num = num + 1;
+											$node = $("<div class='collection'><img onclick='playUpVideo(this)' name="
+													+ item.upv_id
+													+ " title="
+													+ item.upv_name
+													+ " src='../image/wcg_images/noPicture.jpg'> <a onclick='playUpVideo(this)' name="
+													+ item.upv_id
+													+ " style='cursor: pointer;'>"
+													+ name
+													+ "</a></div><img onclick='deleteUploadVideo(this)' src='../image/wcg_images/cancel.png' style='width: 20px;height: 20px;float: left;margin-left: -30px;' name="
+													+ item.upv_id
+													+ " title='删除上传'>");
+											$("#videosBody").append($node);
 										}
-										num = num + 1;
-										$node = $("<div class='collection'><img onclick='playUpVideo(this)' name="
-												+ item.upv_id
-												+ " title="
-												+ item.upv_name
-												+ " src='../image/wcg_images/noPicture.jpg'> <a onclick='playUpVideo(this)' name="
-												+ item.upv_id
-												+ " style='cursor: pointer;'>"
-												+ name
-												+ "</a></div><img onclick='deleteUploadVideo(this)' src='../image/wcg_images/cancel.png' style='width: 20px;height: 20px;float: left;margin-left: -30px;' name="
-												+ item.upv_id
-												+ " title='删除上传'>");
-										$("#videosBody").append($node);
 									});
 				}
 			});
 }
-
+/* 上传视频分页 */
+var start2;
+/* 上传视频分页点击首页 */
+function showFirstPage2() {
+	var currentPageNum2 = Number($("#currentPageNum2").val());
+	if (currentPageNum2 != 1) {
+		$("#currentPageNum2").val(1);
+		start2 = 0;
+		cleanUnderline2();
+		refreshUpload();
+	}
+}
+/* 上传视频分页点击上一页 */
+function showPreviousPage2() {
+	var currentPageNum2 = Number($("#currentPageNum2").val());
+	if (currentPageNum2 != 1) {
+		var previousPageNum2 = Number(currentPageNum2 - 1);
+		$("#currentPageNum2").val(previousPageNum2);
+		start2 = Number(previousPageNum2 - 1) * 10;
+		cleanUnderline2();
+		refreshUpload();
+	} else {
+		alert("这已经是第一页了");
+	}
+}
+/* 上传视频分页点击数字页 */
+function choosePageNumItem2(event) {
+	var currentPageNum2 = Number($("#currentPageNum2").val());
+	var choose = Number(event.title);
+	if (currentPageNum2 != choose) {
+		$("#currentPageNum2").val(choose);
+		start2 = Number(choose - 1) * 10;
+		cleanUnderline2();
+		refreshUpload();
+	}
+}
+/* 上传视频分页点击下一页 */
+function showNextPage2() {
+	var currentPageNum2 = Number($("#currentPageNum2").val());
+	var totalPageNum = Number($("#totalPageNum2").text());
+	if (currentPageNum2 != totalPageNum) {
+		var nextPageNum = Number(currentPageNum2 + 1);
+		$("#currentPageNum2").val(nextPageNum);
+		start2 = currentPageNum2 * 10;
+		cleanUnderline2();
+		refreshUpload();
+	} else {
+		alert("这已经是最后一页了");
+	}
+}
+/* 上传视频分页点击尾页 */
+function showLastPage2() {
+	var currentPageNum2 = Number($("#currentPageNum2").val());
+	var totalPageNum = Number($("#totalPageNum2").text());
+	if (currentPageNum2 != totalPageNum) {
+		$("#currentPageNum1").val(totalPageNum);
+		start2 = Number(totalPageNum - 1) * 10;
+		cleanUnderline2();
+		refreshUpload();
+	}
+}
+/* goto2 */
+function gotoPage2() {
+	var gotoPageNum = Number($("#uploadPageNum").val());
+	var totalPageNum = Number($("#totalPageNum2").text());
+	if (gotoPageNum != null && gotoPageNum != "") {
+		var regexNum = /^[0-9]+.?[0-9]*$/;
+		if (!regexNum.test(gotoPageNum)) {
+			alert("请输入数字");
+			$("#uploadPageNum").val("")
+		} else if (gotoPageNum < 1 || gotoPageNum > totalPageNum) {
+			alert("请输入正确的页数");
+			$("#uploadPageNum").val("")
+		} else {
+			$("#currentPageNum2").val(gotoPageNum);
+			start2 = Number(gotoPageNum - 1) * 10;
+			cleanUnderline2();
+			refreshUpload();
+		}
+	}
+}
+/* 清除当前页数的页数下划线 */
+function cleanUnderline2() {
+	var currentPageNum2 = Number($("#currentPageNum2").val());
+	$("#pageNumItem2 a").attr("style",
+			"text-decoration: underline;cursor: pointer;");
+	$("#pageNumItem2 a[title=" + currentPageNum2 + "]").attr("style",
+			"text-decoration: none;cursor: pointer;");
+}
+/* 刷新上传视频 */
+function refreshUpload() {
+	$
+			.ajax({
+				type : "post",
+				url : "/infoChange/getLimitUploadByUserId",
+				data : {
+					"start" : Number(start2)
+				},
+				dataType : "json",
+				success : function(result) {
+					if (result != null && result != '') {
+						$("#videosBody").html("");
+						var num = 0;
+						var $node;
+						$
+								.each(
+										result,
+										function(index, item) {
+											if (num > 9) {
+												return false;
+											} else {
+												var name = item.upv_name;
+												if (name.length > 11) {
+													name = name
+															.substring(0, 11);
+												}
+												$node = $("<div class='collection'><img onclick='playUpVideo(this)' name="
+														+ item.upv_id
+														+ " title="
+														+ item.upv_name
+														+ " src='../image/wcg_images/noPicture.jpg'> <a onclick='playUpVideo(this)' name="
+														+ item.upv_id
+														+ " style='cursor: pointer;'>"
+														+ name
+														+ "</a></div><img onclick='deleteUploadVideo(this)' src='../image/wcg_images/cancel.png' style='width: 20px;height: 20px;float: left;margin-left: -30px;' name="
+														+ item.upv_id
+														+ " title='删除上传'>");
+												$("#videosBody").append($node);
+												num = num + 1;
+											}
+										});
+					}
+				}
+			});
+}
+/* 删除上传 */
 function deleteUploadVideo(event) {
 	var upvId = event.name;
 	$.ajax({
@@ -888,4 +1323,4 @@ function deleteUploadVideo(event) {
 			}
 		}
 	});
-}
+}/* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */

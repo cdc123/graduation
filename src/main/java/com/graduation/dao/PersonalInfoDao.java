@@ -23,7 +23,13 @@ public interface PersonalInfoDao {
 
 	public List<Map<String, Object>> getFavouriteByUserId(@Param("userId") String userId);
 
+	public List<Map<String, Object>> getLimitFavouriteByUserId(@Param("userId") int userId, @Param("start") int start,
+			@Param("end") int end);
+
 	public List<Map<String, Object>> getUploadByUserId(@Param("userId") String userId);
+
+	public List<Map<String, Object>> getLimitUploadByUserId(@Param("userId") int userId, @Param("start") int start,
+			@Param("end") int end);
 
 	public List<Map<String, Object>> getUpvVideoByName(@Param("upvName") String upvName);
 

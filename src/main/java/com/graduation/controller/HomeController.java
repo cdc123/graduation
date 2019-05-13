@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.graduation.service.HomeService;
 
+import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 
 @RestController
@@ -118,6 +119,40 @@ public class HomeController {
 			if (list.size() > 0) {
 				request.getSession().setAttribute("videosession",
 						Integer.valueOf(((Map) (JSONArray.fromObject(list)).get(0)).get("video_id").toString()));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/* 根据上传视频ID查询视频名称 */
+	@PostMapping(value = "/getUpVideoById")
+	public String getUpVideoById(HttpServletRequest request) {
+		int upVideoId = 0;
+		String upVideoName = null;
+		try {
+			upVideoId = Integer.valueOf(request.getParameter("upVideoId"));
+			upVideoId = -upVideoId;
+			upVideoName = String
+					.valueOf(((Map) (JSONArray.fromObject(service.getUpVideoById(String.valueOf(upVideoId)))).get(0))
+							.get("upv_name").toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return upVideoName;
+	}
+
+	/* 根据上传视频名称查询视频 */
+	@PostMapping(value = "/getUpVideoByName")
+	public void getUpVideoByName(HttpServletRequest request) {
+		List<Map<String, Object>> list = null;
+		try {
+			list = service.getUpVideoByName(request.getParameter("videoName"));
+			if (list.size() > 0) {
+				int upvId = Integer.valueOf(((Map) (JSONArray.fromObject(list)).get(0)).get("upv_id").toString());
+				upvId = -upvId;
+				request.getSession().setAttribute("videosession", upvId);
+				System.out.println("videosession : " + upvId);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

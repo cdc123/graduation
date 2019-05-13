@@ -27,8 +27,12 @@ public interface PersonalInfoService {
 
 	public List<Map<String, Object>> getFavouriteByUserId(@Param("userId") String userId);
 
+	public List<Map<String, Object>> getLimitFavouriteByUserId(@Param("userId") int userId, @Param("start") int start);
+
 	public List<Map<String, Object>> getUploadByUserId(@Param("userId") String userId);
-	
+
+	public List<Map<String, Object>> getLimitUploadByUserId(@Param("userId") int userId, @Param("start") int start);
+
 	public List<Map<String, Object>> checkUpvName(@Param("videoName") String videoName);
 
 	public List<Map<String, Object>> uploadVideo(@Param("upvName") String upvName, @Param("userId") String userId,
