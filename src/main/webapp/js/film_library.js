@@ -1,172 +1,340 @@
-var i = 1;
-var arr = new Array('全部','全部','全部','最多播放');
-var resCount = 0;
-$(function () {
-    //二级菜单
-    $("#sorting_2_hidden").hide();
-    $("#sorting_2").hover(function () {
-        $("#sorting_2_hidden").show();
-        //$(this).css({'border':'1px rgb(221,221,221) solid','border-bottom':'none'})
-    },function () {
-        $("#sorting_2_hidden").hide();
-        //$(this).css('border','none')
-    });
-    $("#sorting_2_hidden").hover(function () {
-        $(this).show();
-    },function () {
-        $(this).hide();
-    });
-    //JS改变二级菜单排序类型
-    $("#sorting_2_hidden_1").click(function () {
-        var $sortname = $(this).text();
-        $("#sorting_2_show").text($sortname);
-    });
-    $("#sorting_2_hidden_2").click(function () {
-        var $sortname = $(this).text();
-        $("#sorting_2_show").text($sortname);
-    });
-    //展开收起
-    $("#show_and_hidden").click(function () {
-        if($("#be_cotrolled").is(":visible")){
-            $("#be_cotrolled").hide();
-            $("#header_part2").css('height','220px');
-            $("#show_and_hidden").css('background','url("../image/video_image/showtype.png") 0px -30px');
-        }else{
-            $("#be_cotrolled").show();
-            $("#header_part2").css('height','330px');
-            $("#show_and_hidden").css('background','url("../image/video_image/showtype.png") 0px 0px');
-        }
-    })
-    //类型click事件改变css
-    $("#sort li").click(function () {
-        $(this).children().css({'color':'white','background-color':'#2fb3ff'})
-        $(this).siblings().children().css({'color':'black','background-color':'white'});
-    });
-    $("#region li").click(function () {
-        $(this).children().css({'color':'white','background-color':'#2fb3ff'});
-        $(this).siblings().children().css({'color':'black','background-color':'white'});
-    });
-    $("#type li").click(function () {
-        $(this).children().css({'color':'white','background-color':'#2fb3ff'});
-        $(this).siblings().children().css({'color':'black','background-color':'white'});
-    })
-//______________________________________________________________________________________________________________________
-
-    showVideo();
-    //按分类分类
-    $("#sort a").click(function () {
-        arr[0]=$(this).text();
-        showVideo();
-    });
-    //按地区分类
-    $("#region a").click(function () {
-        arr[1]=$(this).text();
-        showVideo();
-    });
-    //按类型分类
-    $("#type a").click(function () {
-        arr[2]=$(this).text();
-        showVideo();
-    });
-    //排序
-    $("#sorting_2_hidden a").click(function () {
-        arr[3]=$(this).text();
-        showVideo();
-    });
-    //分页
-    //下一页
-    $("#next").click(function () {
-        var count = Math.ceil( resCount/ 5);
-        if (i < count) {
-            i ++;
-        } else {
-            i = count;
-        }
-        //$("#video_list").children().remove();
-        showVideo();
-    })
-    //上一页
-    $("#pre").click(function () {
-        if (i <= 1) {
-            i = 1;
-        } else {
-            i--;
-        }
-        // $("#video_list").children().remove();
-        showVideo();
-    });
-    //把video_id存到session里面，给达成调用
-    $("body").on("click",".video",function () {
-        var video_name = $(this).find("a").eq(0).text();
-        //alert(video_name);
-        $.ajax({
-            url: "/GetVideo_idByVideo_nameServlet",
-            type: "post",
-            data: {"video_name":video_name},
-            dataType: "json",
-            success: function (result) {
-                showVideo();
-                location.href = "play.html";
-            }
-        })
-    })
-    //搜索框
-    $("#search_list").hide();
-    $("#search_button").click(function () {
-        var search = $("#search").val();
-        $("#sul").children().remove();
-        if(search !=null && search!="") {
-            $.ajax({
-                url: "/SearchVideoServlet",
-                type: "post",
-                data: {"video_name": search},
-                dataType: "json",
-                success: function (result) {
-                    if (result.length > 0) {
-                        $("#search_list").show();
-                        for (i = 0; i < result.length; i++) {
-                            $("#sul").append('<li><p class="searchitem">' + result[i].video_name + '</p></li>');
-                        }
-                    }else {
-                        $("#search_list").show();
-                        $("#sul").append('<li><i>1</i>&nbsp;海绵宝宝</li><li><i>2</i>&nbsp;小猪佩奇</li><li><i>3</i>&nbsp;了不起的盖茨比</li>');
-                    }
-                }, error: function () {
-                    alert(result);
-                }
-            });
-        }
-    });
-    //搜索框视频名点击跳转到播放页
-    $("#search_list").on("click",".searchitem",function () {
-        var video_name = $(this).text();
-        //alert(video_name);
-        $.ajax({
-            url: "/GetVideo_idByVideo_nameServlet",
-            type: "post",
-            data: {"video_name":video_name},
-            dataType: "json",
-            success: function (result) {
-                location.href="play.html";
-            }
-        });
-    });
+$(function() {
+	getVideoSort();
+	getVideoRegion();
+	getVideoType();
+	getSelectVideo();
 });
-function showVideo(){
-    $.ajax({
-        url: "/YfShowVideoServlet",
-        type: "post",
-        data: {"sort": arr[0], "region": arr[1], "type": arr[2], "order": arr[3],"num":i},
-        dataType: "json",
-        success: function (result) {
-            $("#video_list").children().remove();
-            for (var i = 0; i < result.length-1; i++) {
-                var node = '<div class="video"><img src="' + result[i].video_image + '"><ul><li><a href="" class="video_name">' + result[i].video_name + '</a></li><li><a class="playtimes"><i>' + result[i].video_playtimes + '</i>次播放</a></ul></ul></div>';
-                $("#video_list").append(node);
-                $("#sorting_4 i").text(result[result.length-1]);
-            }
-            //查询条数
-            resCount = result[result.length-1];
-        }
-    })
+
+function getVideoSort() {
+	$("#flSort").val("全部");
+	$
+			.ajax({
+				type : "post",
+				url : "/filmLibrary/getVideoSort",
+				dataType : "json",
+				async : false,
+				success : function(result) {
+					if (result != null && result != "") {
+						$
+								.each(
+										result,
+										function(index, item) {
+											var sort = item.video_sort;
+											$node = $("<a name="
+													+ sort
+													+ " onclick='getSelectSort(this)' style='margin-left:10px'>"
+													+ sort + "</a>");
+											$("a[name='上传']").before($node);
+										});
+					}
+				}
+			});
 }
+
+function getSelectSort(event) {
+	var sort = event.name;
+	$("#flSort").val(sort);
+	$("#flSort a").css("color", "#666");
+	event.style.color = "red";
+	start = 0;
+	getSelectVideo();
+}
+
+function getVideoRegion() {
+	$("#flRegion").val("全部");
+	$
+			.ajax({
+				type : "post",
+				url : "/filmLibrary/getVideoRegion",
+				dataType : "json",
+				async : false,
+				success : function(result) {
+					if (result != null && result != "") {
+						$
+								.each(
+										result,
+										function(index, item) {
+											var region = item.video_region;
+											$node = $("<a name="
+													+ region
+													+ " onclick='getSelectRegion(this)' style='margin-left:10px'>"
+													+ region + "</a>");
+											$("#flRegion").append($node);
+										});
+					}
+				}
+			});
+}
+
+function getSelectRegion(event) {
+	var region = event.name;
+	$("#flRegion").val(region);
+	$("#flRegion a").css("color", "#666");
+	event.style.color = "red";
+	start = 0;
+	getSelectVideo();
+}
+
+function getVideoType() {
+	$("#flType").val("全部");
+	$
+			.ajax({
+				type : "post",
+				url : "/filmLibrary/getVideoType",
+				dataType : "json",
+				async : false,
+				success : function(result) {
+					$
+							.each(
+									result,
+									function(index, item) {
+										var type = item.video_type;
+										$node = $("<a name="
+												+ type
+												+ " onclick='getSelectType(this)' style='margin-left:10px'>"
+												+ type + "</a>");
+										$("#flType").append($node);
+									});
+				}
+			});
+}
+
+function getSelectType(event) {
+	var type = event.name;
+	$("#flType").val(type);
+	$("#flType a").css("color", "#666");
+	event.style.color = "red";
+	start = 0;
+	getSelectVideo();
+}
+
+var start = 0;
+/* 获取视频 */
+function getSelectVideo() {
+	var sort = String($("#flSort").val());
+	var region = String($("#flRegion").val());
+	var type = String($("#flType").val());
+	var order = Number($("#flOrder").val());
+	if (sort != "上传") {
+		$
+				.ajax({
+					type : "post",
+					url : "/filmLibrary/getLimitVideoBySRTO",
+					data : {
+						"sort" : sort,
+						"region" : region,
+						"type" : type,
+						"order" : order
+					},
+					dataType : "json",
+					async : false,
+					success : function(result) {
+						$("#videoArea").html("");
+						if (result != null && result != "") {
+							var totalVideoNum = result.length;
+							/* 显示总视频数 */
+							$("#totalVideoNum").text(totalVideoNum);
+							/* 显示总页数 */
+							var shang = Number(totalVideoNum) / 18;
+							shang = Math.floor(shang);
+							var yu = Number(totalVideoNum) % 18;
+							if (yu > 0) {
+								shang = shang + 1;
+							}
+							$("#totalPageNum").text(shang);
+							/* 显示各页数选项 */
+							$("#pageNumItem")
+									.html(
+											"<a title='1' onclick='choosePageNumItem(this)'>1</a> ");
+							for (var i = 2; i < (shang + 1); i++) {
+								$pageNumItem = $("<a title=" + i
+										+ " onclick='choosePageNumItem(this)'>"
+										+ i + "</a> ");
+								$("#pageNumItem").append($pageNumItem);
+							}
+							/* 显示当前页数为1 */
+							$("#currentPageNum").val(1);
+							cleanUnderline();
+							var num = 0;
+							$
+									.each(
+											result,
+											function(index, item) {
+
+												if (num > 17) {
+													return false;
+												} else {
+													var name = item.video_name;
+													if (name.length > 10) {
+														name = name.substring(
+																0, 10)
+																+ "...";
+													}
+													var videoImage = "../image/wcg_images/noPicture.jpg";
+													if (item.video_image != null
+															&& item.video_image != "") {
+														videoImage = item.video_image;
+													}
+													var $node = $("<div style='width: 200px; height: 300px; float: left; margin-left: 13px; margin-top: 10px;'><div style='width: 180px; height: 260px; margin: 0 auto;''><img title="
+															+ item.video_name
+															+ " src="
+															+ videoImage
+															+ " style='width: 100%; height: 100%;'></div><div style='width: 180px; height: 40px; margin: 0 auto;'><p title="
+															+ item.video_name
+															+ " style='width: 100%; height: 100%; font-size: 16px; line-height: 40px; text-align: center;'>"
+															+ name
+															+ "</p></div></div>");
+													$("#videoArea").append(
+															$node);
+													num = num + 1;
+												}
+											});
+						}
+					}
+				});
+	} else {
+		/* 上传情况 */
+	}
+}
+/* 分页start */
+function showFirstPage() {
+	var currentPageNum = Number($("#currentPageNum").val());
+	if (currentPageNum != 1) {
+		$("#currentPageNum1").val(1);
+		start = 0;
+		cleanUnderline();
+		refresh();
+	}
+}
+function showPreviousPage() {
+	var currentPageNum = Number($("#currentPageNum").val());
+	if (currentPageNum != 1) {
+		var previousPageNum = Number(currentPageNum - 1);
+		$("#currentPageNum").val(previousPageNum);
+		start = Number(previousPageNum - 1) * 18;
+		cleanUnderline();
+		refresh();
+	} else {
+		layer.msg("这已经是第一页了");
+	}
+}
+function choosePageNumItem(event) {
+	var currentPageNum = Number($("#currentPageNum").val());
+	var choose = Number(event.title);
+	if (currentPageNum != choose) {
+		$("#currentPageNum").val(choose);
+		start = Number(choose - 1) * 18;
+		cleanUnderline();
+		refresh();
+	}
+}
+function showNextPage() {
+	var currentPageNum = Number($("#currentPageNum").val());
+	var totalPageNum = Number($("#totalPageNum").text());
+	if (currentPageNum != totalPageNum) {
+		var nextPageNum = Number(currentPageNum + 1);
+		$("#currentPageNum").val(nextPageNum);
+		start = currentPageNum * 18;
+		cleanUnderline();
+		refresh();
+	} else {
+		layer.msg("这已经是最后一页了");
+	}
+}
+function showLastPage() {
+	var currentPageNum = Number($("#currentPageNum").val());
+	var totalPageNum = Number($("#totalPageNum").text());
+	if (currentPageNum != totalPageNum) {
+		$("#currentPageNum").val(totalPageNum);
+		start = Number(totalPageNum - 1) * 18;
+		cleanUnderline();
+		refresh();
+	}
+}
+function gotoPage() {
+	var gotoPageNum = $("#pageNum").val();
+	var totalPageNum = Number($("#totalPageNum").text());
+	if (gotoPageNum != null && gotoPageNum != "") {
+		var regexNum = /^[0-9]+.?[0-9]*$/;
+		if (!regexNum.test(gotoPageNum)) {
+			layer.msg("请输入数字");
+			$("#pageNum").val("")
+		} else if (gotoPageNum < 1 || gotoPageNum > totalPageNum) {
+			layer.msg("请输入正确的页数");
+			$("#pageNum").val("")
+		} else {
+			$("#currentPageNum").val(Number(gotoPageNum));
+			start = (Number(gotoPageNum) - 1) * 18;
+			cleanUnderline();
+			refresh();
+		}
+	}
+}
+function cleanUnderline() {
+	var currentPageNum = Number($("#currentPageNum").val());
+	$("#pageNumItem a").attr("style",
+			"text-decoration: underline;cursor: pointer;");
+	$("#pageNumItem a[title=" + currentPageNum + "]").attr("style",
+			"text-decoration: none;cursor: pointer;");
+}
+
+function refresh() {
+	var sort = String($("#flSort").val());
+	var region = String($("#flRegion").val());
+	var type = String($("#flType").val());
+	/*
+	 * 1:video_id desc; 2:video_id asc; 3:video_playtimes desc;
+	 * 4:video+playtimes asc
+	 */
+	var order = Number($("#flOrder").val());
+	if (sort != "上传") {
+		$
+				.ajax({
+					type : "post",
+					url : "/filmLibrary/getLimitVideoBySRTO",
+					data : {
+						"sort" : sort,
+						"region" : region,
+						"type" : type,
+						"order" : order,
+						"start" : Number(start)
+					},
+					dataType : "json",
+					async : false,
+					success : function(result) {
+						if (result != null && result != "") {
+							$("#videoArea").html("");
+							$
+									.each(
+											result,
+											function(index, item) {
+												var name = item.video_name;
+												if (name.length > 10) {
+													name = name
+															.substring(0, 10)
+															+ "...";
+												}
+												var videoImage = "../image/wcg_images/noPicture.jpg";
+												if (item.video_image != null
+														&& item.video_image != "") {
+													videoImage = item.video_image;
+												}
+												var $node = $("<div style='width: 200px; height: 300px; float: left; margin-left: 13px; margin-top: 10px;'><div style='width: 180px; height: 260px; margin: 0 auto;''><img title="
+														+ item.video_name
+														+ " src="
+														+ videoImage
+														+ " style='width: 100%; height: 100%;'></div><div style='width: 180px; height: 40px; margin: 0 auto;'><p title="
+														+ item.video_name
+														+ " style='width: 100%; height: 100%; font-size: 16px; line-height: 40px; text-align: center;'>"
+														+ name
+														+ "</p></div></div>");
+												$("#videoArea").append($node);
+											});
+						}
+					}
+				});
+	} else {
+		/* sort为上传的时候 */
+	}
+}
+/* 分页end */

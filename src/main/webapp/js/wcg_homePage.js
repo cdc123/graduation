@@ -976,7 +976,7 @@ function showPreviousPage() {
 		cleanUnderline();
 		refreshCollection();
 	} else {
-		alert("这已经是第一页了");
+		layer.msg("这已经是第一页了");
 	}
 }
 /* 收藏视频分页点击数字页 */
@@ -1001,7 +1001,7 @@ function showNextPage() {
 		cleanUnderline();
 		refreshCollection();
 	} else {
-		alert("这已经是最后一页了");
+		layer.msg("这已经是最后一页了");
 	}
 }
 /* 收藏视频分页点击尾页 */
@@ -1022,10 +1022,10 @@ function gotoPage() {
 	if (gotoPageNum != null && gotoPageNum != "") {
 		var regexNum = /^[0-9]+.?[0-9]*$/;
 		if (!regexNum.test(gotoPageNum)) {
-			alert("请输入数字");
+			layer.msg("请输入数字");
 			$("#collectionPageNum").val("")
 		} else if (gotoPageNum < 1 || gotoPageNum > totalPageNum) {
-			alert("请输入正确的页数");
+			layer.msg("请输入正确的页数");
 			$("#collectionPageNum").val("")
 		} else {
 			$("#currentPageNum1").val(Number(gotoPageNum));
