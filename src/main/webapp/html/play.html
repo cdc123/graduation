@@ -77,7 +77,7 @@
                     }
                     show();
                 }, error: function () {
-                    alert("展示数据错误！！");
+                    // alert("展示数据错误！！");
                 }
             });
 
@@ -104,7 +104,7 @@
                         $(".tag_1_1").text(result[0].video_name);
                         $(".intro_2").children().text(result[0].video_introduce);
                     }, error: function () {
-                        alert("失败！！");
+                        // alert("失败！！");
                     }
                 });
                 //登陆后
@@ -121,7 +121,7 @@
                                 $(".top_4_2").children().children().children().eq(1).text('"已收藏"');
                             }
                         }, error: function () {
-                            alert("展示数据错误！！");
+                            // alert("展示数据错误！！");
                         }
                     });
                     //点击收藏
@@ -137,7 +137,7 @@
                                     $(".top_4_2").children().children().children().eq(1).text('"已收藏"');
                                 }
                             }, error: function () {
-                                alert("展示数据错误！！");
+                                // alert("展示数据错误！！");
                             }
                         });
                     });
@@ -213,7 +213,7 @@
                                     hourfirst = Number(historyTime.getHours());
                                     minutefirst = Number(historyTime.getMinutes());
                                 } else {
-                                    if ((Number(historyTime.getMonth()) > monthfirst) || (Number(historyTime.getMonth()) == monthfirst && Number(historyTime.getDate()) > datefirst)) {
+                                    if ((Number(historyTime.getMonth()+1) > monthfirst) || (Number(historyTime.getMonth()+1) == monthfirst && Number(historyTime.getDate()) > datefirst)) {
                                         $history = $(m + h);
                                         $("#forHistory").children().eq(0).after($history);
                                         monthfirst = Number(historyTime.getMonth()+1);
@@ -349,7 +349,7 @@
                             rsCount = jsonArray[jsonArray.length - 1].count;
                         },
                         error: function () {
-                            alert("第一页展示数据错误！！");
+                            // alert("第一页展示数据错误！！");
                         },
                     });
                 }
@@ -366,7 +366,7 @@
                         }
                     },
                     error: function () {
-                        alert("第一页展示数据错误！！");
+                        // alert("第一页展示数据错误！！");
                     }
                 });
                 load();
@@ -403,7 +403,7 @@
                                 load();
                             },
                             error: function () {
-                                alert("评论错误！！");
+                                // alert("评论错误！！");
                             },
                         });
                     }else {
@@ -493,46 +493,46 @@
                 <div class="play_3_2">
                     <a class="play_3_2_1" href="#" id="ff"
                        style="width: 160px;height: 90px;float: left; margin-left: 10px;margin-right: 10px;overflow:hidden;position: relative;">
-                        <img src="../image/video_image/video_image.jpg"
+                        <img src="../image/play/black.png"
                              style="width: 160px;height: 256px;position: relative;"/>
                     </a>
                     <div class="play_3_2_2">
-                        <a href="#" title="众人合力 唤醒林动回归">众人合力 唤醒林动回归</a>
+                        <a href="#" title=""></a>
                     </div>
-                    <div class="play_3_2_3"><span>8679次播放</span></div>
+                    <div class="play_3_2_3"><span></span></div>
                 </div>
                 <div class="play_3_2">
                     <a class="play_3_2_1" href="#" id="gg"
                        style="width: 160px;height: 90px;float: left; margin-left: 10px;margin-right: 10px;overflow:hidden;position: relative;">
-                        <img src="../image/play/054102015B792A2F00000176D30D19D4.jpg"
+                        <img src="../image/play/black.png"
                              style="width: 160px;height: 256px;position: relative;"/>
                     </a>
                     <div class="play_3_2_2">
-                        <a href="#" title="众人合力 唤醒林动回归">众人合力 唤醒林动回归</a>
+                        <a href="#" title=""></a>
                     </div>
-                    <div class="play_3_2_3"><span>8679次播放</span></div>
+                    <div class="play_3_2_3"><span></span></div>
                 </div>
                 <div class="play_3_2">
                     <a class="play_3_2_1" href="#" id="hh"
                        style="width: 160px;height: 90px;float: left; margin-left: 10px;margin-right: 10px;overflow:hidden;position: relative;">
-                        <img src="../image/play/054102015B792A2F00000176D30D19D4.jpg"
+                        <img src="../image/play/black.png"
                              style="width: 160px;height: 256px;position: relative;"/>
                     </a>
                     <div class="play_3_2_2">
-                        <a href="#" title="众人合力 唤醒林动回归">众人合力 唤醒林动回归</a>
+                        <a href="#" title=""></a>
                     </div>
-                    <div class="play_3_2_3"><span>8679次播放</span></div>
+                    <div class="play_3_2_3"><span></span></div>
                 </div>
                 <div class="play_3_2">
                     <a class="play_3_2_1" href="#" id="ii"
                        style="width: 160px;height: 90px;float: left; margin-left: 10px;margin-right: 10px;overflow:hidden;position: relative;">
-                        <img src="../image/play/054102015B792A2F00000176D30D19D4.jpg"
+                        <img src="../image/play/black.png"
                              style="width: 160px;height: 256px;position: relative;"/>
                     </a>
                     <div class="play_3_2_2">
-                        <a href="#" title="众人合力 唤醒林动回归">众人合力 唤醒林动回归</a>
+                        <a href="#" title=""></a>
                     </div>
-                    <div class="play_3_2_3"><span>8679次播放</span></div>
+                    <div class="play_3_2_3"><span></span></div>
                 </div>
             </div>
         </div>
@@ -558,34 +558,34 @@
         <div class="recommend_2">
             <ul>
                 <li class="recommend_2_1">
-                    <a href="#" id="aa"><img src="../image/play/introduce.png" class="recommend_2_2" width="150"
+                    <a href="#" id="aa"><img src="../image/play/write.png" class="recommend_2_2" width="150"
                                              height="240">
                     </a>
-                    <p class="recommend_2_3">欢乐喜剧人</p>
+                    <p class="recommend_2_3"></p>
                 </li>
                 <li class="recommend_2_1">
-                    <a href="#" id="bb"><img src="../image/play/introduce.png" class="recommend_2_2" width="150"
+                    <a href="#" id="bb"><img src="../image/play/write.png" class="recommend_2_2" width="150"
                                              height="240">
                     </a>
-                    <p class="recommend_2_3">欢乐喜剧人</p>
+                    <p class="recommend_2_3"></p>
                 </li>
                 <li class="recommend_2_1">
-                    <a href="#" id="cc"><img src="../image/play/introduce.png" class="recommend_2_2" width="150"
+                    <a href="#" id="cc"><img src="../image/play/write.png" class="recommend_2_2" width="150"
                                              height="240">
                     </a>
-                    <p class="recommend_2_3">欢乐喜剧人</p>
+                    <p class="recommend_2_3"></p>
                 </li>
                 <li class="recommend_2_1">
-                    <a href="#" id="dd"><img src="../image/play/introduce.png" class="recommend_2_2" width="150"
+                    <a href="#" id="dd"><img src="../image/play/write.png" class="recommend_2_2" width="150"
                                              height="240">
                     </a>
-                    <p class="recommend_2_3">欢乐喜剧人</p>
+                    <p class="recommend_2_3"></p>
                 </li>
                 <li class="recommend_2_1">
-                    <a href="#" id="ee"><img src="../image/play/introduce.png" class="recommend_2_2" width="150"
+                    <a href="#" id="ee"><img src="../image/play/write.png" class="recommend_2_2" width="150"
                                              height="240">
                     </a>
-                    <p class="recommend_2_3">欢乐喜剧人</p>
+                    <p class="recommend_2_3"></p>
                 </li>
             </ul>
         </div>
@@ -629,16 +629,16 @@
                         <div class="comments-body-item">
                             <div class="comments-body-item1">
                                 <div class="comments-user-avatar">
-                                    <a href="####" target="_blank"><img src="../img/a.jpg" height="50" width="50"/></a>
+                                    <a href="####" target="_blank"><img src="../image/play/write.png" height="50" width="50"/></a>
                                 </div>
                                 <div class="comments-user-info">
                                     <a href="####" target="_blank">
-                                        用户：未取名用户
+
                                     </a>
                                 </div>
                                 <div class="comments-text">
                                     <p>
-                                        难道就我觉得还不错？？？？[爱心]继续支持
+                                        成为第一个评论此片的人吧！
                                     </p>
                                 </div>
                                 <div class="comment-time">评论时间</div>
@@ -647,91 +647,91 @@
                         <div class="comments-body-item">
                             <div class="comments-body-item1">
                                 <div class="comments-user-avatar">
-                                    <a href="####" target="_blank"><img src="../img/a.jpg" height="50" width="50"/></a>
+                                    <a href="####" target="_blank"><img src="../image/play/write.png" height="50" width="50"/></a>
                                 </div>
                                 <div class="comments-user-info">
                                     <a href="####" target="_blank">
-                                        暮笙88800
+
                                     </a>
                                 </div>
                                 <div class="comments-text">
                                     <p>
-                                        难道就我觉得还不错？？？？[爱心]继续支持
+
                                     </p>
                                 </div>
-                                <div class="comment-time">点赞 评论</div>
+                                <div class="comment-time"></div>
                             </div>
                         </div>
                         <div class="comments-body-item">
                             <div class="comments-body-item1">
                                 <div class="comments-user-avatar">
-                                    <a href="####" target="_blank"><img src="../img/a.jpg" height="50" width="50"/></a>
+                                    <a href="####" target="_blank"><img src="../image/play/write.png" height="50" width="50"/></a>
                                 </div>
                                 <div class="comments-user-info">
                                     <a href="####" target="_blank">
-                                        暮笙88800
+
                                     </a>
                                 </div>
                                 <div class="comments-text">
                                     <p>
-                                        难道就我觉得还不错？？？？[爱心]继续支持
+
                                     </p>
                                 </div>
-                                <div class="comment-time">点赞 评论</div>
+                                <div class="comment-time"></div>
                             </div>
                         </div>
                         <div class="comments-body-item">
                             <div class="comments-body-item1">
                                 <div class="comments-user-avatar">
-                                    <a href="####" target="_blank"><img src="../img/a.jpg" height="50" width="50"/></a>
+                                    <a href="####" target="_blank"><img src="../image/play/write.png" height="50" width="50"/></a>
                                 </div>
                                 <div class="comments-user-info">
                                     <a href="####" target="_blank">
-                                        暮笙88800
+
                                     </a>
                                 </div>
                                 <div class="comments-text">
                                     <p>
-                                        难道就我觉得还不错？？？？[爱心]继续支持
+
                                     </p>
                                 </div>
-                                <div class="comment-time">点赞 评论</div>
+                                <div class="comment-time"></div>
                             </div>
                         </div>
                         <div class="comments-body-item">
                             <div class="comments-body-item1">
                                 <div class="comments-user-avatar">
-                                    <a href="####" target="_blank"><img src="../img/a.jpg" height="50" width="50"/></a>
+                                    <a href="####" target="_blank"><img src="../image/play/write.png" height="50" width="50"/></a>
                                 </div>
                                 <div class="comments-user-info">
                                     <a href="####" target="_blank">
-                                        暮笙88800
+
                                     </a>
                                 </div>
                                 <div class="comments-text">
                                     <p>
-                                        难道就我觉得还不错？？？？[爱心]继续支持
+
                                     </p>
                                 </div>
-                                <div class="comment-time">点赞 评论</div>
+                                <div class="comment-time"></div>
                             </div>
                         </div>
                         <div class="comments-body-item">
                             <div class="comments-body-item1">
                                 <div class="comments-user-avatar">
-                                    <a href="####" target="_blank"><img src="../img/a.jpg" height="50" width="50"/></a>
+                                    <a href="####" target="_blank"><img src="../image/play/write.png" height="50" width="50"/></a>
                                 </div>
                                 <div class="comments-user-info">
                                     <a href="####" target="_blank">
-                                        暮笙88800
+
                                     </a>
                                 </div>
                                 <div class="comments-text">
                                     <p>
-                                        难道就我觉得还不错？？？？[爱心]继续支持
+
                                     </p>
                                 </div>
-                                <div class="comment-time">点赞 评论</div>
+                                <div class="comment-time"></div>
                             </div>
                         </div>
                     </div>
@@ -769,7 +769,7 @@
                     target="_blank" href="//mapp.youku.com/service/zhanghuzhuxiao" class="mr0">《账号注销协议》</a>和
             </dd>
             <dd><a target="_blank" href="//mapp.youku.com/service/agreementALL" class="mr0">历史协议文本</a></dd>
-            <dd>Copyright©2017 优酷 youku.com 版权所有</dd>
+            <dd>Copyright©2019 QK 版权所有</dd>
             <dd><a target="_blank" href="//mapp.youku.com/service/0108283">信息网络传播视听节目许可证0108283号</a></dd>
         </dl>
         <dl class="g-w3">
