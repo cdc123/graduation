@@ -638,7 +638,10 @@ function getMovie() {
 														+ " title="
 														+ item.video_name
 														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ name + "</a></div>");
+														+ name
+														+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
+														+ item.video_playtimes
+														+ "次播放</p></div>");
 											} else {
 												$node = $("<div id="
 														+ otherId
@@ -647,7 +650,10 @@ function getMovie() {
 														+ "><img src='../image/wcg_images/noPicture.jpg' title="
 														+ item.video_name
 														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ name + "</a></div>");
+														+ name
+														+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
+														+ item.video_playtimes
+														+ "次播放</p></div>");
 											}
 											$("#moreMovie").before($node);
 										} else {
@@ -661,7 +667,10 @@ function getMovie() {
 														+ " title="
 														+ item.video_name
 														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ name + "</a></div>");
+														+ name
+														+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
+														+ item.video_playtimes
+														+ "次播放</p></div>");
 											} else {
 												$node = $("<div id="
 														+ otherId
@@ -670,7 +679,10 @@ function getMovie() {
 														+ "><img src='../image/wcg_images/noPicture.jpg' title="
 														+ item.video_name
 														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ name + "</a></div>");
+														+ name
+														+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
+														+ item.video_playtimes
+														+ "次播放</p></div>");
 											}
 											$("#moreMovie").before($node);
 										}
@@ -721,7 +733,10 @@ function getTeleplay() {
 														+ " title="
 														+ item.video_name
 														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ name + "</a></div>");
+														+ name
+														+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
+														+ item.video_playtimes
+														+ "次播放</p></div>");
 											} else {
 												$node = $("<div id="
 														+ otherId
@@ -730,7 +745,10 @@ function getTeleplay() {
 														+ "><img src='../image/wcg_images/noPicture.jpg' title="
 														+ item.video_name
 														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ name + "</a></div>");
+														+ name
+														+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
+														+ item.video_playtimes
+														+ "次播放</p></div>");
 											}
 											$("#tvplayArea").before($node);
 										} else {
@@ -744,7 +762,10 @@ function getTeleplay() {
 														+ " title="
 														+ item.video_name
 														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ name + "</a></div>");
+														+ name
+														+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
+														+ item.video_playtimes
+														+ "次播放</p></div>");
 											} else {
 												$node = $("<div id="
 														+ otherId
@@ -753,7 +774,10 @@ function getTeleplay() {
 														+ "><img src='../image/wcg_images/noPicture.jpg' title="
 														+ item.video_name
 														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ name + "</a></div>");
+														+ name
+														+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
+														+ item.video_playtimes
+														+ "次播放</p></div>");
 											}
 											$("#tvplayArea").before($node);
 										}
@@ -1324,3 +1348,29 @@ function deleteUploadVideo(event) {
 		}
 	});
 }/* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+/* 更多视频 */
+function getMoreVideo(event) {
+	alert(event.title);
+	var title = event.title;
+	var sort = null;
+	if ("更多影片" == title) {
+		sort = "电影"
+	} else if ("更多剧集" == title) {
+		sort = "剧集";
+	} else if ("更多上传" == title) {
+		sort = "上传";
+	}
+	$.ajax({
+		type : "post",
+		url : "/home/getMoreVideo",
+		data : {
+			"sort" : String(sort)
+		},
+		dataType : "text",
+		success : function(result) {
+			if (result == "1") {
+				window.location.href = "film_library.html";
+			}
+		}
+	});
+}

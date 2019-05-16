@@ -124,6 +124,31 @@ var start = 0;
 /* 获取视频 */
 function getSelectVideo() {
 	var sort = String($("#flSort").val());
+	$.ajax({
+		type : "post",
+		url : "/filmLibrary/getSortSession",
+		dataType : "text",
+		async : false,
+		success : function(result) {
+			if (result != null && result != "") {
+				sort = String(result);
+				$("#flSort a").css("color", "#666");
+				$("#flSort a[name='" + sort + "']").css("color", "red");
+				if (sort == "上传") {
+					$("#flRegion").hide();
+					$("#flType").hide();
+					$("#flOrder").children().eq(2).hide();
+					$("#flOrder").children().eq(3).hide();
+					$("#flOrder").children().eq(0).prop("selected", true);
+				} else {
+					$("#flRegion").show();
+					$("#flType").show();
+					$("#flOrder").children().eq(2).show();
+					$("#flOrder").children().eq(3).show();
+				}
+			}
+		}
+	});
 	var region = String($("#flRegion").val());
 	var type = String($("#flType").val());
 	var order = Number($("#flOrder").val());
@@ -187,15 +212,17 @@ function getSelectVideo() {
 															&& item.video_image != "") {
 														videoImage = item.video_image;
 													}
-													var $node = $("<div style='width: 200px; height: 300px; float: left; margin-left: 13px; margin-top: 10px;'><div style='width: 180px; height: 260px; margin: 0 auto;'><img onclick='playVideo(this)' title="
+													var $node = $("<div style='width: 200px; height: 340px; float: left; margin-left: 13px; margin-top: 10px;'><div style='width: 180px; height: 260px; margin: 0 auto;'><img onclick='playVideo(this)' title="
 															+ item.video_name
 															+ " src="
 															+ videoImage
-															+ " style='width: 100%; height: 100%;'></div><div style='width: 180px; height: 40px; margin: 0 auto;'><p onclick='playVideo(this)' title="
+															+ " style='width: 100%; height: 100%;'></div><div style='width: 180px; height: 80px; margin: 0 auto;'><p onclick='playVideo(this)' title="
 															+ item.video_name
-															+ " style='width: 100%; height: 100%; font-size: 16px; line-height: 40px; text-align: center;'>"
+															+ " style='width: 100%; height: 40px; font-size: 16px; line-height: 40px; text-align: center;'>"
 															+ name
-															+ "</p></div></div>");
+															+ "</p><p style='width: 100%;height: 40px;font-size: 12px;margin-top: -10px;text-align: center;'>"
+															+ item.video_playtimes
+															+ "次播放</p></div></div>");
 													$("#videoArea").append(
 															$node);
 													num = num + 1;
@@ -406,15 +433,17 @@ function refresh() {
 														&& item.video_image != "") {
 													videoImage = item.video_image;
 												}
-												var $node = $("<div style='width: 200px; height: 300px; float: left; margin-left: 13px; margin-top: 10px;'><div style='width: 180px; height: 260px; margin: 0 auto;'><img onclick='playVideo(this)' title="
+												var $node = $("<div style='width: 200px; height: 340px; float: left; margin-left: 13px; margin-top: 10px;'><div style='width: 180px; height: 260px; margin: 0 auto;'><img onclick='playVideo(this)' title="
 														+ item.video_name
 														+ " src="
 														+ videoImage
-														+ " style='width: 100%; height: 100%;'></div><div style='width: 180px; height: 40px; margin: 0 auto;'><p onclick='playVideo(this)' title="
+														+ " style='width: 100%; height: 100%;'></div><div style='width: 180px; height: 80px; margin: 0 auto;'><p onclick='playVideo(this)' title="
 														+ item.video_name
-														+ " style='width: 100%; height: 100%; font-size: 16px; line-height: 40px; text-align: center;'>"
+														+ " style='width: 100%; height: 40px; font-size: 16px; line-height: 40px; text-align: center;'>"
 														+ name
-														+ "</p></div></div>");
+														+ "</p><p style='width: 100%;height: 40px;font-size: 12px;margin-top: -10px;text-align: center;'>"
+														+ item.video_playtimes
+														+ "次播放</p></div></div>");
 												$("#videoArea").append($node);
 											});
 						}

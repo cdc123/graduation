@@ -85,4 +85,17 @@ public class FilmLibraryController {
 		}
 		return list;
 	}
+
+	@RequestMapping("/getSortSession")
+	public String getSortSession(HttpServletRequest request) {
+		String sort = null;
+		try {
+			sort = String.valueOf(request.getSession().getAttribute("sortSession"));
+			request.getSession().setAttribute("sortSession", "");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return sort;
+	}
+
 }

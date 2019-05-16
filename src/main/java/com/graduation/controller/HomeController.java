@@ -225,4 +225,14 @@ public class HomeController {
 		}
 		return "1";
 	}
+
+	@PostMapping(value = "/getMoreVideo")
+	public String getMoreVideo(HttpServletRequest request) {
+		try {
+			request.getSession().setAttribute("sortSession", request.getParameter("sort"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "1";
+	}
 }
