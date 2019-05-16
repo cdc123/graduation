@@ -144,7 +144,7 @@ public class HomeController {
 
 	/* 根据上传视频名称查询视频 */
 	@PostMapping(value = "/getUpVideoByName")
-	public void getUpVideoByName(HttpServletRequest request) {
+	public String getUpVideoByName(HttpServletRequest request) {
 		List<Map<String, Object>> list = null;
 		try {
 			list = service.getUpVideoByName(request.getParameter("videoName"));
@@ -157,6 +157,7 @@ public class HomeController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return "1";
 	}
 
 	/* 根据视频分类查询视频 */

@@ -74,4 +74,15 @@ public class FilmLibraryServiceImpl implements FilmLibraryService {
 		return list;
 	}
 
+	@Override
+	public List<Map<String, Object>> getLimitUpVideoBySRTO(int order, int start) {
+		List<Map<String, Object>> list = null;
+		try {
+			list = dao.getLimitUpVideoBySRTO(order, start, (start + 18));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
 }

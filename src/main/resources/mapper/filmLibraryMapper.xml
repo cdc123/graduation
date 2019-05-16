@@ -51,4 +51,22 @@
 		</if>
 	</select>
 
+	<select id="getLimitUpVideoBySRTO" parameterType="string"
+		resultType="java.util.HashMap">
+		select *
+		from uploadVideo t
+		where 1 = 1
+		<if test="order == 1">
+			order by t.upv_id desc
+		</if>
+		<if test="order == 2">
+			order by t.upv_id asc
+		</if>
+		<if test="start != -1">
+			limit ${start},${end}
+		</if>
+	</select>
+
+
+
 </mapper>
