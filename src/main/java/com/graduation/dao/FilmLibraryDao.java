@@ -18,4 +18,7 @@ public interface FilmLibraryDao {
 	public List<Map<String, Object>> getLimitVideoBySRTO(@Param("sort") String sort, @Param("region") String region,
 			@Param("type") String type, @Param("order") int order, @Param("start") int start, @Param("end") int end);
 
+	public List<Map<String, Object>> getLimitUpVideoBySRTO(@Param("order") int order, @Param("start") int start,
+			@Param("end") int end);
+
 }

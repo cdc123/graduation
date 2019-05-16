@@ -72,7 +72,17 @@ public class FilmLibraryController {
 
 	@RequestMapping("/getLimitUpVideoBySRTO")
 	public List<Map<String, Object>> getLimitUpVideoBySRTO(HttpServletRequest request) {
-		/* 待开发 */
-		return null;
+		List<Map<String, Object>> list = null;
+		try {
+			if (request.getParameter("start") != null) {
+				list = service.getLimitUpVideoBySRTO(Integer.valueOf(request.getParameter("order")),
+						Integer.valueOf(request.getParameter("start")));
+			} else {
+				list = service.getLimitUpVideoBySRTO(Integer.valueOf(request.getParameter("order")), -1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 }
