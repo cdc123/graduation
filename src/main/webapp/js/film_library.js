@@ -134,6 +134,7 @@ function getSelectVideo() {
 				sort = String(result);
 				$("#flSort a").css("color", "#666");
 				$("#flSort a[name='" + sort + "']").css("color", "red");
+				$("#flSort").val(sort);
 				if (sort == "上传") {
 					$("#flRegion").hide();
 					$("#flType").hide();
