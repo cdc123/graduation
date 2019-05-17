@@ -115,4 +115,25 @@
 	upv_id = #{video_id}
 	</select>
 
+	<!-- 更新播放量 -->
+	<update id="updateClick">
+    UPDATE video
+    SET video_playtimes = (
+	    (
+		    SELECT
+			    v.video_playtimes
+		    FROM
+			    (
+				    SELECT
+					    video_playtimes
+				    FROM
+					    video
+				    WHERE
+					    video_id = #{video_id}
+			    ) v
+	    ) + 1
+    )
+    WHERE
+	    video_id = #{video_id}
+    </update>
 </mapper> 

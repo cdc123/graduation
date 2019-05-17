@@ -107,6 +107,18 @@
                         // alert("失败！！");
                     }
                 });
+                //更新播放量
+                $.ajax({
+                    async: false,
+                    url: "/play/updateClick",
+                    data: {"video_id": $v_id},
+                    type: "post",
+                    success: function (result) {
+
+                    }, error: function () {
+                        // alert("失败！！");
+                    }
+                });
                 //登陆后
                 if ($u_id != -1) {
                     //显示收藏

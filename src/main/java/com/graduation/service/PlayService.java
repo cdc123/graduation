@@ -20,4 +20,6 @@ public interface PlayService {
     List history(int user_id);
 
     String getVid(String video_name);
+
+    void updateClick(String video_id);
 }

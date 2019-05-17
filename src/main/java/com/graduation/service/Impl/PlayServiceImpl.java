@@ -170,4 +170,14 @@ public class PlayServiceImpl implements PlayService {
     public String getVid(String video_name) {
         return dao.getVidByName(video_name);
     }
+
+    /**
+     * 更新播放量
+     *
+     * @param video_id
+     * @return
+     */
+    public void updateClick(String video_id) {
+        dao.updateClick(Integer.parseInt(video_id));
+    }
 }

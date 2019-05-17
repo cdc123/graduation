@@ -87,4 +87,9 @@ public class PlayController {
         String video_id = service.getVid(videoName);
         SessionUtils.set_session_video(request, video_id);
     }
+
+    @PostMapping(value = {"/updateClick"})
+    public void updateClick(String video_id) {
+        service.updateClick(video_id);
+    }
 }

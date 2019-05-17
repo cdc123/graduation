@@ -92,4 +92,11 @@ public interface PlayDao {
      * @return List<Map<String, Object>>
      */
     List<Map<String,Object>> getVideo_u(@Param("video_id")int video_id);
+
+    /**
+     * 更新播放量
+     * @param video_id
+     * @return
+     */
+    void updateClick(@Param("video_id")int video_id);
 }
