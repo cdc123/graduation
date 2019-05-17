@@ -1350,7 +1350,6 @@ function deleteUploadVideo(event) {
 }/* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
 /* 更多视频 */
 function getMoreVideo(event) {
-	alert(event.title);
 	var title = event.title;
 	var sort = null;
 	if ("更多影片" == title) {
@@ -1373,4 +1372,8 @@ function getMoreVideo(event) {
 			}
 		}
 	});
+}
+
+function changeInfo() {
+	window.location.href = "wcg_personalInfoChange.html";
 }

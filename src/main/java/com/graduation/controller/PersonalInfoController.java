@@ -42,7 +42,9 @@ public class PersonalInfoController {
 			userName = request.getParameter("userName");
 			json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
 			userPhone = String.valueOf(((Map) (json.get(0))).get("user_phone").toString());
-			relUserName = String.valueOf(((Map) (json.get(0))).get("user_name").toString());
+			if (((Map) (json.get(0))).get("user_name") != null && ((Map) (json.get(0))).get("user_name") != "") {
+				relUserName = String.valueOf(((Map) (json.get(0))).get("user_name").toString());
+			}
 			if (!userName.equals(relUserName)) {
 				list = service.updateUserName(userPhone, userName);
 				json = JSONArray.fromObject(list);
@@ -104,7 +106,9 @@ public class PersonalInfoController {
 			userAddress = request.getParameter("userAddress");
 			json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
 			userPhone = String.valueOf(((Map) (json.get(0))).get("user_phone").toString());
-			relUserAddress = String.valueOf(((Map) (json.get(0))).get("user_address").toString());
+			if (((Map) (json.get(0))).get("user_address") != null && ((Map) (json.get(0))).get("user_address") != "") {
+				relUserAddress = String.valueOf(((Map) (json.get(0))).get("user_address").toString());
+			}
 			if (!userAddress.equals(relUserAddress)) {
 				list = service.updateUserAddress(userPhone, userAddress);
 				json = JSONArray.fromObject(list);
@@ -140,17 +144,20 @@ public class PersonalInfoController {
 			if (userBirthday != null && !"".equals(userBirthday)) {
 				json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
 				userPhone = String.valueOf(((Map) (json.get(0))).get("user_phone").toString());
-				m = (Map<String, Object>) ((Map) (json.get(0))).get("user_birthday");
-				year = (int) (m.get("year")) + 1900 + "";
-				month = (int) (m.get("month")) + 1 + "";
-				if (month.length() == 1) {
-					month = "0" + month;
+				if (((Map) (json.get(0))).get("user_birthday") != null
+						&& ((Map) (json.get(0))).get("user_birthday") != "") {
+					m = (Map<String, Object>) ((Map) (json.get(0))).get("user_birthday");
+					year = (int) (m.get("year")) + 1900 + "";
+					month = (int) (m.get("month")) + 1 + "";
+					if (month.length() == 1) {
+						month = "0" + month;
+					}
+					day = m.get("date") + "";
+					if (day.length() == 1) {
+						day = "0" + day;
+					}
+					relUserBirthday = year + "-" + month + "-" + day;
 				}
-				day = m.get("date") + "";
-				if (day.length() == 1) {
-					day = "0" + day;
-				}
-				relUserBirthday = year + "-" + month + "-" + day;
 				if (!userBirthday.equals(relUserBirthday)) {
 					list = service.updateUserBirthday(userPhone, userBirthday);
 					json = JSONArray.fromObject(list);
@@ -195,7 +202,10 @@ public class PersonalInfoController {
 			userIntroduce = request.getParameter("userIntroduce");
 			json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
 			userPhone = String.valueOf(((Map) (json.get(0))).get("user_phone").toString());
-			relUserIntroduce = String.valueOf(((Map) (json.get(0))).get("user_introduce").toString());
+			if (((Map) (json.get(0))).get("user_introduce") != null
+					&& ((Map) (json.get(0))).get("user_introduce") != "") {
+				relUserIntroduce = String.valueOf(((Map) (json.get(0))).get("user_introduce").toString());
+			}
 			if (!userIntroduce.equals(relUserIntroduce)) {
 				list = service.updateUserIntroduce(userPhone, userIntroduce);
 				json = JSONArray.fromObject(list);
