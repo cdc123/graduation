@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.graduation.service.HomeService;
 
-import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 
 @RestController
@@ -28,27 +27,27 @@ public class HomeController {
 		List<Map<String, Object>> list = null;
 		try {
 			list = (List<Map<String, Object>>) request.getSession().getAttribute("sessionListForUser");
-			System.out.println("当前登录用户 : " + list);
+			System.out.println("当前登录用户信息 : " + list);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return list;
 	}
 
-	/* 根据搜索框输入关键字进行模糊查询 */
+	/* 搜索框start */
+	/* 搜索框模糊查询 */
 	@PostMapping(value = "/getVideoByFirstName")
 	public List<String> getVideoByFirstName(HttpServletRequest request) {
 		List<String> list = null;
 		try {
 			list = service.getVideoByFirstName(request.getParameter("firstName"));
-			System.out.println("模糊查询视频 : " + list);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return list;
 	}
 
-	/* 点击搜索按钮查询影片 */
+	/* 搜索框混合查询（先精确后模糊） */
 	@PostMapping(value = "/getVideoByName")
 	public List<Map<String, Object>> getVideoByName(HttpServletRequest request) {
 		List<Map<String, Object>> list = null;
@@ -66,30 +65,20 @@ public class HomeController {
 						String.valueOf(((Map) (json.get(0))).get("video_id").toString()));
 			}
 			request.getSession().setAttribute("searchVideoList", list);
-			System.out.println("混合查找视频 : " + list);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return list;
 	}
+	/* 搜索框end */
 
-	/* 登出 */
-	@PostMapping(value = "/logOut")
-	public void logOut(HttpServletRequest request) {
-		try {
-			request.getSession().setAttribute("sessionListForUser", "");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
+	/* 历史start */
 	/* 查询历史纪录 */
 	@PostMapping(value = "/getHistoryByUserId")
 	public List<Map<String, Object>> getHistoryByUserId(HttpServletRequest request) {
 		List<Map<String, Object>> list = null;
 		try {
 			list = service.getHistoryByUserId(request.getParameter("userId"));
-			System.out.println("播放记录 : " + list);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -98,16 +87,14 @@ public class HomeController {
 
 	/* 根据视频ID查询视频名称 */
 	@PostMapping(value = "/getVideoById")
-	public String getVideoById(HttpServletRequest request) {
-		String videoName = null;
+	public List<Map<String, Object>> getVideoById(HttpServletRequest request) {
+		List<Map<String, Object>> list = null;
 		try {
-			videoName = String.valueOf(
-					((Map) (JSONArray.fromObject(service.getVideoById(request.getParameter("videoId")))).get(0))
-							.get("video_name").toString());
+			list = service.getVideoById(request.getParameter("videoId"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return videoName;
+		return list;
 	}
 
 	/* 根据视频名称查询视频 */
@@ -159,6 +146,17 @@ public class HomeController {
 		}
 		return "1";
 	}
+	/* 历史end */
+
+	/* 登出 */
+	@PostMapping(value = "/logOut")
+	public void logOut(HttpServletRequest request) {
+		try {
+			request.getSession().setAttribute("sessionListForUser", "");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	/* 根据视频分类查询视频 */
 	@PostMapping(value = "/getVideoBySort")
@@ -182,6 +180,31 @@ public class HomeController {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	/* 播放上传视频 */
+	@PostMapping(value = "/playUpVideo")
+	public String playUpVideo(HttpServletRequest request) {
+		int upvId = 0;
+		try {
+			upvId = Integer.valueOf(request.getParameter("upvId"));
+			upvId = -upvId;
+			request.getSession().setAttribute("videosession", upvId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "1";
+	}
+
+	/* 点击更多视频链接 */
+	@PostMapping(value = "/getMoreVideo")
+	public String getMoreVideo(HttpServletRequest request) {
+		try {
+			request.getSession().setAttribute("sortSession", request.getParameter("sort"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "1";
 	}
 
 	/* 取消收藏视频 */
@@ -212,27 +235,4 @@ public class HomeController {
 		return "1";
 	}
 
-	@PostMapping(value = "/playUpVideo")
-	public String playUpVideo(HttpServletRequest request) {
-		int upvId = 0;
-		try {
-			upvId = Integer.valueOf(request.getParameter("upvId"));
-			upvId = -upvId;
-			System.out.println("upvId : " + upvId);
-			request.getSession().setAttribute("videosession", upvId);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "1";
-	}
-
-	@PostMapping(value = "/getMoreVideo")
-	public String getMoreVideo(HttpServletRequest request) {
-		try {
-			request.getSession().setAttribute("sortSession", request.getParameter("sort"));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "1";
-	}
 }

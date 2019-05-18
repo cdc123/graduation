@@ -314,11 +314,18 @@ function showHistory() {
 																data : {
 																	"videoId" : videoId
 																},
-																dataType : "text",
+																dataType : "json",
 																async : false,
 																success : function(
 																		res) {
-																	videoName = res;
+																	$
+																			.each(
+																					res,
+																					function(
+																							index,
+																							item) {
+																						videoName = item.video_name;
+																					});
 																}
 															});
 													/* 取出历史时间 */
