@@ -31,19 +31,25 @@
 		from video t
 		where t.video_id = ${videoId}
 	</select>
-	
+
 	<select id="getUpVideoById" parameterType="string"
 		resultType="java.util.HashMap">
-		select * 
-		from uploadVideo t 
+		select *
+		from uploadVideo t
 		where t.upv_id = ${upvId}
 	</select>
-	
+
 	<select id="getUpVideoByName" parameterType="string"
 		resultType="java.util.HashMap">
-		select * 
-		from uploadVideo t 
+		select *
+		from uploadVideo t
 		where t.upv_name = ${upvName}
+	</select>
+
+	<select id="getVideoSort" resultType="java.util.HashMap">
+		select distinct video_sort
+		from video
+		order by video_id
 	</select>
 
 	<!-- 根据视频分类查询视频 -->
@@ -52,6 +58,8 @@
 		select *
 		from video t
 		where t.video_sort = ${videoSort}
+		order
+		by video_id desc
 	</select>
 
 	<select id="getUploadVideo" parameterType="string"

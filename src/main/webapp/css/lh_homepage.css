@@ -200,8 +200,9 @@ a:hover {
 
 #body_four {
 	width: 1400px;
-	height: 400px;
+	height: 300px;
 	margin: 0 auto;
+	margin-top: 50px;
 }
 
 #body_two_logo {
@@ -687,13 +688,13 @@ a:hover {
 	height: 330px;
 }
 
-#moreMovie {
+#moreVideo {
 	width: 128px;
 	height: 330px;
 	float: right;
 }
 
-#moreMovie img:hover {
+#moreVideo img:hover {
 	content: url('../image/wcg_images/moreHover.png');
 }
 
@@ -705,16 +706,6 @@ a:hover {
 #tvplayArea {
 	width: 1400px;
 	height: 330px;
-}
-
-#moreTvplay {
-	width: 128px;
-	height: 330px;
-	float: right;
-}
-
-#moreTvplay img:hover {
-	content: url('../image/wcg_images/moreHover.png');
 }
 
 #upload_logo {

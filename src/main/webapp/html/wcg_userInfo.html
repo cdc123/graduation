@@ -33,16 +33,15 @@
 </head>
 <body>
 	<div id="top">
-		<!-- 用户信息 -->
+		<!-- 登录信息 -->
 		<div style="display: none">
-			<!-- 1/0 -->
+			<!-- 是否登录?1/0 -->
 			<input type="text" id="isLogin" value="0" /> <input type="text"
-				id="userId" value="" /> <input type="text" id="userPhone" value="" />
-			<input type="text" id="userPower" value="" /> <input type="text"
-				id="userName" value="" /> <input type="text" id="userSex" value="" />
-			<input type="text" id="userAddress" value="" /> <input type="text"
-				id="userBirthday" value="" /> <input type="text" id="userIntroduce"
-				value="" /> <input type="text" id="userImage" value="" />
+				id="userId" /> <input type="text" id="userPhone" /> <input
+				type="text" id="userPower" /> <input type="text" id="userName" />
+			<input type="text" id="userSex" /> <input type="text"
+				id="userAddress" /> <input type="text" id="userBirthday" /> <input
+				type="text" id="userIntroduce" /> <input type="text" id="userImage" />
 		</div>
 		<div id="top_in">
 			<!--Logo-->
@@ -65,10 +64,8 @@
 					<p>导视</p>
 				</a>
 				<div id="forNav" onmouseleave="hideForNav()" style="display: none">
-					<ul>
-						<li><a href="homepage.html#movie">电影</a></li>
-						<li><a href="homepage.html#tv">电视</a></li>
-						<li><a href="homepage.html#upV">上传</a></li>
+					<ul id="navList">
+						<li id="navList0"><a href="homepage.html#upV">上传</a></li>
 					</ul>
 				</div>
 			</div>
@@ -111,7 +108,8 @@
 			<div id="history">
 				<div id="historyImg" onclick="showHistory()"
 					style="cursor: pointer;"></div>
-				<div id="forHistory" onmouseleave="hideHistory()" hidden></div>
+				<div id="forHistory" onmouseleave="hideHistory()"
+					style="display: none"></div>
 			</div>
 			<!--收藏-->
 			<div id="collect">

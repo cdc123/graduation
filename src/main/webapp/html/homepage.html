@@ -10,23 +10,22 @@
 <link rel="stylesheet" href="../css/Rotation.css">
 <!-- 基础js -->
 <script src="../js/jquery-3.3.1.js"></script>
-<!-- layUi -->
+<!-- layUI -->
 <script src="../layui/layui.all.js"></script>
 <!-- 功能js -->
 <script type="text/javascript" src="../js/wcg_homePage.js"></script>
 </head>
 <body>
 	<div id="top">
-		<!-- 用户信息 -->
+		<!-- 登录信息 -->
 		<div style="display: none">
-			<!-- 1/0 -->
+			<!-- 是否登录?1/0 -->
 			<input type="text" id="isLogin" value="0" /> <input type="text"
-				id="userId" value="" /> <input type="text" id="userPhone" value="" />
-			<input type="text" id="userPower" value="" /> <input type="text"
-				id="userName" value="" /> <input type="text" id="userSex" value="" />
-			<input type="text" id="userAddress" value="" /> <input type="text"
-				id="userBirthday" value="" /> <input type="text" id="userIntroduce"
-				value="" /> <input type="text" id="userImage" value="" />
+				id="userId" /> <input type="text" id="userPhone" /> <input
+				type="text" id="userPower" /> <input type="text" id="userName" /> <input
+				type="text" id="userSex" /> <input type="text" id="userAddress" /> <input
+				type="text" id="userBirthday" /> <input type="text"
+				id="userIntroduce" /> <input type="text" id="userImage" />
 		</div>
 		<div id="top_in">
 			<!--Logo-->
@@ -49,10 +48,8 @@
 					<p>导视</p>
 				</a>
 				<div id="forNav" onmouseleave="hideForNav()" style="display: none">
-					<ul>
-						<li><a href="homepage.html#movie">电影</a></li>
-						<li><a href="homepage.html#tv">电视</a></li>
-						<li><a href="homepage.html#upV">上传</a></li>
+					<ul id="navList">
+						<li id="navList0"><a href="homepage.html#upV">上传</a></li>
 					</ul>
 				</div>
 			</div>
@@ -163,36 +160,8 @@
 		<button class="pb-arrow pb-arrow-prev"></button>
 		<button class="pb-arrow pb-arrow-next" id="aa"></button>
 	</div>
-	<!-- 电影 -->
-	<a name="movie" style="float: left; margin-top: -40px"></a>
-	<div id="body_two">
-		<div id="movie_logo">
-			<a title="更多影片" onclick="getMoreVideo(this)">电影>></a>
-		</div>
-		<div id="movieArea">
-			<div id="moreMovie" hidden>
-				<img src="../image/wcg_images/more.png" onclick="getMoreVideo(this)"
-					title="更多影片"
-					style="width: 128px; margin-top: 101px; cursor: pointer;" />
-			</div>
-		</div>
-	</div>
-	<!-- 剧集 -->
-	<a name="tv" style="float: left; margin-top: -90px"></a>
-	<div id="body_three">
-		<div id="tvplay_logo">
-			<a title="更多剧集" onclick="getMoreVideo(this)">剧集>></a>
-		</div>
-		<div id="tvplayArea">
-			<div id="moreTvplay" hidden>
-				<img src="../image/wcg_images/more.png" onclick="getMoreVideo(this)"
-					title="更多剧集"
-					style="width: 128px; margin-top: 101px; cursor: pointer;" />
-			</div>
-		</div>
-	</div>
 	<!-- 上传 -->
-	<a name="upV" style="float: left; margin-top: -90px"></a>
+	<a id="upV" name="upV" style="float: left; margin-top: -90px"></a>
 	<div id="body_four">
 		<div id="upload_logo">
 			<a title="更多上传" onclick="getMoreVideo(this)">上传>></a>

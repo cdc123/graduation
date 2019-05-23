@@ -1,5 +1,6 @@
 package com.graduation.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +27,10 @@ public class HomeController {
 	public List<Map<String, Object>> getUserBySession(HttpServletRequest request) {
 		List<Map<String, Object>> list = null;
 		try {
-			list = (List<Map<String, Object>>) request.getSession().getAttribute("sessionListForUser");
+			if (request.getSession().getAttribute("sessionListForUser") != null
+					&& request.getSession().getAttribute("sessionListForUser") != "") {
+				list = (List<Map<String, Object>>) request.getSession().getAttribute("sessionListForUser");
+			}
 			System.out.println("当前登录用户信息 : " + list);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -120,9 +124,12 @@ public class HomeController {
 		try {
 			upVideoId = Integer.valueOf(request.getParameter("upVideoId"));
 			upVideoId = -upVideoId;
-			upVideoName = String
-					.valueOf(((Map) (JSONArray.fromObject(service.getUpVideoById(String.valueOf(upVideoId)))).get(0))
-							.get("upv_name").toString());
+			if (service.getUpVideoById(String.valueOf(upVideoId)) != null
+					&& service.getUpVideoById(String.valueOf(upVideoId)).size() != 0) {
+				upVideoName = String.valueOf(
+						((Map) (JSONArray.fromObject(service.getUpVideoById(String.valueOf(upVideoId)))).get(0))
+								.get("upv_name").toString());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -158,7 +165,28 @@ public class HomeController {
 		}
 	}
 
-	/* 根据视频分类查询视频 */
+	/* 获取视频分类 */
+	@PostMapping(value = "/getVideoSort")
+	public List<Map<String, Object>> getVideoSort(HttpServletRequest request) {
+		List<Map<String, Object>> list = null;
+		JSONArray json = null;
+		List<String> list2 = null;
+		try {
+			list = service.getVideoSort();
+			if (list.size() > 0) {
+				list2 = new ArrayList<String>();
+				json = JSONArray.fromObject(list);
+				for (int i = 0; i < list.size(); i++) {
+					list2.add(String.valueOf(((Map) (json.get(i))).get("video_sort").toString()));
+				}
+				request.getSession().setAttribute("sortSessionForHome", list2);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
 	@PostMapping(value = "/getVideoBySort")
 	public List<Map<String, Object>> getVideoBySort(HttpServletRequest request) {
 		List<Map<String, Object>> list = null;
@@ -168,6 +196,23 @@ public class HomeController {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	/* 根据视频分类获得各种视频列表 */
+	@PostMapping(value = "/getVideoBySort2")
+	public List<List<Map<String, Object>>> getVideoBySort2(HttpServletRequest request) {
+		List<String> list = null;
+		List<List<Map<String, Object>>> list2 = null;
+		try {
+			list2 = new ArrayList<List<Map<String, Object>>>();
+			list = (List<String>) (request.getSession().getAttribute("sortSessionForHome"));
+			for (String s : list) {
+				list2.add(service.getVideoBySort(s));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list2;
 	}
 
 	/* 查询上传视频 */

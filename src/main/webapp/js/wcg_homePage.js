@@ -1,10 +1,8 @@
 $(function() {
 	/* 查询当前登录信息 */
 	getUserBySession();
-	/* 首页获取电影 */
-	getMovie();
-	/* 首页获取剧集 */
-	getTeleplay();
+	/* 获取各分类视频 */
+	getVideoSortForTop();
 	/* 首页获取上传 */
 	getUpload();
 	/* 点击搜索栏下拉框选项时直接播放影片 */
@@ -603,192 +601,144 @@ function collection() {
 		window.location.href = "wcg_userInfo.html#miao";
 	}
 }
-/* 首页显示电影 */
-function getMovie() {
-	var videoSort = "电影";
+/* 获取视频分类 */
+function getVideoSortForTop() {
 	$
 			.ajax({
-				url : "/home/getVideoBySort",
-				data : {
-					"videoSort" : videoSort
-				},
+				url : "/home/getVideoSort",
 				type : "post",
 				dataType : "json",
 				async : false,
 				success : function(result) {
-					var $node = null;
-					var num = 0;
-					var firstId = "body_two_content1";
-					var otherId = "body_two_content2";
-					var v = "mt";
-					$
-							.each(
-									result,
-									function(index, item) {
-										var name = item.video_name;
-										if (name.length > 12) {
-											name = name.substring(0, 12)
-													+ "...";
-										}
-										num = num + 1;
-										if (num > 6) {
-											$("#moreMovie").show(100);
-											return false;
-										} else if (num > 1) {
-											if (item.video_image != null) {
-												$node = $("<div id="
-														+ otherId
-														+ " class="
-														+ v
-														+ "><img src="
-														+ item.video_image
-														+ " title="
-														+ item.video_name
-														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ name
-														+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
-														+ item.video_playtimes
-														+ "次播放</p></div>");
-											} else {
-												$node = $("<div id="
-														+ otherId
-														+ " class="
-														+ v
-														+ "><img src='../image/wcg_images/noPicture.jpg' title="
-														+ item.video_name
-														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ name
-														+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
-														+ item.video_playtimes
-														+ "次播放</p></div>");
-											}
-											$("#moreMovie").before($node);
-										} else {
-											if (item.video_image != null) {
-												$node = $("<div id="
-														+ firstId
-														+ " class="
-														+ v
-														+ "><img src="
-														+ item.video_image
-														+ " title="
-														+ item.video_name
-														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ name
-														+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
-														+ item.video_playtimes
-														+ "次播放</p></div>");
-											} else {
-												$node = $("<div id="
-														+ otherId
-														+ " class="
-														+ v
-														+ "><img src='../image/wcg_images/noPicture.jpg' title="
-														+ item.video_name
-														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ name
-														+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
-														+ item.video_playtimes
-														+ "次播放</p></div>");
-											}
-											$("#moreMovie").before($node);
-										}
-									});
+					if (result != null && result != "") {
+						var $node;
+						var $node2;
+						$
+								.each(
+										result,
+										function(index, item) {
+											$node = $("<li><a style='cursor:pointer' onclick='getMoreVideo(this)' title='更多"
+													+ item.video_sort
+													+ "'>"
+													+ item.video_sort
+													+ "</a></li>");
+											$("#navList").append($node);
+											$node2 = $("<a name="
+													+ item.video_sort
+													+ " style='float: left; margin-top: 500px'></a><div style='width: 1400px;height: 420px;margin: 0 auto;margin-top: 50px;'><div style='height: 50px;font-size: 25px;'><a style='cursor:pointer' onclick='getMoreVideo(this)' title='更多"
+													+ item.video_sort
+													+ "'>"
+													+ item.video_sort
+													+ ">></a></div><div id="
+													+ item.video_sort
+													+ "><div style='float: right' id='more"
+													+ item.video_sort
+													+ "' hidden><img src='../image/wcg_images/more.png' onclick='getMoreVideo(this)' title='更多"
+													+ item.video_sort
+													+ "' style='width: 128px; margin-top: 101px; cursor: pointer;' /></div></div></div>");
+											$("#upV").before($node2);
+										});
+					}
 				}
 			});
-
+	getVideoBySort();
 }
-/* 首页显示剧集 */
-function getTeleplay() {
-	var videoSort = "剧集";
+/* 往各分类添加视频 */
+function getVideoBySort() {
 	$
 			.ajax({
-				url : "/home/getVideoBySort",
-				data : {
-					"videoSort" : videoSort
-				},
+				url : "/home/getVideoBySort2",
 				type : "post",
 				dataType : "json",
 				async : false,
 				success : function(result) {
-					var $node = null;
-					var num = 0;
-					var firstId = "body_two_content1";
-					var otherId = "body_two_content2";
-					var v = "mt";
-					$
-							.each(
-									result,
-									function(index, item) {
-										var name = item.video_name;
-										if (name.length > 12) {
-											name = name.substring(0, 12)
-													+ "...";
-										}
-										num = num + 1;
-										if (num > 6) {
-											$("#moreTvplay").show(100);
-											return false;
-										} else if (num > 1) {
-											if (item.video_image != null) {
-												$node = $("<div id="
-														+ otherId
-														+ " class="
-														+ v
-														+ "><img src="
-														+ item.video_image
-														+ " title="
-														+ item.video_name
-														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ name
-														+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
-														+ item.video_playtimes
-														+ "次播放</p></div>");
-											} else {
-												$node = $("<div id="
-														+ otherId
-														+ " class="
-														+ v
-														+ "><img src='../image/wcg_images/noPicture.jpg' title="
-														+ item.video_name
-														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ name
-														+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
-														+ item.video_playtimes
-														+ "次播放</p></div>");
-											}
-											$("#tvplayArea").before($node);
-										} else {
-											if (item.video_image != null) {
-												$node = $("<div id="
-														+ firstId
-														+ " class="
-														+ v
-														+ "><img src="
-														+ item.video_image
-														+ " title="
-														+ item.video_name
-														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ name
-														+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
-														+ item.video_playtimes
-														+ "次播放</p></div>");
-											} else {
-												$node = $("<div id="
-														+ otherId
-														+ " class="
-														+ v
-														+ "><img src='../image/wcg_images/noPicture.jpg' title="
-														+ item.video_name
-														+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-														+ name
-														+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
-														+ item.video_playtimes
-														+ "次播放</p></div>");
-											}
-											$("#tvplayArea").before($node);
-										}
-									});
+					if (result != null && result != "") {
+						var $node = null;
+						var firstId = "body_two_content1";
+						var otherId = "body_two_content2";
+						var v = "mt";
+						for (var i = 0; i < result.length; i++) {
+							var num = 0;
+							$
+									.each(
+											result[i],
+											function(index2, item2) {
+												var name = item2.video_name;
+												if (name.length > 12) {
+													name = name
+															.substring(0, 12)
+															+ "...";
+												}
+												num = num + 1;
+												if (num > 6) {
+													$(
+															"#more"
+																	+ item2.video_sort)
+															.show(100);
+												} else if (num > 1) {
+													if (item2.video_image != null) {
+														$node = $("<div id="
+																+ otherId
+																+ " class="
+																+ v
+																+ "><img src="
+																+ item2.video_image
+																+ " title="
+																+ item2.video_name
+																+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+																+ name
+																+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
+																+ item2.video_playtimes
+																+ "次播放</p></div>");
+													} else {
+														$node = $("<div id="
+																+ otherId
+																+ " class="
+																+ v
+																+ "><img src='../image/wcg_images/noPicture.jpg' title="
+																+ item2.video_name
+																+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+																+ name
+																+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
+																+ item2.video_playtimes
+																+ "次播放</p></div>");
+													}
+													$("#" + item2.video_sort)
+															.before($node);
+												} else {
+													if (item2.video_image != null) {
+														$node = $("<div id="
+																+ firstId
+																+ " class="
+																+ v
+																+ "><img src="
+																+ item2.video_image
+																+ " title="
+																+ item2.video_name
+																+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+																+ name
+																+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
+																+ item2.video_playtimes
+																+ "次播放</p></div>");
+													} else {
+														$node = $("<div id="
+																+ otherId
+																+ " class="
+																+ v
+																+ "><img src='../image/wcg_images/noPicture.jpg' title="
+																+ item2.video_name
+																+ "><br/><a style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+																+ name
+																+ "</a><p style='font-size: 12px;margin-top: -10px;'>"
+																+ item2.video_playtimes
+																+ "次播放</p></div>");
+													}
+													$("#" + item2.video_sort)
+															.before($node);
+												}
+											});
+						}
+					}
 				}
 			});
 }
@@ -801,54 +751,66 @@ function getUpload() {
 				dataType : "json",
 				async : false,
 				success : function(result) {
-					var $node = null;
-					var num = 0;
-					var firstId = "u1";
-					var otherId = "u2";
-					var v = "u";
-					$
-							.each(
-									result,
-									function(index, item) {
-										var name = item.upv_name;
-										if (name.length > 12) {
-											name = name.substring(0, 12)
-													+ "...";
-										}
-										num = num + 1;
-										if (num > 6) {
-											$("#moreUpload").show(100);
-											return false;
-										} else if (num > 1) {
-											$node = $("<div id="
-													+ otherId
-													+ " class="
-													+ v
-													+ "><img onclick='playUpVideo(this)' src='../image/wcg_images/upPic.jpg' name="
-													+ item.upv_id
-													+ " title="
-													+ item.upv_name
-													+ "><br/><a onclick='playUpVideo(this)' name="
-													+ item.upv_id
-													+ " style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-													+ name + "</a></div>");
-											$("#uploadArea").before($node);
-										} else {
-											$node = $("<div id="
-													+ firstId
-													+ " class="
-													+ v
-													+ "><img onclick='playUpVideo(this)' src='../image/wcg_images/upPic.jpg' name="
-													+ item.upv_id
-													+ " title="
-													+ item.upv_name
-													+ "><br/><a onclick='playUpVideo(this)' name="
-													+ item.upv_id
-													+ " style='font-size: 14px; line-height: 40px;cursor:pointer'>"
-													+ name + "</a></div>");
-											$("#uploadArea").before($node);
-										}
-									});
+					if (result.length > 0) {
+						$("#navList0").show();
+						$("#upV").show();
+						$("#body_four").show();
+						$("#flSort a[name='上传']").show()
+						var $node = null;
+						var num = 0;
+						var firstId = "u1";
+						var otherId = "u2";
+						var v = "u";
+						$
+								.each(
+										result,
+										function(index, item) {
+											var name = item.upv_name;
+											if (name.length > 12) {
+												name = name.substring(0, 12)
+														+ "...";
+											}
+											num = num + 1;
+											if (num > 6) {
+												$("#moreUpload").show(100);
+												return false;
+											} else if (num > 1) {
+												$node = $("<div id="
+														+ otherId
+														+ " class="
+														+ v
+														+ "><img onclick='playUpVideo(this)' src='../image/wcg_images/upPic.jpg' name="
+														+ item.upv_id
+														+ " title="
+														+ item.upv_name
+														+ "><br/><a onclick='playUpVideo(this)' name="
+														+ item.upv_id
+														+ " style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ name + "</a></div>");
+												$("#uploadArea").before($node);
+											} else {
+												$node = $("<div id="
+														+ firstId
+														+ " class="
+														+ v
+														+ "><img onclick='playUpVideo(this)' src='../image/wcg_images/upPic.jpg' name="
+														+ item.upv_id
+														+ " title="
+														+ item.upv_name
+														+ "><br/><a onclick='playUpVideo(this)' name="
+														+ item.upv_id
+														+ " style='font-size: 14px; line-height: 40px;cursor:pointer'>"
+														+ name + "</a></div>");
+												$("#uploadArea").before($node);
+											}
+										});
+					} else {
+						$("#navList0").hide();
+						$("#upV").hide();
+						$("#body_four").hide();
+						$("#flSort a[name='上传']").hide()
+					}
+
 				}
 			});
 }
@@ -1359,13 +1321,7 @@ function deleteUploadVideo(event) {
 function getMoreVideo(event) {
 	var title = event.title;
 	var sort = null;
-	if ("更多影片" == title) {
-		sort = "电影"
-	} else if ("更多剧集" == title) {
-		sort = "剧集";
-	} else if ("更多上传" == title) {
-		sort = "上传";
-	}
+	sort = title.split("更多")[1];
 	$.ajax({
 		type : "post",
 		url : "/home/getMoreVideo",
@@ -1373,6 +1329,7 @@ function getMoreVideo(event) {
 			"sort" : String(sort)
 		},
 		dataType : "text",
+		async : false,
 		success : function(result) {
 			if (result == "1") {
 				window.location.href = "film_library.html";
