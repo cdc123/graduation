@@ -791,11 +791,13 @@ function getUpload() {
 												$("#moreUpload").show(100);
 												return false;
 											} else if (num > 1) {
-												$node = $("<div id="
+												$node = $("<div style='height:150px' id="
 														+ otherId
 														+ " class="
 														+ v
-														+ "><img onclick='playUpVideo(this)' src='../image/wcg_images/upPic.jpg' name="
+														+ "><img style='width:100%;height:100%' onclick='playUpVideo(this)' src="
+														+ item.upv_image
+														+ " name="
 														+ item.upv_id
 														+ " title="
 														+ item.upv_name
@@ -805,11 +807,13 @@ function getUpload() {
 														+ name + "</a></div>");
 												$("#uploadArea").before($node);
 											} else {
-												$node = $("<div id="
+												$node = $("<div style='height:150px' id="
 														+ firstId
 														+ " class="
 														+ v
-														+ "><img onclick='playUpVideo(this)' src='../image/wcg_images/upPic.jpg' name="
+														+ "><img style='width:100%;height:100%' onclick='playUpVideo(this)' src="
+														+ item.upv_image
+														+ " name="
 														+ item.upv_id
 														+ " title="
 														+ item.upv_name
@@ -1168,7 +1172,9 @@ function showUpLoad() {
 													+ item.upv_id
 													+ " title="
 													+ item.upv_name
-													+ " src='../image/wcg_images/noPicture.jpg'> <a onclick='playUpVideo(this)' name="
+													+ " src="
+													+ item.upv_image
+													+ "> <a onclick='playUpVideo(this)' name="
 													+ item.upv_id
 													+ " style='cursor: pointer;'>"
 													+ name
@@ -1301,7 +1307,9 @@ function refreshUpload() {
 														+ item.upv_id
 														+ " title="
 														+ item.upv_name
-														+ " src='../image/wcg_images/noPicture.jpg'> <a onclick='playUpVideo(this)' name="
+														+ " src="
+														+ item.upv_image
+														+ "> <a onclick='playUpVideo(this)' name="
 														+ item.upv_id
 														+ " style='cursor: pointer;'>"
 														+ name

@@ -36,5 +36,5 @@ public interface PersonalInfoService {
 	public List<Map<String, Object>> checkUpvName(@Param("videoName") String videoName);
 
 	public List<Map<String, Object>> uploadVideo(@Param("upvName") String upvName, @Param("userId") String userId,
-			@Param("upvDate") String upvDate, @Param("upvVideo") String upvVideo);
+			@Param("upvDate") String upvDate, @Param("upvVideo") String upvVideo, @Param("upvImage") String upvImage);
 }

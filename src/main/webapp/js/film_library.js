@@ -283,13 +283,12 @@ function getSelectVideo() {
 																0, 10)
 																+ "...";
 													}
-													var videoImage = "../image/wcg_images/noPicture.jpg";
 													var $node = $("<div style='width: 200px; height: 300px; float: left; margin-left: 13px; margin-top: 10px;'><div style='width: 180px; height: 260px; margin: 0 auto;'><img onclick='playUpVideo(this)' name="
 															+ item.upv_id
 															+ " title="
 															+ item.upv_name
 															+ " src="
-															+ videoImage
+															+ item.upv_image
 															+ " style='width: 100%; height: 100%;'></div><div style='width: 180px; height: 40px; margin: 0 auto;'><p onclick='playUpVideo(this)' title="
 															+ item.upv_name
 															+ " style='width: 100%; height: 100%; font-size: 16px; line-height: 40px; text-align: center;'>"

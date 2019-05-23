@@ -34,5 +34,5 @@ public interface PersonalInfoDao {
 	public List<Map<String, Object>> getUpvVideoByName(@Param("upvName") String upvName);
 
 	public void uploadVideo(@Param("upvName") String upvName, @Param("userId") String userId,
-			@Param("upvDate") String upvDate, @Param("upvVideo") String upvVideo);
+			@Param("upvDate") String upvDate, @Param("upvVideo") String upvVideo, @Param("upvImage") String upvImage);
 }

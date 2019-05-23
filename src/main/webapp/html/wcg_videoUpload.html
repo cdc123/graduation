@@ -188,13 +188,33 @@
 			     　　　 }
 			              return xhr;
 			    },
+			    dataType : "json",
 				success : function(result) {
-					if (result == "1") {
-						layer.msg('上传成功');
-					}
+						var $node;
+						$.each(result, function(n, value) {
+							$node = $("<div style='width: 280px;height: 280px;background-color: aliceblue;margin-top: 10px;margin-left: 100px;'><img title="+value.upv_name+" src="+value.upv_image+" style='width: 100%;height: 100%;cursor:pointer' onclick='playUpVideo(this)'></div>");
+							$("#progress").after($node);
+						});
+						layer.msg('上传完成');
 				}
 			});
 		}
+	}
+	
+	/* 上传视频播放(title = name) */
+	function playUpVideo(event) {
+		var upvName = event.title;
+		$.ajax({
+			type : "post",
+			url : "/home/getUpVideoByName",
+			data : {
+				"videoName" : upvName
+			},
+			dataType : "json",
+			success : function(result) {
+				window.location.href = "play.html";
+			}
+		});
 	}
 </script>
 </html>

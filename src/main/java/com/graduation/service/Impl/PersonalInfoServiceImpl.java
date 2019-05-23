@@ -148,7 +148,8 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
 	}
 
 	@Override
-	public List<Map<String, Object>> uploadVideo(String upvName, String userId, String upvDate, String upvVideo) {
+	public List<Map<String, Object>> uploadVideo(String upvName, String userId, String upvDate, String upvVideo,
+			String upvImage) {
 		List<Map<String, Object>> list = null;
 		try {
 			upvName = "'" + upvName + "'";
@@ -156,7 +157,8 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
 			upvDate = "'" + upvDate + "'";
 			upvVideo = upvVideo.replace("\\", "/");
 			upvVideo = "'" + upvVideo + "'";
-			dao.uploadVideo(upvName, userId, upvDate, upvVideo);
+			upvImage = "'" + upvImage + "'";
+			dao.uploadVideo(upvName, userId, upvDate, upvVideo, upvImage);
 			list = dao.getUpvVideoByName(upvName);
 		} catch (Exception e) {
 			e.printStackTrace();
