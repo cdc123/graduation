@@ -296,106 +296,89 @@ function showHistory() {
 							var hourfirst = 0;
 							var minutefirst = 0;
 							/* 取出每一条历史记录 */
-							$
-									.each(
-											result,
-											function(n, value) {
-												/* 取出video_id */
-												var videoId = value.video_id;
-												if (Number(videoId) > 0) {
-													var videoName = "";
-													/* 根据videoId查出视频名称,存入videoName */
-													$
-															.ajax({
-																type : "post",
-																url : "/home/getVideoById",
-																data : {
-																	"videoId" : videoId
-																},
-																dataType : "json",
-																async : false,
-																success : function(
-																		res) {
-																	$
-																			.each(
-																					res,
-																					function(
-																							index,
-																							item) {
-																						videoName = item.video_name;
-																					});
-																}
-															});
-													/* 取出历史时间 */
-													var historyTime = new Date(
-															value.history_time);/* value.history_time */
-													/* 取出年份 */
-													var year = historyTime
-															.getFullYear()
-															+ "年";
-													/* 取出月，日 */
-													var month_date = historyTime
-															.getMonth()
-															+ 1
-															+ "月"
-															+ historyTime
-																	.getDate()
-															+ "日";
-													/* 取出时，分 */
-													var hour_minute = historyTime
-															.getHours()
-															+ "时"
-															+ historyTime
-																	.getMinutes()
-															+ "分";
-													/* 取出数据计算出百分比 */
-													var historyHolder = Number(value.history_holder);
-													var historyTotal = Number(value.history_total);
-													var percent = Number(
-															(historyHolder / historyTotal) * 100)
-															.toFixed()
-															+ "%";
-													/* 组装$node */
-													var y = "<div class='year'>"
-															+ year + "</div>";
-													var m = "<div class='month_day'>"
-															+ month_date
-															+ "</div>";
-													var h = "<div class='sItem'><div class='hour_minute'>"
-															+ hour_minute
-															+ "</div><div class='context'><a style='cursor:pointer' id='play' onclick='continuedBroadcasting(this)'>"
-															+ videoName
-															+ "</a></div><div class='rate'>看到"
-															+ percent
-															+ "</div></div>";
-													if (Number(historyTime
-															.getFullYear()) > yearfirst) {
-														$history = $(y + m + h);
-														$("#forHistory")
-																.append(
-																		$history);
-														yearfirst = Number(historyTime
-																.getFullYear());
-														monthfirst = Number(historyTime
-																.getMonth());
-														datefirst = Number(historyTime
-																.getDate());
-														hourfirst = Number(historyTime
-																.getHours());
-														minutefirst = Number(historyTime
-																.getMinutes());
-													} else {
-														if ((Number(historyTime
-																.getMonth()) > monthfirst)
-																|| (Number(historyTime
-																		.getMonth()) == monthfirst && Number(historyTime
-																		.getDate()) > datefirst)) {
-															$history = $(m + h);
+							if (result != null && result != "") {
+								$
+										.each(
+												result,
+												function(n, value) {
+													/* 取出video_id */
+													var videoId = value.video_id;
+													if (Number(videoId) > 0) {
+														var videoName = "";
+														/* 根据videoId查出视频名称,存入videoName */
+														$
+																.ajax({
+																	type : "post",
+																	url : "/home/getVideoById",
+																	data : {
+																		"videoId" : videoId
+																	},
+																	dataType : "json",
+																	async : false,
+																	success : function(
+																			res) {
+																		$
+																				.each(
+																						res,
+																						function(
+																								index,
+																								item) {
+																							videoName = item.video_name;
+																						});
+																	}
+																});
+														/* 取出历史时间 */
+														var historyTime = new Date(
+																value.history_time);/* value.history_time */
+														/* 取出年份 */
+														var year = historyTime
+																.getFullYear()
+																+ "年";
+														/* 取出月，日 */
+														var month_date = historyTime
+																.getMonth()
+																+ 1
+																+ "月"
+																+ historyTime
+																		.getDate()
+																+ "日";
+														/* 取出时，分 */
+														var hour_minute = historyTime
+																.getHours()
+																+ "时"
+																+ historyTime
+																		.getMinutes()
+																+ "分";
+														/* 取出数据计算出百分比 */
+														var historyHolder = Number(value.history_holder);
+														var historyTotal = Number(value.history_total);
+														var percent = Number(
+																(historyHolder / historyTotal) * 100)
+																.toFixed()
+																+ "%";
+														/* 组装$node */
+														var y = "<div class='year'>"
+																+ year
+																+ "</div>";
+														var m = "<div class='month_day'>"
+																+ month_date
+																+ "</div>";
+														var h = "<div class='sItem'><div class='hour_minute'>"
+																+ hour_minute
+																+ "</div><div class='context'><a style='cursor:pointer' id='play' onclick='continuedBroadcasting(this)'>"
+																+ videoName
+																+ "</a></div><div class='rate'>看到"
+																+ percent
+																+ "</div></div>";
+														if (Number(historyTime
+																.getFullYear()) > yearfirst) {
+															$history = $(y + m
+																	+ h);
 															$("#forHistory")
-																	.children()
-																	.eq(0)
-																	.after(
+																	.append(
 																			$history);
+															yearfirst = Number(historyTime
+																	.getFullYear());
 															monthfirst = Number(historyTime
 																	.getMonth());
 															datefirst = Number(historyTime
@@ -405,111 +388,116 @@ function showHistory() {
 															minutefirst = Number(historyTime
 																	.getMinutes());
 														} else {
-															if ((historyTime
-																	.getHours() > hourfirst)
-																	|| ((historyTime
-																			.getHours() == hourfirst) && historyTime
-																			.getMinutes() > minutefirst)) {
-																$history = $(h);
+															if ((Number(historyTime
+																	.getMonth()) > monthfirst)
+																	|| (Number(historyTime
+																			.getMonth()) == monthfirst && Number(historyTime
+																			.getDate()) > datefirst)) {
+																$history = $(m
+																		+ h);
 																$("#forHistory")
 																		.children()
-																		.eq(1)
+																		.eq(0)
 																		.after(
 																				$history);
+																monthfirst = Number(historyTime
+																		.getMonth());
+																datefirst = Number(historyTime
+																		.getDate());
 																hourfirst = Number(historyTime
 																		.getHours());
 																minutefirst = Number(historyTime
 																		.getMinutes());
+															} else {
+																if ((historyTime
+																		.getHours() > hourfirst)
+																		|| ((historyTime
+																				.getHours() == hourfirst) && historyTime
+																				.getMinutes() > minutefirst)) {
+																	$history = $(h);
+																	$(
+																			"#forHistory")
+																			.children()
+																			.eq(
+																					1)
+																			.after(
+																					$history);
+																	hourfirst = Number(historyTime
+																			.getHours());
+																	minutefirst = Number(historyTime
+																			.getMinutes());
+																}
 															}
 														}
-													}
-												} else {
-													var videoName = "";
-													/* 根据upVideoId查出视频名称,存入upVideoName */
-													$
-															.ajax({
-																type : "post",
-																url : "/home/getUpVideoById",
-																data : {
-																	"upVideoId" : videoId
-																},
-																dataType : "text",
-																async : false,
-																success : function(
-																		res) {
-																	videoName = res;
-																}
-															});
-													/* 取出历史时间 */
-													var historyTime = new Date(
-															value.history_time);/* value.history_time */
-													/* 取出年份 */
-													var year = historyTime
-															.getFullYear()
-															+ "年";
-													/* 取出月，日 */
-													var month_date = historyTime
-															.getMonth()
-															+ 1
-															+ "月"
-															+ historyTime
-																	.getDate()
-															+ "日";
-													/* 取出时，分 */
-													var hour_minute = historyTime
-															.getHours()
-															+ "时"
-															+ historyTime
-																	.getMinutes()
-															+ "分";
-													/* 取出数据计算出百分比 */
-													var historyHolder = Number(value.history_holder);
-													var historyTotal = Number(value.history_total);
-													var percent = Number(
-															(historyHolder / historyTotal) * 100)
-															.toFixed()
-															+ "%";
-													/* 组装$node */
-													var y = "<div class='year'>"
-															+ year + "</div>";
-													var m = "<div class='month_day'>"
-															+ month_date
-															+ "</div>";
-													var h = "<div class='sItem'><div class='hour_minute'>"
-															+ hour_minute
-															+ "</div><div class='context'><a style='cursor:pointer' id='play' onclick='continuedBroadcasting2(this)'>"
-															+ videoName
-															+ "</a></div><div class='rate'>看到"
-															+ percent
-															+ "</div></div>";
-													if (Number(historyTime
-															.getFullYear()) > yearfirst) {
-														$history = $(y + m + h);
-														$("#forHistory")
-																.append(
-																		$history);
-														yearfirst = Number(historyTime
-																.getFullYear());
-														monthfirst = Number(historyTime
-																.getMonth());
-														datefirst = Number(historyTime
-																.getDate());
-														hourfirst = Number(historyTime
-																.getHours());
-														minutefirst = Number(historyTime
-																.getMinutes());
 													} else {
-														if ((Number(historyTime
-																.getMonth()) > monthfirst)
-																|| (Number(historyTime
-																		.getMonth()) == monthfirst && Number(historyTime
-																		.getDate()) > datefirst)) {
-															$history = $(m + h);
+														var videoName = "";
+														/* 根据upVideoId查出视频名称,存入upVideoName */
+														$
+																.ajax({
+																	type : "post",
+																	url : "/home/getUpVideoById",
+																	data : {
+																		"upVideoId" : videoId
+																	},
+																	dataType : "text",
+																	async : false,
+																	success : function(
+																			res) {
+																		videoName = res;
+																	}
+																});
+														/* 取出历史时间 */
+														var historyTime = new Date(
+																value.history_time);/* value.history_time */
+														/* 取出年份 */
+														var year = historyTime
+																.getFullYear()
+																+ "年";
+														/* 取出月，日 */
+														var month_date = historyTime
+																.getMonth()
+																+ 1
+																+ "月"
+																+ historyTime
+																		.getDate()
+																+ "日";
+														/* 取出时，分 */
+														var hour_minute = historyTime
+																.getHours()
+																+ "时"
+																+ historyTime
+																		.getMinutes()
+																+ "分";
+														/* 取出数据计算出百分比 */
+														var historyHolder = Number(value.history_holder);
+														var historyTotal = Number(value.history_total);
+														var percent = Number(
+																(historyHolder / historyTotal) * 100)
+																.toFixed()
+																+ "%";
+														/* 组装$node */
+														var y = "<div class='year'>"
+																+ year
+																+ "</div>";
+														var m = "<div class='month_day'>"
+																+ month_date
+																+ "</div>";
+														var h = "<div class='sItem'><div class='hour_minute'>"
+																+ hour_minute
+																+ "</div><div class='context'><a style='cursor:pointer' id='play' onclick='continuedBroadcasting2(this)'>"
+																+ videoName
+																+ "</a></div><div class='rate'>看到"
+																+ percent
+																+ "</div></div>";
+														if (Number(historyTime
+																.getFullYear()) > yearfirst) {
+															$history = $(y + m
+																	+ h);
 															$("#forHistory")
-																	.children()
-																	.eq(0)
-																	.after(
+																	.append(
 																			$history);
+															yearfirst = Number(historyTime
+																	.getFullYear());
 															monthfirst = Number(historyTime
 																	.getMonth());
 															datefirst = Number(historyTime
@@ -519,26 +507,54 @@ function showHistory() {
 															minutefirst = Number(historyTime
 																	.getMinutes());
 														} else {
-															if ((historyTime
-																	.getHours() > hourfirst)
-																	|| ((historyTime
-																			.getHours() == hourfirst) && historyTime
-																			.getMinutes() > minutefirst)) {
-																$history = $(h);
+															if ((Number(historyTime
+																	.getMonth()) > monthfirst)
+																	|| (Number(historyTime
+																			.getMonth()) == monthfirst && Number(historyTime
+																			.getDate()) > datefirst)) {
+																$history = $(m
+																		+ h);
 																$("#forHistory")
 																		.children()
-																		.eq(1)
+																		.eq(0)
 																		.after(
 																				$history);
+																monthfirst = Number(historyTime
+																		.getMonth());
+																datefirst = Number(historyTime
+																		.getDate());
 																hourfirst = Number(historyTime
 																		.getHours());
 																minutefirst = Number(historyTime
 																		.getMinutes());
+															} else {
+																if ((historyTime
+																		.getHours() > hourfirst)
+																		|| ((historyTime
+																				.getHours() == hourfirst) && historyTime
+																				.getMinutes() > minutefirst)) {
+																	$history = $(h);
+																	$(
+																			"#forHistory")
+																			.children()
+																			.eq(
+																					1)
+																			.after(
+																					$history);
+																	hourfirst = Number(historyTime
+																			.getHours());
+																	minutefirst = Number(historyTime
+																			.getMinutes());
+																}
 															}
 														}
 													}
-												}
-											});
+												});
+							} else {
+								$("#forHistory")
+										.html(
+												"<p style='width:240px;font-size:15px;text-align:center;line-height:30px'>暂无历史纪录</p>");
+							}
 						}
 					});
 			$("#forHistory").show(100);

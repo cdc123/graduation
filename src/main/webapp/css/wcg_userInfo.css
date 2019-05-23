@@ -288,14 +288,13 @@ a {
 
 #forHistory {
 	width: 240px;
-	min-height: 300px;
-	max-height: 500px;
-	height: 10px;
+	min-height: 30px;
 	margin-top: 30px;
 	margin-left: -90px;
 	border-radius: 5px;
 	overflow: auto;
 	background-color: rgba(255, 255, 255, 0.8);
+	max-height: 500px;
 }
 
 .year {
