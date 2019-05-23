@@ -40,19 +40,10 @@ public class LoginController {
 	/* 用户登录 */
 	@PostMapping(value = "/login")
 	public List<Map<String, Object>> login(HttpServletRequest request, HttpServletResponse response) {
-		String password = null;
-		JsonConfig jsonConfig = null;
 		List<Map<String, Object>> list = null;
-		JSONArray json = null;
-		String relPassword = null;
 		try {
-			password = request.getParameter("password");
-			list = service.login(request.getParameter("userPhone"), password);
-			jsonConfig = new JsonConfig();
-			jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
-			json = JSONArray.fromObject(list, jsonConfig);
-			relPassword = String.valueOf(((Map) json.get(0)).get("user_password").toString());
-			if (relPassword.equals(password)) {
+			list = service.login(request.getParameter("userPhone"), request.getParameter("password"));
+			if (list != null && list.size() > 0) {
 				request.getSession().setAttribute("sessionListForUser", list);
 			}
 		} catch (Exception e) {
