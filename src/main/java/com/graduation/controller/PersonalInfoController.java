@@ -75,7 +75,9 @@ public class PersonalInfoController {
 			userSex = request.getParameter("userSex");
 			json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
 			userPhone = String.valueOf(((Map) (json.get(0))).get("user_phone").toString());
-			relUserSex = String.valueOf(((Map) (json.get(0))).get("user_sex").toString());
+			if (((Map) (json.get(0))).get("user_sex") != null && ((Map) (json.get(0))).get("user_sex") != "") {
+				relUserSex = String.valueOf(((Map) (json.get(0))).get("user_sex").toString());
+			}
 			if (!userSex.equals(relUserSex)) {
 				list = service.updateUserSex(userPhone, userSex);
 				json = JSONArray.fromObject(list);
