@@ -75,7 +75,9 @@ public class PersonalInfoController {
 			userSex = request.getParameter("userSex");
 			json = JSONArray.fromObject(request.getSession().getAttribute("sessionListForUser"));
 			userPhone = String.valueOf(((Map) (json.get(0))).get("user_phone").toString());
-			relUserSex = String.valueOf(((Map) (json.get(0))).get("user_sex").toString());
+			if (((Map) (json.get(0))).get("user_sex") != null && ((Map) (json.get(0))).get("user_sex") != "") {
+				relUserSex = String.valueOf(((Map) (json.get(0))).get("user_sex").toString());
+			}
 			if (!userSex.equals(relUserSex)) {
 				list = service.updateUserSex(userPhone, userSex);
 				json = JSONArray.fromObject(list);
@@ -289,9 +291,9 @@ public class PersonalInfoController {
 		Date t = new Date();
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
 		String uploadDate = df.format(t);
-		String realPath = request.getServletContext().getRealPath("/image/userPhotos");
+		String realPath = request.getServletContext().getRealPath("/home/jar/image");
 		GenerateImage(stringImage, realPath + "\\" + uploadDate + ".png");
-		String userImage = "../image/userPhotos/" + uploadDate + ".png";
+		String userImage = "/home/jar/image/" + uploadDate + ".png";
 		JSONArray json = null;
 		String userPhone = null;
 		List<Map<String, Object>> list = null;
