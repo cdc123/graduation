@@ -36,6 +36,18 @@
     </style>
     <script type="text/javascript">
         var win ;
+        /* 登出 */
+        function logOut() {
+            $.ajax({
+                url : "/home/logOut",
+                type : "post",
+                dataType : "text",
+                success : function(result) {
+                    window.location.href = "homepage.html";
+                }
+            });
+        }
+
 
         function show3() {
             $.ajax({
@@ -93,7 +105,9 @@
                 success: function (list) {
                     $(".tr_2").children().remove();
                    for (var i = 0; i < list.length-1; i++) {
-                        var $node1 = $(' <tr> <td lay-data="{width:90}">'+list[i].video_id+'</td> <td lay-data="{width:90}">'+list[i].video_name+'</td> <td lay-data="{width:90}"> '+list[i].video_introduce+'</td> <td lay-data="{width:120}">'+list[i].video_sort+'</td> <td lay-data="{width:90}">'+list[i].video_region+'</td> <td lay-data="{width:90}">'+list[i].video_type+'</td> <td lay-data="{ width:90}">'+list[i].video_playtimes+'</td> <td lay-data="{width:100}">'+list[i].video_commentnum+'</td> <td lay-data="{width:90}"> <button class="button2_1">修改</button> </td> <td lay-data="{width:90}"> <button class="button2_2">删除</button> </td> </tr> ');
+                        var $node1 = $(' <tr> <td lay-data="{width:90}">'+list[i].video_id+'</td> <td lay-data="{width:90}">'+list[i].video_name+'</td> <td lay-data="{width:90}"> '+list[i].video_introduce+'</td> <td lay-data="{width:120}">'+list[i].video_sort+'</td> <td lay-data="{width:90}">'+list[i].video_region+'</td> <td lay-data="{width:90}">'+list[i].video_type+'</td> <td lay-data="{ width:90}">'+list[i].video_playtimes+'</td> <td lay-data="{width:100}">'+list[i].video_commentnum+'</td> ' +
+                            // '<td lay-data="{width:90}"> <button class="button2_1">修改</button> ' +
+                            '</td> <td lay-data="{width:90}"> <button class="button2_1">删除</button> </td> </tr> ');
                         $(".tr_2").append($node1);
                     }
                     rsCount = list[list.length-1].count;
@@ -189,19 +203,19 @@
                         }
                     });
                 });
-                $(".tr_2").on('click', '.button2_1', function () {
-                    var $m = $(this);
-                    $.post("/zmm_sessionServlet", {"id": $m.closest("tr").children().eq(0).text()}, function (ret) {
-                    }, 'text');
-                    win = layer.open({
-                        type: 2,
-                        area: ['320px', '450px'],
-                        title: '视频信息修改',
-                        shade: 0.6,
-                         anim: 2,
-                        content: 'zmm_form1.html'
-                    })
-                });
+                // $(".tr_2").on('click', '.button2_1', function () {
+                //     var $m = $(this);
+                //     $.post("/zmm_sessionServlet", {"id": $m.closest("tr").children().eq(0).text()}, function (ret) {
+                //     }, 'text');
+                //     win = layer.open({
+                //         type: 2,
+                //         area: ['320px', '450px'],
+                //         title: '视频信息修改',
+                //         shade: 0.6,
+                //          anim: 2,
+                //         content: 'zmm_form1.html'
+                //     })
+                // });
                 $(".tr_2").on('click', '.button2_2', function () {
                     var $m = $(this);
                     layer.msg('确认删除？', {
@@ -226,16 +240,16 @@
                         }
                     });
                 });
-                $(".tr_3").on('click', '.button3_1', function () {
-                    layer.open({
-                        type: 1,
-                        title: false,
-                        closeBtn: 0,
-                        shadeClose: true,
-                        skin: 'yourclass',
-                        content: '自定义HTML内容'
-                    });
-                });
+                // $(".tr_3").on('click', '.button3_1', function () {
+                //     layer.open({
+                //         type: 1,
+                //         title: false,
+                //         closeBtn: 0,
+                //         shadeClose: true,
+                //         skin: 'yourclass',
+                //         content: '自定义HTML内容'
+                //     });
+                // });
                 $(".tr_3").on('click', ".button3_2", function () {
                     var $m=$(this);
                     layer.msg('确认删除？', {
@@ -319,7 +333,7 @@
                     }
                     pageload1();
                 })
-            //视频分页
+            // //视频分页
             $(".li_2").click(function () {
                 pageload2();
                 $(".butt6").click(function () {
@@ -365,23 +379,6 @@
                     pageload4();
                 })
             })
-            // $("input[value='下一页']").click(function () {
-            //     var count = Math.ceil(rsCount / 6);
-            //     if (pagenumber < count) {
-            //         pagenumber++;
-            //     } else {
-            //         pagenumber = count;
-            //     }
-            //     load();
-            // })
-            // $("input[value='上一页']").click(function () {
-            //     if (pagenumber <= 1) {
-            //         pagenumber = 1;
-            //     } else {
-            //         pagenumber--;
-            //     }
-            //     load();
-            // })
 
         })
     </script>
@@ -396,7 +393,7 @@
                 <img src="../image/zmm_img/logo.png" class="layui-nav-img">
                 管理员
             </li>
-            <li class="layui-nav-item"><a href="#">退出</a></li>
+            <li class="layui-nav-item"><a onclick="logOut()">退出</a></li>
         </ul>
     </div>
     <div class="layui-side layui-bg-black" style="position: absolute;">
@@ -430,26 +427,12 @@
                 </tr>
                 </thead>
                 <tbody class="tr_1" id="tb_1">
-                <!--<tr>-->
-                <!--<td lay-data="{width:120}">1</td>-->
-                <!--<td lay-data="{width:90}">mm</td>-->
-                <!--<td lay-data="{width:90}">女</td>-->
-                <!--<td lay-data="{width:90}">水电费v</td>-->
-                <!--<td lay-data="{width:120}">头像</td>-->
 
-                <!--<td lay-data="{ width:120}">1997.2.3</td>-->
-                <!--<td lay-data="{width:90}">15159825532</td>-->
-                <!--<td lay-data="{width:110}">123455</td>-->
-                <!--<td lay-data="{width:90}">vip</td>-->
-                <!--<td lay-data="{width:90}">vip</td>-->
-                <!--<td lay-data="{width:90}"><button class="button2_1">修改</button></td>-->
-                <!--<td lay-data="{width:90}"><button class="button2_2">删除</button></td>-->
-                <!--</tr>-->
                 </tbody>
             </table>
             <a href="#" title="添加用户"><i class="layui-icon layui-icon-add-circle-fine add_1" style="position: absolute;top:-20px;left:1020px"></i></a>
         </div>
-        <input type="button" value="上一页" class="butt3"><input type="button" value="下一页" class="butt4">
+        <!--<input type="button" value="上一页" class="butt3"><input type="button" value="下一页" class="butt4">-->
     </div>
     <div class="layui-body body2">
         <div class="layui-col-md11" style="position: absolute; top: 30px;left: 50px">
@@ -464,43 +447,19 @@
                     <th lay-data="{width:120}">视频类型</th>
                     <th lay-data="{ width:90}">播放量</th>
                     <th lay-data="{width:100}">评论数</th>
-                    <th lay-data="{width:90}">操作</th>
+                    <!--<th lay-data="{width:90}">操作</th>-->
                     <th lay-data="{width:90}">操作</th>
                 </tr>
                 </thead>
                 <tbody class="tr_2">
-                <!--<tr>-->
-                    <!--<td lay-data="{width:90}">1</td>-->
-                    <!--<td lay-data="{width:90}">mm</td>-->
-                    <!--<td lay-data="{width:90}">-->
-                        <!--<div style="width:60px;white-space:nowrap; overflow:hidden;">军军军</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i-->
-                            <!--class="layui-icon layui-icon-right tu_1"></i></td>-->
-                    <!--<td lay-data="{width:120}">水电费v</td>-->
-                    <!--<td lay-data="{width:90}"><img src="../image/zmm_img/select.PNG" width="100px"></td>-->
-                    <!--<td lay-data="{ width:90}">1997.2.3</td>-->
-                    <!--<td lay-data="{width:100}">15159825532</td>-->
-                    <!--<td lay-data="{width:90}">-->
-                        <!--<button class="button1_1">修改</button>-->
-                    <!--</td>-->
-                    <!--<td lay-data="{width:90}">-->
-                        <!--<button class="button1_2">删除</button>-->
-                    <!--</td>-->
-                <!--</tr>-->
+
                 </tbody>
             </table>
         </div>
-        <input type="button" value="上一页" class="butt5"><input type="button" value="下一页" class="butt6">
+        <!--<input type="button" value="上一页" class="butt5"><input type="button" value="下一页" class="butt6">-->
     </div>
     <div class="layui-body body3">
-        <!-- 内容主体区域 -->
-        <!--<div style="margin-bottom: 5px;">-->
-            <!--<ins class="adsbygoogle" style="display:inline-block;width:800px;height:60px"-->
-                 <!--data-ad-client="ca-pub-6111334333458862" data-ad-slot="3820120620">-->
 
-                <!--<div style="position: absolute;top: 25px;left: 350px;"><input type="text" width="80" height="30"><input-->
-                        <!--type="button" value="搜索"></div>-->
-            <!--</ins>-->
-        <!--</div>-->
         <div class="layui-col-md11" style="position: absolute; top: 30px;left: 50px">
             <table class="layui-table">
                 <thead>
@@ -515,15 +474,6 @@
                 </thead>
                 <tbody class="tr_3">
                 <tr>
-                    <!--<td lay-data="{width:90}">1</td>-->
-                    <!--<td lay-data="{width:90}">mm</td>-->
-                    <!--<td lay-data="{width:90}">女</td>-->
-                    <!--<td lay-data="{width:120}">水电费v</td>-->
-                    <!--<td lay-data="{width:90}"><img src="../image/zmm_img/select.PNG" width="100px"></td>-->
-
-                    <!--<td lay-data="{ width:90}">1997.2.3</td>-->
-                    <!--<td lay-data="{width:90}"><input type="button" value="修改" style="width: 35px;height: 25px;"></td>-->
-                    <!--<td lay-data="{width:90}"><input type="button" value="删除" style="width: 35px;height: 25px;"></td>-->
                 </tr>
                 </tbody>
             </table>
@@ -546,20 +496,12 @@
                 </thead>
                 <tbody class="tr_4">
                 <tr>
-                    <!--<td lay-data="{width:90}">1</td>-->
-                    <!--<td lay-data="{width:90}">mm</td>-->
-                    <!--<td lay-data="{width:90}">女</td>-->
-                    <!--<td lay-data="{width:120}">水电费v</td>-->
-                    <!--<td lay-data="{width:90}"><img src="../image/zmm_img/select.PNG" width="100px"></td>-->
 
-                    <!--<td lay-data="{ width:90}">1997.2.3</td>-->
-                    <!--<td lay-data="{width:90}"><input type="button" value="查找" style="width: 35px;height: 25px;"></td>-->
-                    <!--<td lay-data="{width:90}"><input type="button" value="删除" style="width: 35px;height: 25px;"></td>-->
                 </tr>
                 </tbody>
             </table>
         </div>
-        <input type="button" value="上一页" class="butt1"><input type="button" value="下一页" class="butt2">
+        <!--<input type="button" value="上一页" class="butt1"><input type="button" value="下一页" class="butt2">-->
     </div>
     <div class="layui-body body5">
         <div id="chartmain" style="width:1000px; height: 500px;"></div>
@@ -602,8 +544,8 @@
         </script>
     </div>
 </div>
-<div class="layui-footer" id="foot">
+<!--<div class="layui-footer" id="foot">-->
 
-</div>
+<!--</div>-->
 </body>
 </html>
