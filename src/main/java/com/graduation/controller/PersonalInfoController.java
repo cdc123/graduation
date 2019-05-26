@@ -291,9 +291,9 @@ public class PersonalInfoController {
 		Date t = new Date();
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
 		String uploadDate = df.format(t);
-		String realPath = request.getServletContext().getRealPath("/home/jar/image");
+		String realPath = request.getServletContext().getRealPath("/image/userPhotos/");
 		GenerateImage(stringImage, realPath + "\\" + uploadDate + ".png");
-		String userImage = "/home/jar/image/" + uploadDate + ".png";
+		String userImage = "../image/userPhotos/" + uploadDate + ".png";
 		JSONArray json = null;
 		String userPhone = null;
 		List<Map<String, Object>> list = null;

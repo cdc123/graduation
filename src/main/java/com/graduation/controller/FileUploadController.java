@@ -71,10 +71,10 @@ public class FileUploadController {
 			upvVideo = realPath1 + upvName + ext;
 			/* 上传文件 */
 			file.transferTo(new File(upvVideo));
-			upvVideo = "/video/uploadVideos" + upvName + ext;
-			realPath2 = request.getServletContext().getRealPath("/home/jar/upv_image/");
+			upvVideo = "../video/uploadVideos/" + upvName + ext;
+			realPath2 = request.getServletContext().getRealPath("/image/upv_images/");
 			fetchFrame(realPath1 + upvName + ext, realPath2 + upvName + ".jpg");
-			upvImage = "/home/jar/upv_image/" + upvName + ".jpg";
+			upvImage = "../image/upv_images/" + upvName + ".jpg";
 			/* 插入操作并返回插入数据 */
 			list = service.uploadVideo(upvName, userId, upvDate, upvVideo, upvImage);
 		} catch (Exception e) {
