@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.graduation.dao.PersonalInfoDao">
+
+	<update id="updateUserName" parameterType="string">
+		update user t
+		set
+		t.user_name = ${userName}
+		where t.user_phone = ${userPhone}
+	</update>
+
+	<update id="updateUserSex" parameterType="string">
+		update user t
+		set
+		t.user_sex = ${userSex}
+		where t.user_phone = ${userPhone}
+	</update>
+
+	<update id="updateUserAddress" parameterType="string">
+		update user t
+		set
+		t.user_address = ${userAddress}
+		where t.user_phone = ${userPhone}
+	</update>
+
+	<update id="updateUserBirthday" parameterType="string">
+		update user t
+		set
+		t.user_birthday = ${userBirthday}
+		where t.user_phone = ${userPhone}
+	</update>
+
+	<update id="updateUserIntroduce" parameterType="string">
+		update user t
+		set
+		t.user_introduce = ${userIntroduce}
+		where t.user_phone = ${userPhone}
+	</update>
+
+	<update id="updateUserImage" parameterType="string">
+		update user t
+		set
+		t.user_image = ${userImage}
+		where t.user_phone = ${userPhone}
+	</update>
+
+	<select id="getFavouriteByUserId" parameterType="string"
+		resultType="java.util.HashMap">
+		select *
+		from video v
+		where v.video_id in
+		(select t.video_id
+		from favourite t where
+		t.user_id = ${userId})
+	</select>
+
+	<select id="getLimitFavouriteByUserId" parameterType="int"
+		resultType="java.util.HashMap">
+		select *
+		from video v
+		where v.video_id in
+		(select t.video_id
+		from favourite t where
+		t.user_id = ${userId})
+		order by v.video_id asc
+		limit ${start},${end}
+	</select>
+
+	<select id="getUploadByUserId" parameterType="string"
+		resultType="java.util.HashMap">
+		select *
+		from uploadVideo t
+		where t.user_id = ${userId}
+	</select>
+
+	<select id="getLimitUploadByUserId" parameterType="int"
+		resultType="java.util.HashMap">
+		select *
+		from uploadVideo t
+		where t.user_id = ${userId}
+		order
+		by t.upv_id asc
+		limit ${start},${end}
+	</select>
+
+	<select id="getUpvVideoByName" parameterType="string"
+		resultType="java.util.HashMap">
+		select *
+		from uploadVideo t
+		where t.upv_name = ${upvName}
+	</select>
+
+	<insert id="uploadVideo" parameterType="string">
+		insert into
+		uploadVideo(upv_name,user_id,upv_date,upv_video,upv_image)
+		values(${upvName},${userId},${upvDate},${upvVideo},${upvImage})
+	</insert>
+
+
+</mapper>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>登录</title>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/lh_login.css">
+<style type="text/css">
+#myform label.error {
+	color: #c81623;
+}
+</style>
+<script src="../js/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+	/*手机号校验*/
+	function checkUserPhone() {
+		var userPhone = $("#input_three1").val();
+		var regexpPhone = /^1(3|4|5|7|8)\d{9}$/;
+		if (userPhone != null && userPhone != '') {
+			if (!regexpPhone.test(userPhone)) {
+				$("#flag1").val("0");
+				$("#error1").remove();
+				var $error = $("<p id='error1' style='color:red'>请输入正确的手机号</p>");
+				$("#input_three1").after($error);
+			} else {
+				$
+						.ajax({
+							url : "/login/checkUserPhone",
+							type : "post",
+							dataType : "text",
+							async : false,
+							data : {
+								"userPhone" : userPhone
+							},
+							success : function(result) {
+								if (result == "true") {
+									$("#flag1").val("1");
+									$("#error1").remove();
+									var $error = $("<p id='error1' style='color:green'>手机号格式正确</p>");
+									$("#input_three1").after($error);
+								} else {
+									$("#flag1").val("0");
+									$("#error1").remove();
+									var $error = $("<p id='error1' style='color:red'>该手机号还没有注册，请前往注册</p>");
+									$("#input_three1").after($error);
+								}
+							}
+						});
+			}
+		}
+	}
+
+	/*密码校验*/
+	function checkPassword() {
+		var password = $("#input_three2").val();
+		var regexpPass = /^[0-9a-zA-Z]{6,16}$/;
+		if (password != null && password != '') {
+			if (!regexpPass.test(password)) {
+				$("#flag2").val("0");
+				$("#error2").remove();
+				var $error = $("<p id='error2' style='color:red'>请输入6-16位数字或密码组合</p>");
+				$("#input_three2").after($error);
+			} else {
+				$("#flag2").val("1");
+				$("#error2").remove();
+				var $error = $("<p id='error2' style='color:green'>密码格式正确</p>");
+				$("#input_three2").after($error);
+			}
+		}
+	}
+
+	/*登录*/
+	function login() {
+		if ($("#flag1").val() == "1" && $("#flag2").val() == "1") {
+			$.ajax({
+				url : "/login/login",
+				async : false,
+				data : {
+					"userPhone" : $("#input_three1").val(),
+					"password" : $("#input_three2").val()
+				},
+				type : "post",
+				dataType : "json",
+				success : function(result) {
+					if (null != result && "" != result) {
+						$.each(result, function(n, value) {
+							if (value.user_power == "3") {
+								/*跳转管理员页面*/
+								parent.location.href = "zmm_backstage.html";
+								var index = parent.layer
+										.getFrameIndex(window.name);
+								parent.layer.close(index);
+							} else {
+								parent.location.reload();
+								var index = parent.layer
+										.getFrameIndex(window.name);
+								parent.layer.close(index);
+							}
+						});
+					} else {
+						/*密码错误*/
+					}
+				}
+			});
+		}
+	}
+
+	/*点击注册按钮*/
+	var index = parent.layer.getFrameIndex(window.name);
+	function showRegister() {
+		parent.layer.open({
+			type : 2,
+			title : false,
+			area : [ '760px', '420px' ],
+			content : 'register.html',
+		});
+		/*关闭登录弹出框*/
+		parent.layer.close(index);
+	}
+</script>
+</head>
+<body>
+	<div style="display: none">
+		<input type="text" id="flag1" value="0" /> <input type="text"
+			id="flag2" value="0" />
+	</div>
+	<div id="body">
+		<div id="right">
+			<div id="log1">账号登录</div>
+			<div id="log3">
+				<form id="myform">
+					<div id="YZ_three">
+						<div id="log3_x">
+							<img src="../image/lh_images/登录注册-用户小.png" height="200"
+								width="200" />
+						</div>
+						<div id="log3_x1">
+							<input id="input_three1" type="text" placeholder="账号/手机号"
+								name="userphone" onblur="checkUserPhone()" />
+						</div>
+					</div>
+					<div id="YZ_three1">
+						<div id="log3_y">
+							<img src="../image/lh_images/登录注册-密码大.png" />
+						</div>
+						<div id="log3_x2">
+							<input type="password" placeholder="登录密码" name="password"
+								id="input_three2" onblur="checkPassword()" />
+						</div>
+					</div>
+					<div id="YZ_five1" style="visibility: hidden">
+						<div id="YZ_five_x" style="margin-top: 1px">
+							<input type="checkbox" id="agree">
+						</div>
+						<div id="YZ_five_y">
+							<p>
+								记住我<span style="float: right"><a href="#">忘记密码</a>
+							</p>
+						</div>
+					</div>
+					<div id="but1">
+						<input type="button" value="登录" id="button" onclick="login()">
+					</div>
+				</form>
+			</div>
+			<div id="register22" onclick="showRegister()">
+				<a id="zhuce" href="#">注册</a>
+			</div>
+			<!-- 其他方式登录隐藏(不使用) -->
+			<div class="YT-text" style="visibility: hidden">其他方式:</div>
+			<div id="bottom" style="visibility: hidden">
+				<div>
+					<a href="#" id="qq"></a>
+				</div>
+				<div>
+					<a href="#" id="weibo"></a>
+				</div>
+				<div>
+					<a href="#" id="wechat"></a>
+				</div>
+				<div>
+					<a href="#" id="zhifubao"></a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

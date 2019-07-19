@@ -1,0 +1,62 @@
+
+.tu_1:hover {
+    color: goldenrod;
+}
+.add_1:hover{
+    color: #ff3c00;
+}
+.add_2:hover{
+    color: #ff3c00;
+}
+.butt1,.butt2{
+    position: absolute;
+    top: 500px;
+    left: 50px;
+    font-size: 15px;
+    background-color: #e7e7e7; color: black;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    border-radius: 12px;
+}
+.butt1:hover {
+    background-color: goldenrod;/* Green */
+    color: white;
+}
+.butt2{
+    position: absolute;
+    top: 500px;
+    left: 120px;
+}
+.butt2:hover {
+    background-color: goldenrod;/* Green */
+    color: white;
+}
+.butt3,.butt4{
+    position: absolute;
+    top: 500px;
+    left: 50px;
+    font-size: 15px;
+    background-color: #e7e7e7; color: black;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    border-radius: 12px;
+}
+.butt3:hover {
+    background-color: goldenrod;/* Green */
+    color: white;
+}
+.butt4{
+    position: absolute;
+    top: 500px;
+    left: 120px;
+}
+.butt4:hover {
+    background-color: goldenrod;/* Green */
+    color: white;
+}
+#foot{
+    background-color: #5e5e5e;
+    width: 1166px;
+    height: 20px;
+    position: absolute;
+    top: 641px;
+    left: 200px;
+}

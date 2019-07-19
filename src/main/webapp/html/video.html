@@ -1,0 +1,97 @@
+<link href="https://www.moerats.com/usr/dplayer/DPlayer.min.css" rel="stylesheet">
+<div id="dplayer"></div>
+<script src="../js/jquery-3.3.1.js" type="text/javascript"></script>
+<script src="https://www.moerats.com/usr/dplayer/DPlayer.min.js"></script>
+<script src="https://cdnjs.loli.net/ajax/libs/blueimp-md5/2.10.0/js/md5.min.js"></script>
+<script>
+    $(function () {
+        var $v_id = -1;
+        var $u_id = -1;
+        var $cur = 0;
+        var $dur = 1;
+        //获取session信息
+        $.ajax({
+            async: false,
+            url: "/play/getSession_v",
+            type: "post",
+            success: function (result) {
+                $v_id = Number(result.video_id);
+                if(result.user_id != null){
+                    $u_id = Number(result.user_id)
+                }
+                video();
+            }, error: function () {
+                // alert("展示数据错误！！");
+            }
+        });
+
+        function video() {
+            $.ajax({
+                async: false,
+                url: "/play/getVideo",
+                data: {"video_id": $v_id},
+                type: "post",
+                success: function (result) {
+                    var url = result[0].video_video;
+                    var danmu = result[0].video_danmu;
+                    //这里填写视频地址
+                    var id = md5(url);
+                    const dp = new DPlayer({
+                        container: document.getElementById('dplayer'),
+                        autoplay: true,
+                        video: {
+                            url: url
+                        },
+                        danmaku: {
+                            id: id,
+                            api: 'https://dplayer.moerats.com/',
+                            addition: [danmu]   //这里填写弹幕地址
+                        }
+                    })
+                    if ($u_id != -1) {
+                        $.ajax({
+                            async: false,
+                            url: "/play/continue",
+                            data: {"video_id": $v_id},
+                            type: "post",
+                            success: function (result) {
+                                //时间跳转
+                                dp.seek(result[0].history_holder);
+                            }, error: function () {
+                                // alert("展示数据错误！！");
+                            }
+                        });
+                        setInterval(miao, 1000);
+                    }
+                    function miao() {
+                        //获取当前播放时间
+                        $cur = dp.video.currentTime;
+                        //获取视频总时间
+                        $dur = dp.video.duration;
+                    };
+
+                },
+                error: function () {
+                    // alert("失败！！");
+                }
+            });
+
+            if ($u_id != -1) {
+                // 动态更新历史观看时间
+                setInterval(InXubo, 1000);
+            }
+
+            function InXubo() {
+                $.ajax({
+                    url: "/play/playTime",
+                    data: {"history_holder": $cur, "history_total": $dur, "video_id": $v_id},
+                    type: "post",
+                    success: function (result) {
+                    }, error: function () {
+                        // alert("展示数据错误！！");
+                    }
+                });
+            }
+        }
+    });
+</script>

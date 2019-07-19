@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.graduation.dao.HomeDao">
+
+	<!-- 根据搜索框输入关键字进行模糊查询 -->
+	<select id="getVideoByFirstName" parameterType="string"
+		resultType="java.util.HashMap">
+		${sql}
+	</select>
+
+	<!-- 点击搜索按钮查询影片 -->
+	<select id="getVideoByName" parameterType="string"
+		resultType="java.util.HashMap">
+		${sql}
+	</select>
+
+	<!-- 查询用户的播放记录 -->
+	<select id="getHistoryByUserId" parameterType="string"
+		resultType="java.util.HashMap">
+		select *
+		from history t
+		where user_id = ${userId}
+		order by
+		t.history_time asc
+	</select>
+
+	<!-- 根据视频Id查询视频 -->
+	<select id="getVideoById" parameterType="string"
+		resultType="java.util.HashMap">
+		select *
+		from video t
+		where t.video_id = ${videoId}
+	</select>
+
+	<select id="getUpVideoById" parameterType="string"
+		resultType="java.util.HashMap">
+		select *
+		from uploadVideo t
+		where t.upv_id = ${upvId}
+	</select>
+
+	<select id="getUpVideoByName" parameterType="string"
+		resultType="java.util.HashMap">
+		select *
+		from uploadVideo t
+		where t.upv_name = ${upvName}
+	</select>
+
+	<select id="getVideoSort" resultType="java.util.HashMap">
+		select distinct video_sort
+		from video
+		order by video_id
+	</select>
+
+	<!-- 根据视频分类查询视频 -->
+	<select id="getVideoBySort" parameterType="string"
+		resultType="java.util.HashMap">
+		select *
+		from video t
+		where t.video_sort = ${videoSort}
+		order
+		by video_id desc
+	</select>
+
+	<select id="getUploadVideo" parameterType="string"
+		resultType="java.util.HashMap">
+		select *
+		from uploadVideo
+	</select>
+
+	<delete id="cancelCollection" parameterType="int">
+		delete from
+		favourite
+		where user_id = ${userId}
+		and video_id = ${videoId}
+	</delete>
+
+	<delete id="deleteUploadVideo" parameterType="int">
+		delete from
+		uploadVideo
+		where user_id = ${userId}
+		and upv_id = ${upvId}
+	</delete>
+
+</mapper> 

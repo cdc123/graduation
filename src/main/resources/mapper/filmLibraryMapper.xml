@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.graduation.dao.FilmLibraryDao">
+
+	<select id="getVideoSort" parameterType="string"
+		resultType="java.util.HashMap">
+		select distinct t.video_sort
+		from video t
+	</select>
+
+	<select id="getVideoRegion" parameterType="string"
+		resultType="java.util.HashMap">
+		select distinct t.video_region
+		from video t
+	</select>
+
+	<select id="getVideoType" parameterType="string"
+		resultType="java.util.HashMap">
+		select distinct t.video_type
+		from video t
+	</select>
+
+	<select id="getLimitVideoBySRTO" parameterType="string"
+		resultType="java.util.HashMap">
+		select *
+		from video t
+		where 1 = 1
+		<if test="sort != null and sort != ''">
+			and t.video_sort = ${sort}
+		</if>
+		<if test="region != null and region != ''">
+			and t.video_region = ${region}
+		</if>
+		<if test="type != null and type != ''">
+			and t.video_type = ${type}
+		</if>
+		<if test="order == 1">
+			order by t.video_id desc
+		</if>
+		<if test="order == 2">
+			order by t.video_id asc
+		</if>
+		<if test="order == 3">
+			order by t.video_playtimes desc
+		</if>
+		<if test="order == 4">
+			order by t.video_playtimes asc
+		</if>
+		<if test="start != -1">
+			limit ${start},${end}
+		</if>
+	</select>
+
+	<select id="getLimitUpVideoBySRTO" parameterType="string"
+		resultType="java.util.HashMap">
+		select *
+		from uploadVideo t
+		where 1 = 1
+		<if test="order == 1">
+			order by t.upv_id desc
+		</if>
+		<if test="order == 2">
+			order by t.upv_id asc
+		</if>
+		<if test="start != -1">
+			limit ${start},${end}
+		</if>
+	</select>
+
+
+
+</mapper>

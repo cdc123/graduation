@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>个人信息主页</title>
+<link type="text/css" rel="stylesheet" href="../css/base.css">
+<link type="text/css" rel="stylesheet" href="../css/wcg_userInfo.css">
+<style type="text/css">
+#paging a {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+#paging2 a {
+	text-decoration: underline;
+	cursor: pointer;
+}
+</style>
+<script type="text/javascript" src="../js/jquery-3.3.1.js"></script>
+<script src="../layui/layui.all.js"></script>
+<script type="text/javascript" src="../js/wcg_homePage.js"></script>
+<script type="text/javascript">
+	$(function() {
+		/*二维码显示，隐藏*/
+		$("#myUrl").mouseenter(function() {
+			$("#qr").show();
+		});
+		$("#qr").mouseleave(function() {
+			$("#qr").hide();
+		});
+	});
+</script>
+</head>
+<body>
+	<div id="top">
+		<!-- 登录信息 -->
+		<div style="display: none">
+			<!-- 是否登录?1/0 -->
+			<input type="text" id="isLogin" value="0" /> <input type="text"
+				id="userId" /> <input type="text" id="userPhone" /> <input
+				type="text" id="userPower" /> <input type="text" id="userName" />
+			<input type="text" id="userSex" /> <input type="text"
+				id="userAddress" /> <input type="text" id="userBirthday" /> <input
+				type="text" id="userIntroduce" /> <input type="text" id="userImage" />
+		</div>
+		<div id="top_in">
+			<!--Logo-->
+			<div id="logo">
+				<a href="homepage.html">
+					<div></div>
+				</a>
+			</div>
+			<!--首页-->
+			<div id="home">
+				<a href="homepage.html">
+					<div></div>
+					<p>首页</p>
+				</a>
+			</div>
+			<!--导航-->
+			<div id="nav" onclick="showForNav()">
+				<a style="cursor: pointer;">
+					<div id="navLogo"></div>
+					<p>导视</p>
+				</a>
+				<div id="forNav" onmouseleave="hideForNav()" style="display: none">
+					<ul id="navList">
+						<li id="navList0"><a href="homepage.html#upV">上传</a></li>
+					</ul>
+				</div>
+			</div>
+			<!--搜索栏-->
+			<div id="search">
+				<div id="key_word">
+					<div onclick="getVideoByName()"></div>
+					<input type="text" name="search" onkeyup="getVideoByFirstName()" />
+				</div>
+				<div id="search_button">
+					<button onclick="getVideoByName()">搜库</button>
+				</div>
+				<div id="forSearch">
+					<ul>
+					</ul>
+				</div>
+			</div>
+			<!--头像-->
+			<div id="photo" onmouseenter="showForPhoto()"
+				style="cursor: pointer;">
+				<a id="tou">
+					<div id="photoImg" onclick="ShowLoginText()"></div>
+				</a>
+				<div id="forPhoto" hidden onmouseleave="hideForPhoto()">
+					<ul>
+						<li><a href="wcg_personalInfoChange.html"
+							style="cursor: pointer;">修改信息</a></li>
+						<li><a id="logout" onclick="logOut()"
+							style="cursor: pointer;">退出登录</a></li>
+					</ul>
+				</div>
+			</div>
+			<!--上传-->
+			<div id="upload">
+				<a onclick="upload()" style="cursor: pointer;">
+					<div></div>
+				</a>
+			</div>
+			<!--历史-->
+			<div id="history">
+				<div id="historyImg" onclick="showHistory()"
+					style="cursor: pointer;"></div>
+				<div id="forHistory" onmouseleave="hideHistory()"
+					style="display: none"></div>
+			</div>
+			<!--收藏-->
+			<div id="collect">
+				<a onclick="collection()" style="cursor: pointer;">
+					<div></div>
+				</a>
+			</div>
+			<!--片库-->
+			<div id="searchLib" style="cursor: pointer;">
+				<a href="film_library.html">
+					<div></div>
+				</a>
+			</div>
+		</div>
+	</div>
+	<div id="body">
+		<div id="kongbai"></div>
+		<div id="theme">
+			<div id="myUrl">
+				<p>分享</p>
+				<div></div>
+			</div>
+			<div id="qr" hidden></div>
+			<div id="pictrue_out">
+				<a href="wcg_personalInfoChange.html">
+					<div id="pictrue"></div>
+				</a>
+			</div>
+		</div>
+		<div id="introduction">
+			<div id="self" style="cursor: pointer" onclick="changeInfo()">
+				<p id="selfUsername">
+					<b>用户名</b>
+				</p>
+				<br />
+				<p id="selfIntroduce">个人简介 ：</p>
+				<p id="introduce">这个人很懒，什么都没有留下......</p>
+			</div>
+		</div>
+		<div id="title">
+			<div id="zhuye">
+				<p>个人页</p>
+			</div>
+		</div>
+		<div id="video_out">
+			<div id="video">
+				<a name="miao" style="float: left; margin-top: -90px"></a>
+				<div id="sowingList">
+					<p>
+						收藏的视频(<span>0</span>)
+					</p>
+				</div>
+				<div id="sowingListBody"></div>
+				<div style="width: 1000px; height: 80px; margin: 0 auto;">
+					<input type="text" id="currentPageNum1" style="display: none" />
+					<div id="paging"
+						style="width: 800px; height: 80px; margin: 0 auto;">
+						<div
+							style="width: 800px; height: 40px; text-align: center; font-size: 15px; line-height: 40px;">
+							<a onclick="showFirstPage()">首页</a>&nbsp;<a
+								onclick="showPreviousPage()">上一页</a>&nbsp;
+							<div id="pageNumItem" style="display: inline;">
+								<a title="1" onclick="choosePageNumItem(this)">1</a>
+							</div>
+							&nbsp;<a onclick="showNextPage()">下一页</a>&nbsp;<a
+								onclick="showLastPage()">尾页</a>
+						</div>
+						<div
+							style="width: 800px; height: 40px; text-align: center; font-size: 15px; line-height: 40px;">
+							跳转到&nbsp;<input type="text" id="collectionPageNum"
+								style="width: 30px;">&nbsp;页 <a onclick="gotoPage()">确定</a>,&nbsp;共[<span
+								id="totalPageNum">1</span>]页,&nbsp;[<span id="totalVideoNum">0</span>]条记录
+						</div>
+					</div>
+				</div>
+				<hr>
+				<a name="up" style="float: left; margin-top: -90px"></a>
+				<div id="videos">
+					<p style="float: left;">
+						上传的视频(<span>0</span>)
+					</p>
+					<p style="float: right; margin-right: 10px">
+						<a style="color: white;" href="wcg_videoUpload.html">上传更多视频</a>
+					</p>
+				</div>
+				<div id="videosBody"></div>
+				<div style="width: 1000px; height: 80px; margin: 0 auto;">
+					<input type="text" id="currentPageNum2" style="display: none">
+					<div id="paging2"
+						style="width: 800px; height: 80px; margin: 0 auto;">
+						<div
+							style="width: 800px; height: 40px; text-align: center; font-size: 15px; line-height: 40px;">
+							<a onclick="showFirstPage2()">首页</a>&nbsp;<a
+								onclick="showPreviousPage2()">上一页</a>&nbsp;
+							<div id="pageNumItem2" style="display: inline;">
+								<a title="1" onclick="choosePageNumItem2(this)">1</a>
+							</div>
+							&nbsp;<a onclick="showNextPage2()">下一页</a>&nbsp;<a
+								onclick="showLastPage2()">尾页</a>
+						</div>
+						<div
+							style="width: 800px; height: 40px; text-align: center; font-size: 15px; line-height: 40px;">
+							跳转到&nbsp;<input type="text" id="uploadPageNum"
+								style="width: 30px;">&nbsp;页 <a onclick="gotoPage2()">确定</a>,&nbsp;共[<span
+								id="totalPageNum2">1</span>]页,&nbsp;[<span id="totalVideoNum2">0</span>]条记录
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="footer">
+		<p>Copyright©2019 泉青酷 weteam.online 版权所有</p>
+	</div>
+</body>
+</html>

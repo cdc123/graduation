@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>个人视频上传</title>
+<!--base css-->
+<link type="text/css" rel="stylesheet" href="../css/base.css">
+<!--layui css-->
+<!--<link rel="stylesheet" href="../layui/css/layui.css">-->
+<!--会影响原网页字体-->
+<link rel="stylesheet" href="../layui/css/layui.mobile.css">
+<link rel="stylesheet" href="../layui/css/modules/code.css">
+<link rel="stylesheet"
+	href="../layui/css/modules/laydate/default/laydate.css">
+<!--self css-->
+<link rel="stylesheet" href="../css/wcg_userInfo.css">
+<!--jquery-3.3.1 js-->
+<script type="text/javascript" src="../js/jquery-3.3.1.js"></script>
+<!--layui js-->
+<script src="../layui/layui.all.js"></script>
+<script src="../layui/layui.js"></script>
+<script src="../layui/lay/modules/carousel.js"></script>
+<script src="../layui/lay/modules/code.js"></script>
+<script src="../layui/lay/modules/element.js"></script>
+<script src="../layui/lay/modules/flow.js"></script>
+<script src="../layui/lay/modules/form.js"></script>
+<script src="../layui/lay/modules/jquery.js"></script>
+<script src="../layui/lay/modules/laydate.js"></script>
+<script src="../layui/lay/modules/layedit.js"></script>
+<script src="../layui/lay/modules/layer.js"></script>
+<script src="../layui/lay/modules/laypage.js"></script>
+<script src="../layui/lay/modules/laytpl.js"></script>
+<script src="../layui/lay/modules/mobile.js"></script>
+<script src="../layui/lay/modules/rate.js"></script>
+<script src="../layui/lay/modules/table.js"></script>
+<script src="../layui/lay/modules/tree.js"></script>
+<script src="../layui/lay/modules/upload.js"></script>
+<script src="../layui/lay/modules/util.js"></script>
+<!--myself js-->
+<script type="text/javascript" src="../js/wcg_homePage.js"></script>
+</head>
+<body>
+	<div id="top">
+		<!-- 登录信息 -->
+		<div style="display: none">
+			<!-- 是否登录?1/0 -->
+			<input type="text" id="isLogin" value="0" /> <input type="text"
+				id="userId" /> <input type="text" id="userPhone" /> <input
+				type="text" id="userPower" /> <input type="text" id="userName" />
+			<input type="text" id="userSex" /> <input type="text"
+				id="userAddress" /> <input type="text" id="userBirthday" /> <input
+				type="text" id="userIntroduce" /> <input type="text" id="userImage" />
+		</div>
+		<div id="top_in">
+			<!--Logo-->
+			<div id="logo">
+				<a href="homepage.html">
+					<div></div>
+				</a>
+			</div>
+			<!--首页-->
+			<div id="home">
+				<a href="homepage.html">
+					<div></div>
+					<p>首页</p>
+				</a>
+			</div>
+			<!--导航-->
+			<div id="nav" onclick="showForNav()">
+				<a style="cursor: pointer;">
+					<div id="navLogo"></div>
+					<p>导视</p>
+				</a>
+				<div id="forNav" onmouseleave="hideForNav()" style="display: none">
+					<ul id="navList">
+						<li id="navList0"><a href="homepage.html#upV">上传</a></li>
+					</ul>
+				</div>
+			</div>
+			<!--搜索栏-->
+			<div id="search">
+				<div id="key_word">
+					<div onclick="getVideoByName()"></div>
+					<input type="text" name="search" onkeyup="getVideoByFirstName()" />
+				</div>
+				<div id="search_button">
+					<button onclick="getVideoByName()">搜库</button>
+				</div>
+				<div id="forSearch">
+					<ul>
+					</ul>
+				</div>
+			</div>
+			<!--头像-->
+			<div id="photo" onmouseenter="showForPhoto()"
+				style="cursor: pointer;">
+				<a id="tou">
+					<div id="photoImg" onclick="ShowLoginText()"></div>
+				</a>
+				<div id="forPhoto" hidden onmouseleave="hideForPhoto()">
+					<ul>
+						<li><a href="wcg_personalInfoChange.html"
+							style="cursor: pointer;">修改信息</a></li>
+						<li><a id="logout" onclick="logOut()"
+							style="cursor: pointer;">退出登录</a></li>
+					</ul>
+				</div>
+			</div>
+			<!--上传-->
+			<div id="upload">
+				<a onclick="upload()" style="cursor: pointer;">
+					<div></div>
+				</a>
+			</div>
+			<!--历史-->
+			<div id="history">
+				<div id="historyImg" onclick="showHistory()"
+					style="cursor: pointer;"></div>
+				<div id="forHistory" onmouseleave="hideHistory()"
+					style="display: none"></div>
+			</div>
+			<!--收藏-->
+			<div id="collect">
+				<a onclick="collection()" style="cursor: pointer;">
+					<div></div>
+				</a>
+			</div>
+			<!--片库-->
+			<div id="searchLib" style="cursor: pointer;">
+				<a href="film_library.html">
+					<div></div>
+				</a>
+			</div>
+		</div>
+	</div>
+	<div id="body">
+		<div id="kongbai"></div>
+		<div
+			style="width: 1080px; height: 600px; background-color: rgba(15, 15, 15, 0.2)">
+			<div
+				style="width: 1000px; height: 500px; float: left; margin-top: 50px; margin-left: 40px; font-size: 18px">
+				<h1>视频上传</h1>
+				<form method="post" enctype="multipart/form-data" id="form"
+					style="margin-top: 30px; font-size: 18px;">
+					上传视频：<input type="file" name="file"
+						style="width: 400px; height: 30px; margin-left: 30px;" />(必选)<br />
+					<br /> 设置视频名称：<input type="text" name="setVideoName" />（可选） <input
+						type="button" value="提交" onclick="videoUpload()"
+						style="cursor: pointer; margin-left: 200px; width: 100px; height: 30px; border: 0; color: white; background-color: #31b6ff; border-radius: 5px;" />
+				</form>
+				<br /> 上传进度：
+				<progress id="progress" value="0" max="100" style="width: 800px"></progress>
+			</div>
+		</div>
+	</div>
+	<div id="footer">
+		<p>Copyright©2019 泉青酷 weteam.online 版权所有</p>
+	</div>
+</body>
+<script type="text/javascript">
+	function videoUpload() {
+		if ($("input[name='file']").val() == null
+				&& $("input[name='file']").val() == '') {
+			layer.msg('请选择要上传的视频');
+		} else {
+			var xhr = new XMLHttpRequest();
+			var progressBar = document.getElementById('progress');
+			var form = new FormData(document.getElementById("form"));
+			$.ajax({
+				url : "/upload/videoUpload",
+				type : "post",
+				data : form,
+				processData : false,
+				contentType : false,
+				xhr: function() {
+			    　　　　var xhr = $.ajaxSettings.xhr();
+			    　　　　if (xhr.upload) {
+			    　　　　　　xhr.upload.onprogress = function(progress) {
+			                    if (progress.lengthComputable) {
+			                        console.log(progress.loaded / progress.total * 100);
+			                        progressBar.max = progress.total;
+			                        progressBar.value = progress.loaded;
+			                    }
+			                };
+			                xhr.upload.onloadstart = function() {
+			                	layer.msg('上传开始');
+			                };
+			     　　　 }
+			              return xhr;
+			    },
+			    dataType : "json",
+				success : function(result) {
+						var $node;
+						$.each(result, function(n, value) {
+							$node = $("<div style='width: 280px;height: 280px;background-color: aliceblue;margin-top: 10px;margin-left: 100px;'><img title="+value.upv_name+" src="+value.upv_image+" style='width: 100%;height: 100%;cursor:pointer' onclick='playUpVideo(this)'></div>");
+							$("#progress").after($node);
+						});
+						layer.msg('上传完成');
+				}
+			});
+		}
+	}
+	
+	/* 上传视频播放(title = name) */
+	function playUpVideo(event) {
+		var upvName = event.title;
+		$.ajax({
+			type : "post",
+			url : "/home/getUpVideoByName",
+			data : {
+				"videoName" : upvName
+			},
+			dataType : "json",
+			success : function(result) {
+				window.location.href = "play.html";
+			}
+		});
+	}
+</script>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>视频库</title>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/wcg_userInfo.css">
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../layui/layui.all.js"></script>
+<script type="text/javascript" src="../js/wcg_homePage.js"></script>
+<script type="text/javascript" src="../js/film_library.js"></script>
+<style type="text/css">
+#allView a {
+	cursor: pointer;
+}
+
+#videoArea img {
+	cursor: pointer;
+}
+
+#videoArea p {
+	cursor: pointer;
+}
+
+#flbackground {
+	width: 94%;
+	padding-bottom: 10px;
+	margin: 0 auto;
+	padding-left: 10px;
+	padding-right: 10px;
+	background-color: rgba(102, 102, 102, 0.2)
+}
+
+#flbackground:hover {
+	background-color: rgba(102, 102, 102, 0.1)
+}
+</style>
+</head>
+<body>
+	<div id="top">
+		<!-- 登录信息 -->
+		<div style="display: none">
+			<!-- 是否登录?1/0 -->
+			<input type="text" id="isLogin" value="0" /> <input type="text"
+				id="userId" /> <input type="text" id="userPhone" /> <input
+				type="text" id="userPower" /> <input type="text" id="userName" />
+			<input type="text" id="userSex" /> <input type="text"
+				id="userAddress" /> <input type="text" id="userBirthday" /> <input
+				type="text" id="userIntroduce" /> <input type="text" id="userImage" />
+		</div>
+		<div id="top_in">
+			<!--Logo-->
+			<div id="logo">
+				<a href="homepage.html">
+					<div></div>
+				</a>
+			</div>
+			<!--首页-->
+			<div id="home">
+				<a href="homepage.html">
+					<div></div>
+					<p>首页</p>
+				</a>
+			</div>
+			<!--导航-->
+			<div id="nav" onclick="showForNav()">
+				<a style="cursor: pointer;">
+					<div id="navLogo"></div>
+					<p>导视</p>
+				</a>
+				<div id="forNav" onmouseleave="hideForNav()" style="display: none">
+					<ul id="navList">
+						<li id="navList0"><a href="homepage.html#upV">上传</a></li>
+					</ul>
+				</div>
+			</div>
+			<!--搜索栏-->
+			<div id="search">
+				<div id="key_word">
+					<div onclick="getVideoByName()"></div>
+					<input type="text" name="search" onkeyup="getVideoByFirstName()" />
+				</div>
+				<div id="search_button">
+					<button onclick="getVideoByName()">搜库</button>
+				</div>
+				<div id="forSearch">
+					<ul>
+					</ul>
+				</div>
+			</div>
+			<!--头像-->
+			<div id="photo" onmouseenter="showForPhoto()"
+				style="cursor: pointer;">
+				<a id="tou">
+					<div id="photoImg" onclick="ShowLoginText()"></div>
+				</a>
+				<div id="forPhoto" hidden onmouseleave="hideForPhoto()">
+					<ul>
+						<li><a href="wcg_personalInfoChange.html"
+							style="cursor: pointer;">修改信息</a></li>
+						<li><a id="logout" onclick="logOut()"
+							style="cursor: pointer;">退出登录</a></li>
+					</ul>
+				</div>
+			</div>
+			<!--上传-->
+			<div id="upload">
+				<a onclick="upload()" style="cursor: pointer;">
+					<div></div>
+				</a>
+			</div>
+			<!--历史-->
+			<div id="history">
+				<div id="historyImg" onclick="showHistory()"
+					style="cursor: pointer;"></div>
+				<div id="forHistory" onmouseleave="hideHistory()"
+					style="display: none"></div>
+			</div>
+			<!--收藏-->
+			<div id="collect">
+				<a onclick="collection()" style="cursor: pointer;">
+					<div></div>
+				</a>
+			</div>
+			<!--片库-->
+			<div id="searchLib" style="cursor: pointer;">
+				<a href="film_library.html">
+					<div></div>
+				</a>
+			</div>
+		</div>
+	</div>
+	<div style="height: 90px; width: 100%"></div>
+	<div id="allView"
+		style="width: 1400px; padding-bottom: 30px; margin: 0 auto;">
+		<div id="flbackground">
+			<div style="width: 100%; height: 50px;">
+				<div id="flSort" style="line-height: 50px; font-size: 15px;">
+					种类：<a style="margin-left: 10px; color: red" name="全部"
+						onclick="getSelectSort(this)">全部</a><a style="margin-left: 10px"
+						name="上传" onclick="getSelectSort(this)">上传</a>
+				</div>
+			</div>
+			<div style="width: 100%; height: 50px;">
+				<div id="flRegion" style="line-height: 50px; font-size: 15px;">
+					地区：<a style="margin-left: 10px; color: red" name="全部"
+						onclick="getSelectRegion(this)">全部</a>
+				</div>
+			</div>
+			<div style="width: 100%; height: 50px;">
+				<div id="flType" style="line-height: 50px; font-size: 15px;">
+					类型：<a style="margin-left: 10px; color: red" name="全部"
+						onclick="getSelectType(this)">全部</a>
+				</div>
+			</div>
+			<hr style="border: solid 2px; margin-top: 10px;">
+			<div style="width: 100%; margin-top: 10px; padding-bottom: 10px;">
+				<div style="width: 100%; height: 50px;">
+					<div
+						style="font-size: 15px; line-height: 50px; float: right; margin-right: 10px;">
+						排序：<select id="flOrder" onchange="getSelectVideo()"
+							style="width: 120px; height: 20px; border: 0;">
+							<!--按照videoId降序-->
+							<option value="1" selected>按上架时间降序</option>
+							<!--按照videoId升序-->
+							<option value="2">按上架时间升序</option>
+							<!--以下两者只针对video，不支持上传，点击上传时隐藏-->
+							<option value="3">按播放次数降序</option>
+							<option value="4">按播放次数升序</option>
+						</select>
+					</div>
+				</div>
+				<div style="width: 100%; padding-top: 10px; padding-bottom: 10px;">
+					<div id="videoArea"
+						style="width: 98%; margin: 0 auto; height: 1060px;"></div>
+					<div style="width: 1000px; height: 80px; margin: 0 auto;">
+						<input type="text" id="currentPageNum" style="display: none">
+						<div id="paging"
+							style="width: 800px; height: 80px; margin: 0 auto;">
+							<div
+								style="width: 800px; height: 40px; text-align: center; font-size: 15px; line-height: 40px;">
+								<a onclick="showFirstPage()">首页</a>&nbsp;<a
+									onclick="showPreviousPage()">上一页</a>&nbsp;
+								<div id="pageNumItem" style="display: inline;"></div>
+								&nbsp;<a onclick="showNextPage()">下一页</a>&nbsp;<a
+									onclick="showLastPage()">尾页</a>
+							</div>
+							<div
+								style="width: 800px; height: 40px; text-align: center; font-size: 15px; line-height: 40px;">
+								跳转到&nbsp;<input type="text" id="pageNum" style="width: 30px;">&nbsp;页
+								<a onclick="gotoPage()">确定</a>,&nbsp;共[<span id="totalPageNum">1</span>]页,&nbsp;[<span
+									id="totalVideoNum">0</span>]条记录
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div style="width: 100%; padding-bottom: 15px">
+		<p style="text-align: center;">Copyright©2019 泉青酷 weteam.online
+			版权所有</p>
+	</div>
+</body>
+</html>

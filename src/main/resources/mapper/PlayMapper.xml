@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.graduation.dao.PlayDao">
+
+    <!-- 获取视频信息 -->
+    <select id="getVideo" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+		SELECT
+	video_video,
+	video_introduce,
+	video_name,
+	video_danmu
+        FROM
+	video
+        WHERE
+	video_id = #{video_id}
+	</select>
+
+    <!-- 获取推荐信息 -->
+    <select id="recommend" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+	SELECT
+	b.video_id,
+	b.video_image,
+	b.video_name,
+	b.video_playtimes,
+	b.video_introduce
+    FROM
+	video a,
+	video b
+    WHERE
+	a.video_id = #{video_id}
+    AND a.video_type = b.video_type
+	</select>
+
+	<!-- 获取视频是否收藏 -->
+	<select id="f_findById" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    SELECT count(*) FROM favourite WHERE user_id = #{user_id} AND video_id = #{video_id}
+	</select>
+
+	<!-- 收藏视频 -->
+	<insert id="f_docreat" parameterType="java.lang.Integer">
+    INSERT INTO favourite (user_id,video_id)VALUES(#{user_id},#{video_id});
+	</insert>
+
+	<!-- 获取头像 -->
+	<select id="gerAvatar" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+    SELECT user_image FROM user where user_id = #{user_id}
+	</select>
+
+	<!-- 获取是否有历史记录 -->
+	<select id="h_findById" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    SELECT count(*) FROM history WHERE user_id = #{user_id} AND video_id = #{video_id}
+	</select>
+
+	<!-- 存储观看时间 -->
+	<insert id="setPlayTime">
+    INSERT INTO history (user_id,video_id,history_holder,history_total,history_time)VALUES(#{user_id},#{video_id},#{cur},#{dur},NOW());
+	</insert>
+
+    <!-- 更新观看时间 -->
+    <update id="updatePlayTime">
+    UPDATE history SET history_holder = #{cur},history_total = #{dur},history_time = NOW() WHERE user_id = #{user_id} AND video_id = #{video_id}
+    </update>
+
+	<!-- 获取观看记录 -->
+	<select id="continue_v" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+    SELECT history_holder FROM history WHERE user_id = #{user_id} AND video_id = #{video_id}
+	</select>
+
+	<!-- 获取历史记录 -->
+	<select id="getHistory" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+		SELECT
+		h.user_id,
+		h.video_id,
+		h.history_time,
+		h.history_holder,
+		h.history_total,
+		v.video_name
+		FROM
+		history h
+		LEFT JOIN video v ON h.video_id = v.video_id
+		WHERE
+		h.user_id = #{user_id}
+		AND h.video_id &gt; 0
+		UNION
+		SELECT
+		h.user_id,
+		h.video_id,
+		h.history_time,
+		h.history_holder,
+		h.history_total,
+		u.upv_name 'video_name'
+		FROM
+		history h
+		LEFT JOIN uploadVideo u ON h.video_id = - u.upv_id
+		WHERE
+		h.user_id = #{user_id}
+		AND h.video_id &lt; 0
+		ORDER BY
+		history_time ASC
+	</select>
+
+	<!-- 获取视频id -->
+	<select id="getVidByName" resultType="java.lang.String" parameterType="java.lang.String">
+    SELECT video_id FROM video WHERE video_name = #{video_name}
+	</select>
+
+	<!-- 获取上传视频信息 -->
+	<select id="getVideo_u" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+		SELECT
+	upv_video 'video_video',
+	upv_name 'video_name'
+        FROM
+	uploadVideo
+        WHERE
+	upv_id = #{video_id}
+	</select>
+
+	<!-- 更新播放量 -->
+	<update id="updateClick">
+    UPDATE video
+    SET video_playtimes = (
+	    (
+		    SELECT
+			    v.video_playtimes
+		    FROM
+			    (
+				    SELECT
+					    video_playtimes
+				    FROM
+					    video
+				    WHERE
+					    video_id = #{video_id}
+			    ) v
+	    ) + 1
+    )
+    WHERE
+	    video_id = #{video_id}
+    </update>
+</mapper> 

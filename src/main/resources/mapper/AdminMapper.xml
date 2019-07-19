@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.graduation.dao.AdminDao">
+    <!--显示用户-->
+    <select id="getUser" resultType="java.util.HashMap">
+		select * from user
+	</select>
+    <!--删除用户-->
+    <delete id="deleteUser">
+	delete from user WHERE user_id = #{user_id}
+	</delete>
+    <!--显示视频-->
+    <select id="getVideo" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+		select * from video
+	</select>
+    <!--删除视频-->
+    <delete id="deleteVideo" parameterType="java.lang.Integer">
+		delete from video where video_id = #{video_id}
+	</delete>
+    <!--显示留言-->
+	<select id="getMessage" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+		select * from message
+	</select>
+	<!--删除留言-->
+	<delete id="deleteMessage">
+		delete from message where msg_id = #{msg_id}
+	</delete>
+	<!--显示上传-->
+	<select id="getUpVideo" resultType="java.util.HashMap">
+		select * from uploadVideo
+	</select>
+	<!--删除上传-->
+	<delete id="deleteUpVideo">
+		delete from uploadVideo where upv_id = #{upv_id}
+	</delete>
+</mapper> 
