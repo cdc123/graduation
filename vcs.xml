@@ -24,10 +24,14 @@
         </UrlAndUserName>
         <UrlAndUserName>
           <option name="url" value="http://code.bonc.com.cn" />
-          <option name="userName" value="wangchenguang@bonc.com.cn" />
+          <option name="userName" value="chendacheng123" />
         </UrlAndUserName>
         <UrlAndUserName>
           <option name="url" value="https://code.bonc.com.cn/015709/epmwxwl.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://code.bonc.com.cn/015704/xAssignment.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
       </list>
