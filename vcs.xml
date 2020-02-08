@@ -24,7 +24,7 @@
         </UrlAndUserName>
         <UrlAndUserName>
           <option name="url" value="http://code.bonc.com.cn" />
-          <option name="userName" value="chendacheng123" />
+          <option name="userName" value="wangchenguang@bonc.com.cn" />
         </UrlAndUserName>
         <UrlAndUserName>
           <option name="url" value="https://code.bonc.com.cn/015709/epmwxwl.git" />
@@ -52,6 +52,10 @@
         </UrlAndUserName>
         <UrlAndUserName>
           <option name="url" value="https://code.bonc.com.cn/015705/boncSms.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://code.bonc.com.cn/015705/boncSmsInterface.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
       </list>
