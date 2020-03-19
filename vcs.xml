@@ -58,6 +58,10 @@
           <option name="url" value="https://code.bonc.com.cn/015705/boncSmsInterface.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://code.bonc.com.cn/yanbo/clyx_userpool.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
     <option name="cloneParentDir" value="F:\ideaFiles" />
